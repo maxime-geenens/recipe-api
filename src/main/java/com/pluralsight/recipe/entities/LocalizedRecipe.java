@@ -1,5 +1,7 @@
 package com.pluralsight.recipe.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -12,6 +14,7 @@ import lombok.Data;
 @Table(name = "LOCALIZED_RECIPE")
 @Entity
 @Data
+@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
 public class LocalizedRecipe {
 
 	@EmbeddedId

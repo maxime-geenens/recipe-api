@@ -3,6 +3,8 @@ package com.pluralsight.recipe.entities;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,6 +19,7 @@ import lombok.Data;
 @Table(name = "RECIPE")
 @Entity
 @Data
+@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
 public class Recipe {
 
 	@Id

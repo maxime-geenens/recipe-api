@@ -10,11 +10,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Table(name = "INGREDIENT")
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
 public class Ingredient {
 
@@ -23,24 +27,22 @@ public class Ingredient {
 	@Column(name = "id")
 	private Long id;
 
-	@Column(name = "locale")
-	private String locale;
+	@Column(name = "lang")
+	private String lang;
 
 	@Column(name = "quantity")
 	private Double quantity;
 
 	@ManyToOne
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "unit", referencedColumnName = "id")
 	private UnitReference unitReference;
 
 	@ManyToOne
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "ingredient", referencedColumnName = "id")
 	private IngredientReference ingredientReference;
 
 	@ManyToOne
-	@JoinColumn(name = "id")
-	private LocalizedRecipe localizedRecipe;
-	
-	
+	@JoinColumn(name = "recipe_id", referencedColumnName = "id")
+	private Recipe localizedRecipe;
 
 }

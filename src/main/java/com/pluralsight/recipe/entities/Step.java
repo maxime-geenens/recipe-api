@@ -10,11 +10,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Table(name = "STEP")
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
 public class Step {
 
@@ -23,8 +27,8 @@ public class Step {
 	@Column(name = "id")
 	private Long id;
 
-	@Column(name = "locale")
-	private String locale;
+	@Column(name = "lang")
+	private String lang;
 
 	@Column(name = "position")
 	private Integer position;
@@ -33,8 +37,7 @@ public class Step {
 	private String description;
 
 	@ManyToOne
-	@JoinColumn(name = "id")
-	private LocalizedRecipe localizedRecipe;
+	@JoinColumn(name = "recipe_id", referencedColumnName = "id")
+	private Recipe Recipe;
 
-	
 }

@@ -1,24 +1,24 @@
 package com.pluralsight.recipe.entities;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.MapKey;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Table(name = "RECIPE")
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
 public class Recipe {
 
@@ -33,20 +33,11 @@ public class Recipe {
 	@Column(name = "description")
 	private String description;
 
-	@OneToMany(mappedBy = "recipe", cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
-			CascadeType.REFRESH }, orphanRemoval = true)
-	@MapKey(name = "localizedRecipeId.locale")
-	private Map<String, LocalizedRecipe> localizations = new HashMap<>();
+	@Column(name = "lang")
+	private String lang;
 
-	public String getName(String locale) {
-		return localizations.get(locale).getName();
-	}
+	@ManyToOne
+	@JoinColumn(name = "type", referencedColumnName = "id")
+	private RecipeType type;
 
-	public String getDescription(String locale) {
-		return localizations.get(locale).getDescription();
-	}
-
-	public RecipeType getType(String locale) {
-		return localizations.get(locale).getType();
-	}
 }

@@ -3,6 +3,7 @@ package com.pluralsight.recipe.services;
 import java.util.List;
 
 import com.pluralsight.recipe.dto.RecipeDTO;
+import com.pluralsight.recipe.dto.RecipeDetailDTO;
 
 public interface RecipeService {
 
@@ -17,10 +18,10 @@ public interface RecipeService {
 	List<RecipeDTO> listRecipes(String lang);
 
 	/**
-	 * Retrieves 1 recipe with given id
+	 * Retrieves 1 recipe with all details for given id
 	 * @param id Long
 	 * @return
 	 */
-	RecipeDTO getRecipeById(Long id);
+	RecipeDetailDTO getRecipeById(Long id);
 
 }

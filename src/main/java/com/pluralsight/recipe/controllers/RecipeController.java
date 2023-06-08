@@ -17,8 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pluralsight.recipe.dto.RecipeRequestDTO;
 import com.pluralsight.recipe.exceptions.EntityNotFoundException;
+import com.pluralsight.recipe.exceptions.InvalidParameterException;
 import com.pluralsight.recipe.dto.RecipeDTO;
+import com.pluralsight.recipe.dto.RecipeDetailDTO;
 import com.pluralsight.recipe.services.RecipeService;
+import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,13 +50,20 @@ public class RecipeController {
 	}
 
 	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<RecipeDTO> getRecipe(@PathVariable(required = true) Long id) throws EntityNotFoundException {
+	public ResponseEntity<RecipeDetailDTO> getRecipeDetail(@PathVariable(required = true) Long id)
+			throws EntityNotFoundException, InvalidParameterException {
 
 		if (log.isInfoEnabled()) {
 			log.info(" API Call api/recipe/{} ", id);
 		}
 
-		RecipeDTO dto = recipeService.getRecipeById(id);
+		RecipeDetailDTO dto = new RecipeDetailDTO();
+
+		if (id != null) {
+			dto = recipeService.getRecipeById(id);
+		} else {
+			throw new InvalidParameterException(ExceptionMessageConstants.ID_PARAMETER_IS_NULL);
+		}
 
 		if (log.isInfoEnabled()) {
 			log.info(" Returning from api/recipe/{} :: {}", id, dto.toString());

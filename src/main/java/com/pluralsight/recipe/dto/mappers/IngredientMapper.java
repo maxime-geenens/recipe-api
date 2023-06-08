@@ -10,8 +10,8 @@ import com.pluralsight.recipe.entities.Ingredient;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface IngredientMapper {
-	
-	RecipeMapper MAPPER = Mappers.getMapper(RecipeMapper.class);
+
+	IngredientMapper MAPPER = Mappers.getMapper(IngredientMapper.class);
 
 	@Mapping(source = "ingredientReference.name", target = "name")
 	@Mapping(source = "ingredientReference.type.name", target = "type")

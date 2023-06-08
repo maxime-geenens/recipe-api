@@ -12,4 +12,9 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<String> entityNotFoundException(EntityNotFoundException ex) {
 		return new ResponseEntity<String>(ex.getExceptionMessage(), HttpStatus.NOT_FOUND);
 	}
+
+	@ExceptionHandler(value = InvalidParameterException.class)
+	public ResponseEntity<String> invalidParameterException(InvalidParameterException ex) {
+		return new ResponseEntity<String>(ex.getExceptionMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 }

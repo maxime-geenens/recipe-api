@@ -38,6 +38,6 @@ public class Step {
 
 	@ManyToOne
 	@JoinColumn(name = "recipe_id", referencedColumnName = "id")
-	private Recipe Recipe;
+	private Recipe recipe;
 
 }

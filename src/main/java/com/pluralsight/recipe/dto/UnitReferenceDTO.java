@@ -7,13 +7,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RecipeDTO {
+public class UnitReferenceDTO {
 
 	private Long id;
 	private String lang;
 	private String name;
+	private String symbol;
 	private String description;
-	private String type;
-	private Long typeId;
-	
+
 }

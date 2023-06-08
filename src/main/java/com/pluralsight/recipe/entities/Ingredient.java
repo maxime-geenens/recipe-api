@@ -43,6 +43,6 @@ public class Ingredient {
 
 	@ManyToOne
 	@JoinColumn(name = "recipe_id", referencedColumnName = "id")
-	private Recipe localizedRecipe;
+	private Recipe recipe;
 
 }

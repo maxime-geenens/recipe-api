@@ -36,6 +36,14 @@ public class Recipe {
 	@Column(name = "lang")
 	private String lang;
 
+	/**
+	 * To ensure it stays a reference and no duplicates are created in the table
+	 * 
+	 * Has to be set as lang + name
+	 */
+	@Column(name = "code", unique = true)
+	private String code;
+
 	@ManyToOne
 	@JoinColumn(name = "type", referencedColumnName = "id")
 	private RecipeType type;

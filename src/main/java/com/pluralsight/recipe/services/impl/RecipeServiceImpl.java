@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pluralsight.recipe.dto.RecipeDTO;
+import com.pluralsight.recipe.dto.mappers.RecipeMapper;
 import com.pluralsight.recipe.entities.QRecipe;
 import com.pluralsight.recipe.entities.Recipe;
 import com.pluralsight.recipe.exceptions.EntityNotFoundException;
-import com.pluralsight.recipe.mapper.RecipeMapper;
 import com.pluralsight.recipe.repositories.RecipeRepository;
 import com.pluralsight.recipe.services.RecipeService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;

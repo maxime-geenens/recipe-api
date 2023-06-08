@@ -7,13 +7,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RecipeDTO {
+public class StepDTO {
 
 	private Long id;
 	private String lang;
-	private String name;
+	private Integer position;
 	private String description;
-	private String type;
-	private Long typeId;
-	
+	private Long recipeId;
+
 }

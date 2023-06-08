@@ -1,5 +1,7 @@
 package com.pluralsight.recipe.dto;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,13 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RecipeDTO {
-
-	private Long id;
-	private String lang;
-	private String name;
-	private String description;
-	private String type;
-	private Long typeId;
+public class RecipeDetailDTO {
 	
+	private RecipeDTO recipeDTO;
+	private List<IngredientDTO> ingredientDTOList;
 }

@@ -1,4 +1,4 @@
-package com.pluralsight.recipe.mapper;
+package com.pluralsight.recipe.dto.mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -13,6 +13,4 @@ public interface RecipeTypeMapper {
 	RecipeTypeMapper MAPPER = Mappers.getMapper(RecipeTypeMapper.class);
 
 	RecipeTypeDTO mapToDTO(RecipeType entity);
-
-	RecipeType mapToEntity(RecipeTypeDTO dto);
 }

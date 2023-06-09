@@ -15,7 +15,7 @@ public class IngredientDTO {
 	private String type;
 	private Double quantity;
 	private String unit;
-	private Long unitId;
-	private Long refId;
+	private Long unitRefId;
+	private Long ingredientRefId;
 	private Long recipeId;
 }

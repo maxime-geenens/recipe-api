@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pluralsight.recipe.dto.RecipeRequestDTO;
 import com.pluralsight.recipe.exceptions.EntityNotFoundException;
 import com.pluralsight.recipe.exceptions.InvalidParameterException;
 import com.pluralsight.recipe.dto.RecipeDTO;
@@ -37,13 +36,13 @@ public class RecipeController {
 	public ResponseEntity<List<RecipeDTO>> listRecipes(@PathVariable(required = false) String lang) {
 
 		if (log.isInfoEnabled()) {
-			log.info(" API Call api/recipe/{} ", lang);
+			log.info(" GET API Call api/recipes/{} ", lang);
 		}
 
 		List<RecipeDTO> list = recipeService.listRecipes(lang);
 
 		if (log.isInfoEnabled()) {
-			log.info(" Returning from api/recipe/{} :: {}", lang, list.toString());
+			log.info(" Returning from api/recipes/{} :: {}", lang, list.toString());
 		}
 
 		return new ResponseEntity<List<RecipeDTO>>(list, HttpStatus.OK);
@@ -54,7 +53,7 @@ public class RecipeController {
 			throws EntityNotFoundException, InvalidParameterException {
 
 		if (log.isInfoEnabled()) {
-			log.info(" API Call api/recipe/{} ", id);
+			log.info(" GET API Call api/recipes/{} ", id);
 		}
 
 		RecipeDetailDTO dto = new RecipeDetailDTO();
@@ -62,24 +61,34 @@ public class RecipeController {
 		if (id != null) {
 			dto = recipeService.getRecipeById(id);
 		} else {
-			throw new InvalidParameterException(ExceptionMessageConstants.ID_PARAMETER_IS_NULL);
+			throw new InvalidParameterException(ExceptionMessageConstants.PARAMETER_NULL);
 		}
 
 		if (log.isInfoEnabled()) {
-			log.info(" Returning from api/recipe/{} :: {}", id, dto.toString());
+			log.info(" Returning from api/recipes/{} :: {}", id, dto.toString());
 		}
 
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 
 	@PostMapping(path = "/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public RecipeDTO createRecipe(@RequestBody(required = true) RecipeRequestDTO recipe) {
+	public ResponseEntity<RecipeDetailDTO> createRecipe(@RequestBody(required = true) RecipeDetailDTO recipeDetailDTO) {
 
-		return null;
+		if (log.isInfoEnabled()) {
+			log.info(" POST API Call api/recipes/create :: {} ", recipeDetailDTO);
+		}
+
+		RecipeDetailDTO recipe = recipeService.createRecipe(recipeDetailDTO);
+
+		if (log.isInfoEnabled()) {
+			log.info(" Returning from api/recipes/create :: {} ", recipe);
+		}
+
+		return new ResponseEntity<>(recipe, HttpStatus.OK);
 	}
 
 	@PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public RecipeDTO updateRecipe(@RequestBody(required = true) RecipeRequestDTO recipe,
+	public ResponseEntity<RecipeDetailDTO> updateRecipe(@RequestBody(required = true) RecipeDetailDTO recipeDetailDTO,
 			@PathVariable(required = true) Long id) {
 
 		return null;

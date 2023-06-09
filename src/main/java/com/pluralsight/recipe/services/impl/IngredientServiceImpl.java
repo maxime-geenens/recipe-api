@@ -35,4 +35,9 @@ public class IngredientServiceImpl implements IngredientService {
 				.collect(Collectors.toList());
 	}
 
+	@Override
+	public List<Ingredient> createIngredientList(List<Ingredient> ingredientList) {
+		return ingredientRepository.saveAll(ingredientList);
+	}
+
 }

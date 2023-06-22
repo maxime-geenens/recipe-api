@@ -1,6 +1,7 @@
 package com.pluralsight.recipe.services.impl;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,7 +40,46 @@ public class StepServiceImpl implements StepService {
 
 		stepList = (List<Step>) stepRepository.findAll(predicate);
 
-		return stepList.stream().map((entity) -> StepMapper.MAPPER.mapToDTO(entity)).collect(Collectors.toList());
+		return stepList.stream().map((entity) -> StepMapper.MAPPER.mapToDTO(entity))
+				.sorted(Comparator.comparingInt(StepDTO::getPosition)).collect(Collectors.toList());
+	}
+
+	@Override
+	public StepDTO addStep(StepDTO dto) {
+
+		List<Step> stepList = new ArrayList<>();
+
+		QStep qStep = QStep.step;
+		Predicate predicate = qStep.recipe.id.eq(dto.getRecipeId());
+
+		stepList = (List<Step>) stepRepository.findAll(predicate);
+
+		List<Integer> positionList = stepList.stream().map(Step::getPosition).sorted().collect(Collectors.toList());
+		Integer lastPosition = positionList.get(positionList.size() - 1);
+		if (!dto.getPosition().equals(lastPosition + 1)) {
+			dto.setPosition(lastPosition + 1);
+		}
+
+		StepBuilder builder = new StepBuilder();
+
+		Recipe recipe = new Recipe();
+		Optional<Recipe> oRecipe = recipeRepository.findById(dto.getRecipeId());
+		if (oRecipe.isPresent()) {
+			recipe = oRecipe.get();
+		} else {
+			throw new EntityNotFoundException(ExceptionMessageConstants.RECIPE_NOT_FOUND);
+		}
+
+		Step step = builder
+				.addLang(dto.getLang())
+				.addPosition(dto.getPosition())
+				.addDescription(dto.getDescription())
+				.addRecipe(recipe)
+				.build();
+
+		Step savedStep = stepRepository.save(step);
+
+		return StepMapper.MAPPER.mapToDTO(savedStep);
 	}
 
 	@Override
@@ -83,6 +123,52 @@ public class StepServiceImpl implements StepService {
 				.build();
 
 		return step;
+	}
+
+	@Override
+	public List<StepDTO> updateStepList(List<StepDTO> requestDTO) {
+
+		List<Step> stepList = new ArrayList<>();
+
+		for (StepDTO dto : requestDTO) {
+
+			Step step = new Step();
+
+			if (dto.getId() != null) {
+
+				Optional<Step> oStep = stepRepository.findById(dto.getId());
+
+				if (oStep.isPresent()) {
+					step = oStep.get();
+				} else {
+					throw new EntityNotFoundException(ExceptionMessageConstants.STEP_NOT_FOUND);
+				}
+			} else {
+				throw new InvalidParameterException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			}
+
+			String description = dto.getDescription();
+			if (description != null && !description.isEmpty() && !description.isBlank()) {
+				step.setDescription(description);
+			}
+
+			Integer position = dto.getPosition();
+			if (position != null) {
+				step.setPosition(position);
+			}
+
+			stepList.add(step);
+		}
+
+		List<Step> updatedStepList = stepRepository.saveAll(stepList);
+
+		return updatedStepList.stream().map((entity) -> StepMapper.MAPPER.mapToDTO(entity))
+				.sorted(Comparator.comparingInt(StepDTO::getPosition)).collect(Collectors.toList());
+	}
+
+	@Override
+	public void deleteStep(Long id) {
+		stepRepository.deleteById(id);
 	}
 
 }

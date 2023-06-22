@@ -23,4 +23,30 @@ public interface StepService {
 	 */
 	List<StepDTO> createStepList(List<StepDTO> requestDTO);
 
+	/**
+	 * 
+	 * Update a list of steps for a given recipe
+	 * 
+	 * @param requestDTO
+	 * @return
+	 */
+	List<StepDTO> updateStepList(List<StepDTO> requestDTO);
+
+	/**
+	 * 
+	 * Delete a step for a given id
+	 * 
+	 * @param id
+	 */
+	void deleteStep(Long id);
+
+	/**
+	 * 
+	 * Add a step to a given recipe
+	 * 
+	 * @param requestDTO
+	 * @return
+	 */
+	StepDTO addStep(StepDTO requestDTO);
+
 }

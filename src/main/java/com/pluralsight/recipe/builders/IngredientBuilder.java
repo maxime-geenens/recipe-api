@@ -94,7 +94,7 @@ public class IngredientBuilder {
 						" recipe.code ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY);
 			}
 		} else {
-			throw new InvalidParameterException(" recipe ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			throw new InvalidParameterException(" Recipe ::" + ExceptionMessageConstants.PARAMETER_NULL);
 		}
 	}
 

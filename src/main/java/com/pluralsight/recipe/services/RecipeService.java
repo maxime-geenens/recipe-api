@@ -28,9 +28,18 @@ public interface RecipeService {
 	/**
 	 * Create a new recipe and persist it in database
 	 * 
-	 * @param recipeDetailDTO
-	 * @return recipeDetailDTO
+	 * @param recipeDTO
+	 * @return RecipeDetailDTO
 	 */
-	RecipeDetailDTO createRecipe(RecipeDetailDTO recipeDetailDTO);
+	RecipeDTO createRecipe(RecipeDTO recipeDTO);
+
+	/**
+	 * 
+	 * Update a recipe
+	 * 
+	 * @param recipeDTO
+	 * @return RecipeDetailDTO
+	 */
+	RecipeDTO updateRecipe(RecipeDTO recipeDTO);
 
 }

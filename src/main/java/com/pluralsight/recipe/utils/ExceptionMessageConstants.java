@@ -8,11 +8,13 @@ public class ExceptionMessageConstants {
 	public static final String STEPT_LIST_NOT_FOUND = " Step list not found for this recipe.";
 	public static final String RECIPE_TYPE_CODE_NOT_FOUND = " RecipeType not found for the given code.";
 	public static final String UNIT_REFERENCE_NOT_FOUND = " UnitReference not found.";
+	public static final String INGREDIENT_REFERENCE_NOT_FOUND = " IngredientReference not found.";
 
 	// INVALID PARAMETER
 	public static final String PARAMETER_NULL = " Parameter shall not be null.";
 	public static final String PARAMETER_INVALID = " Parameter isn't valid.";
 	public static final String PARAMETER_BLANK_EMPTY = " Parameter shall not be blank or empty.";
 	public static final String PARAMETER_NEGATIVE = " Parameter shall not < 0 .";
+	public static final String PARAMETER_UNIQUE = " Parameter shall be unique.";
 
 }

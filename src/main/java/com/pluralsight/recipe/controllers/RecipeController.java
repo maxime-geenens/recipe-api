@@ -72,13 +72,13 @@ public class RecipeController {
 	}
 
 	@PostMapping(path = "/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<RecipeDetailDTO> createRecipe(@RequestBody(required = true) RecipeDetailDTO recipeDetailDTO) {
+	public ResponseEntity<RecipeDTO> createRecipe(@RequestBody(required = true) RecipeDTO recipeDTO) {
 
 		if (log.isInfoEnabled()) {
-			log.info(" POST API Call api/recipes/create :: {} ", recipeDetailDTO);
+			log.info(" POST API Call api/recipes/create :: {} ", recipeDTO);
 		}
 
-		RecipeDetailDTO recipe = recipeService.createRecipe(recipeDetailDTO);
+		RecipeDTO recipe = recipeService.createRecipe(recipeDTO);
 
 		if (log.isInfoEnabled()) {
 			log.info(" Returning from api/recipes/create :: {} ", recipe);
@@ -88,10 +88,20 @@ public class RecipeController {
 	}
 
 	@PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<RecipeDetailDTO> updateRecipe(@RequestBody(required = true) RecipeDetailDTO recipeDetailDTO,
+	public ResponseEntity<RecipeDTO> updateRecipe(@RequestBody(required = true) RecipeDTO recipeDTO,
 			@PathVariable(required = true) Long id) {
 
-		return null;
+		if (log.isInfoEnabled()) {
+			log.info(" PUT API Call api/recipes/{} :: {} ", id, recipeDTO);
+		}
+
+		RecipeDTO recipe = recipeService.updateRecipe(recipeDTO);
+
+		if (log.isInfoEnabled()) {
+			log.info(" Returning from api/recipes/{} :: {} ", id, recipe);
+		}
+
+		return new ResponseEntity<>(recipe, HttpStatus.OK);
 	}
 
 	@DeleteMapping(path = "/{id}")

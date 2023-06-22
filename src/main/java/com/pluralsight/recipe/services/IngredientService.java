@@ -3,7 +3,6 @@ package com.pluralsight.recipe.services;
 import java.util.List;
 
 import com.pluralsight.recipe.dto.IngredientDTO;
-import com.pluralsight.recipe.entities.Ingredient;
 
 public interface IngredientService {
 
@@ -18,9 +17,9 @@ public interface IngredientService {
 	/**
 	 * Creates and persists an ingredient list
 	 * 
-	 * @param ingredientList
+	 * @param requestDTO
 	 * @return List<Ingredient>
 	 */
-	List<Ingredient> createIngredientList(List<Ingredient> ingredientList);
+	List<IngredientDTO> createIngredientList(List<IngredientDTO> requestDTO);
 
 }

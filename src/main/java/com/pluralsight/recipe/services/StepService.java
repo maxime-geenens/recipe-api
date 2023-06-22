@@ -14,4 +14,13 @@ public interface StepService {
 	 */
 	List<StepDTO> listStepsByRecipe(Long id);
 
+	/**
+	 * 
+	 * Creates and persists a step list
+	 * 
+	 * @param requestDTO
+	 * @return List<Step>
+	 */
+	List<StepDTO> createStepList(List<StepDTO> requestDTO);
+
 }

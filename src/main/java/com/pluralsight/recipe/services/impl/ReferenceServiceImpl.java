@@ -4,11 +4,12 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.pluralsight.recipe.entities.IngredientReference;
 import com.pluralsight.recipe.entities.QRecipeType;
-import com.pluralsight.recipe.entities.QUnitReference;
 import com.pluralsight.recipe.entities.RecipeType;
 import com.pluralsight.recipe.entities.UnitReference;
 import com.pluralsight.recipe.exceptions.EntityNotFoundException;
+import com.pluralsight.recipe.repositories.IngredientReferenceRepository;
 import com.pluralsight.recipe.repositories.RecipeTypeRepository;
 import com.pluralsight.recipe.repositories.UnitReferenceRepository;
 import com.pluralsight.recipe.services.ReferenceService;
@@ -22,6 +23,9 @@ public class ReferenceServiceImpl implements ReferenceService {
 
 	@Autowired
 	private UnitReferenceRepository unitReferenceRepository;
+
+	@Autowired
+	private IngredientReferenceRepository ingredientReferenceRepository;
 
 	@Override
 	public RecipeType getRecipeTypeByCode(String typeCode) {
@@ -53,6 +57,22 @@ public class ReferenceServiceImpl implements ReferenceService {
 			response = oUnitRef.get();
 		} else {
 			throw new EntityNotFoundException(ExceptionMessageConstants.UNIT_REFERENCE_NOT_FOUND);
+		}
+
+		return response;
+	}
+
+	@Override
+	public IngredientReference getIngredientReferenceById(Long ingredientRefId) {
+
+		IngredientReference response = new IngredientReference();
+
+		Optional<IngredientReference> oIngredientRef = ingredientReferenceRepository.findById(ingredientRefId);
+
+		if (oIngredientRef.isPresent()) {
+			response = oIngredientRef.get();
+		} else {
+			throw new EntityNotFoundException(ExceptionMessageConstants.INGREDIENT_REFERENCE_NOT_FOUND);
 		}
 
 		return response;

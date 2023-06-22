@@ -42,4 +42,12 @@ public interface RecipeService {
 	 */
 	RecipeDTO updateRecipe(RecipeDTO recipeDTO);
 
+	/**
+	 * 
+	 * Delete a recipe with given id.
+	 * 
+	 * @param id
+	 */
+	void deleteRecipe(Long id);
+
 }

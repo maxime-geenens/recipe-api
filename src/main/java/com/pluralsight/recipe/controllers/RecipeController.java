@@ -107,5 +107,15 @@ public class RecipeController {
 	@DeleteMapping(path = "/{id}")
 	public void deleteRecipe(@PathVariable(required = true) Long id) {
 
+		if (log.isInfoEnabled()) {
+			log.info(" DELETE API Call api/recipes/{} ", id);
+		}
+
+		recipeService.deleteRecipe(id);
+
+		if (log.isInfoEnabled()) {
+			log.info(" Recipe (id :: {}) has been deleted.", id);
+		}
+
 	}
 }

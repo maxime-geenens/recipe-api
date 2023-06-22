@@ -86,11 +86,4 @@ public class RecipeBuilder {
 		}
 	}
 
-	// Only to update the recipe
-	public void validateId() {
-		if (recipe.getId() == null) {
-			throw new InvalidParameterException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
-		}
-	}
-
 }

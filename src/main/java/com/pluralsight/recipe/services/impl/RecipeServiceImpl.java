@@ -18,6 +18,7 @@ import com.pluralsight.recipe.entities.QRecipe;
 import com.pluralsight.recipe.entities.Recipe;
 import com.pluralsight.recipe.entities.RecipeType;
 import com.pluralsight.recipe.exceptions.EntityNotFoundException;
+import com.pluralsight.recipe.exceptions.InvalidParameterException;
 import com.pluralsight.recipe.repositories.RecipeRepository;
 import com.pluralsight.recipe.services.IngredientService;
 import com.pluralsight.recipe.services.RecipeService;
@@ -67,7 +68,7 @@ public class RecipeServiceImpl implements RecipeService {
 		Optional<Recipe> oRecipe = recipeRepository.findById(id);
 		RecipeDTO recipeDTO = new RecipeDTO();
 
-		if (oRecipe.isPresent() && !oRecipe.isEmpty()) {
+		if (oRecipe.isPresent()) {
 			recipeDTO = RecipeMapper.MAPPER.mapToDTO(oRecipe.get());
 			response.setRecipeDTO(recipeDTO);
 		} else {
@@ -114,7 +115,44 @@ public class RecipeServiceImpl implements RecipeService {
 	@Override
 	public RecipeDTO updateRecipe(RecipeDTO requestDTO) {
 
-		return null;
+		Recipe recipe = new Recipe();
+
+		if (requestDTO.getId() != null) {
+
+			Optional<Recipe> oRecipe = recipeRepository.findById(requestDTO.getId());
+
+			if (oRecipe.isPresent()) {
+				recipe = oRecipe.get();
+			} else {
+				throw new EntityNotFoundException(ExceptionMessageConstants.RECIPE_NOT_FOUND);
+			}
+		} else {
+			throw new InvalidParameterException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
+		}
+
+		String name = requestDTO.getName();
+		if (name != null && !name.isEmpty() && !name.isBlank()) {
+			recipe.setName(name);
+		}
+
+		String description = requestDTO.getDescription();
+		if (description != null && !description.isEmpty() && !description.isBlank()) {
+			recipe.setDescription(description);
+		}
+
+		String typeCode = requestDTO.getTypeCode();
+		if (typeCode != null && !typeCode.isEmpty() && !typeCode.isBlank()) {
+			recipe.setType(referenceService.getRecipeTypeByCode(typeCode));
+		}
+
+		Recipe updatedRecipe = recipeRepository.save(recipe);
+
+		return RecipeMapper.MAPPER.mapToDTO(updatedRecipe);
+	}
+
+	@Override
+	public void deleteRecipe(Long id) {
+		recipeRepository.deleteById(id);
 	}
 
 }

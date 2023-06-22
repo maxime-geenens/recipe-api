@@ -98,11 +98,4 @@ public class IngredientBuilder {
 		}
 	}
 
-	// Only to update the ingredient
-	public void validateId() {
-		if (ingredient.getId() == null) {
-			throw new InvalidParameterException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
-		}
-	}
-
 }

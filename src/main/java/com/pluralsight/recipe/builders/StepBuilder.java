@@ -64,11 +64,4 @@ public class StepBuilder {
 
 	}
 
-	// Only to update the step
-	public void validateId() {
-		if (step.getId() == null) {
-			throw new InvalidParameterException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
-		}
-	}
-
 }

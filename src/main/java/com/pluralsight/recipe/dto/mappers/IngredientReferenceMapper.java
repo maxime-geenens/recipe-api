@@ -9,9 +9,9 @@ import com.pluralsight.recipe.dto.IngredientReferenceDTO;
 import com.pluralsight.recipe.entities.IngredientReference;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.ERROR)
-public interface IngredientRefrenceMapper {
+public interface IngredientReferenceMapper {
 
-	IngredientRefrenceMapper MAPPER = Mappers.getMapper(IngredientRefrenceMapper.class);
+	IngredientReferenceMapper MAPPER = Mappers.getMapper(IngredientReferenceMapper.class);
 
 	@Mapping(source = "type.name", target = "type")
 	@Mapping(source = "type.id", target = "typeId")

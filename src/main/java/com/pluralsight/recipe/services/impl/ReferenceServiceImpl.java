@@ -1,15 +1,26 @@
 package com.pluralsight.recipe.services.impl;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.pluralsight.recipe.builders.IngredientReferenceBuilder;
+import com.pluralsight.recipe.dto.IngredientReferenceDTO;
+import com.pluralsight.recipe.dto.UnitReferenceDTO;
+import com.pluralsight.recipe.dto.mappers.IngredientReferenceMapper;
+import com.pluralsight.recipe.dto.mappers.UnitReferenceMapper;
 import com.pluralsight.recipe.entities.IngredientReference;
+import com.pluralsight.recipe.entities.IngredientType;
+import com.pluralsight.recipe.entities.QIngredientReference;
 import com.pluralsight.recipe.entities.QRecipeType;
+import com.pluralsight.recipe.entities.QUnitReference;
 import com.pluralsight.recipe.entities.RecipeType;
 import com.pluralsight.recipe.entities.UnitReference;
 import com.pluralsight.recipe.exceptions.EntityNotFoundException;
 import com.pluralsight.recipe.repositories.IngredientReferenceRepository;
+import com.pluralsight.recipe.repositories.IngredientTypeRepository;
 import com.pluralsight.recipe.repositories.RecipeTypeRepository;
 import com.pluralsight.recipe.repositories.UnitReferenceRepository;
 import com.pluralsight.recipe.services.ReferenceService;
@@ -26,6 +37,9 @@ public class ReferenceServiceImpl implements ReferenceService {
 
 	@Autowired
 	private IngredientReferenceRepository ingredientReferenceRepository;
+
+	@Autowired
+	private IngredientTypeRepository ingredientTypeRepository;
 
 	@Override
 	public RecipeType getRecipeTypeByCode(String typeCode) {
@@ -76,6 +90,61 @@ public class ReferenceServiceImpl implements ReferenceService {
 		}
 
 		return response;
+	}
+
+	@Override
+	public List<IngredientReferenceDTO> listIngredientsByTypeAndLang(String type, String lang) {
+
+		QIngredientReference qIngredientRef = QIngredientReference.ingredientReference;
+		Predicate predicate = qIngredientRef.type.name.eq(type).and(qIngredientRef.lang.eq(lang));
+
+		List<IngredientReference> ingredientList = (List<IngredientReference>) ingredientReferenceRepository
+				.findAll(predicate);
+
+		return ingredientList.stream().map((entity) -> IngredientReferenceMapper.MAPPER.mapToDTO(entity))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<UnitReferenceDTO> listUnitsByLang(String lang) {
+
+		QUnitReference qUnitReference = QUnitReference.unitReference;
+		Predicate predicate = qUnitReference.lang.eq(lang);
+
+		List<UnitReference> unitList = (List<UnitReference>) unitReferenceRepository.findAll(predicate);
+
+		return unitList.stream().map((entity) -> UnitReferenceMapper.MAPPER.mapToDTO(entity))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public IngredientReferenceDTO addIngredientRef(IngredientReferenceDTO dto) {
+
+		IngredientReferenceBuilder builder = new IngredientReferenceBuilder();
+
+		IngredientType type = findIngredientTypeById(dto.getTypeId());
+
+		IngredientReference ingredientRef = builder
+				.addLang(dto.getLang())
+				.addName(dto.getName())
+				.addType(type)
+				.build();
+
+		IngredientReference savedIngredientRef = ingredientReferenceRepository.save(ingredientRef);
+
+		return IngredientReferenceMapper.MAPPER.mapToDTO(savedIngredientRef);
+	}
+
+	private IngredientType findIngredientTypeById(Long id) {
+
+		Optional<IngredientType> oType = ingredientTypeRepository.findById(id);
+
+		if (oType.isPresent()) {
+			return oType.get();
+		} else {
+			throw new EntityNotFoundException(ExceptionMessageConstants.INGREDIENT_TYPE_NOT_FOUND);
+		}
+
 	}
 
 }

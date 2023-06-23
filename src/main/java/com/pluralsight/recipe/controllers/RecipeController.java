@@ -33,7 +33,7 @@ public class RecipeController {
 	private RecipeService recipeService;
 
 	@GetMapping(path = "/{lang}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<RecipeDTO>> listRecipes(@PathVariable(required = false) String lang) {
+	public ResponseEntity<List<RecipeDTO>> listRecipes(@PathVariable(name="lang", required = false) String lang) {
 
 		if (log.isInfoEnabled()) {
 			log.info(" GET API Call api/recipes/{} ", lang);
@@ -49,7 +49,7 @@ public class RecipeController {
 	}
 
 	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<RecipeDetailDTO> getRecipeDetail(@PathVariable(required = true) Long id)
+	public ResponseEntity<RecipeDetailDTO> getRecipeDetail(@PathVariable(name="id", required = true) Long id)
 			throws EntityNotFoundException, InvalidParameterException {
 
 		if (log.isInfoEnabled()) {
@@ -89,7 +89,7 @@ public class RecipeController {
 
 	@PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<RecipeDTO> updateRecipe(@RequestBody(required = true) RecipeDTO recipeDTO,
-			@PathVariable(required = true) Long id) {
+			@PathVariable(name="id", required = true) Long id) {
 
 		if (log.isInfoEnabled()) {
 			log.info(" PUT API Call api/recipes/{} :: {} ", id, recipeDTO);
@@ -105,7 +105,7 @@ public class RecipeController {
 	}
 
 	@DeleteMapping(path = "/{id}")
-	public void deleteRecipe(@PathVariable(required = true) Long id) {
+	public void deleteRecipe(@PathVariable(name="id", required = true) Long id) {
 
 		if (log.isInfoEnabled()) {
 			log.info(" DELETE API Call api/recipes/{} ", id);

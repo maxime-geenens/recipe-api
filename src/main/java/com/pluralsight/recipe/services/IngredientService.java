@@ -22,4 +22,30 @@ public interface IngredientService {
 	 */
 	List<IngredientDTO> createIngredientList(List<IngredientDTO> requestDTO);
 
+	/**
+	 * 
+	 * Update a list of ingredients for a given recipe
+	 * 
+	 * @param requestDTO
+	 * @return List<IngredientDTO>
+	 */
+	List<IngredientDTO> updateIngredientList(List<IngredientDTO> requestDTO);
+
+	/**
+	 * 
+	 * Delete an ingredient for a given id
+	 * 
+	 * @param id
+	 */
+	void deleteIngredient(Long id);
+
+	/**
+	 * 
+	 * Add an ingredient to a given recipe
+	 * 
+	 * @param requestDTO
+	 * @return IngredientDTO
+	 */
+	IngredientDTO addIngredient(IngredientDTO requestDTO);
+
 }

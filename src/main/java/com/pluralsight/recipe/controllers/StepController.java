@@ -45,7 +45,7 @@ public class StepController {
 
 	@PutMapping(path = "/list/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<StepDTO>> updateStepList(@RequestBody(required = true) List<StepDTO> requestDTO,
-			@PathVariable(required = true) Long recipeId) {
+			@PathVariable(name = "id", required = true) Long recipeId) {
 
 		if (log.isInfoEnabled()) {
 			log.info(" PUT API Call api/steps/list/{} :: {} ", recipeId, requestDTO);
@@ -61,7 +61,7 @@ public class StepController {
 	}
 
 	@DeleteMapping(path = "/{id}")
-	public void deleteStep(@PathVariable(required = true) Long id) {
+	public void deleteStep(@PathVariable(name = "id", required = true) Long id) {
 
 		if (log.isInfoEnabled()) {
 			log.info(" DELETE API Call api/steps/{} ", id);

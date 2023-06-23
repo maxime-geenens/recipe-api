@@ -28,7 +28,7 @@ public interface StepService {
 	 * Update a list of steps for a given recipe
 	 * 
 	 * @param requestDTO
-	 * @return
+	 * @return List<StepDTO>
 	 */
 	List<StepDTO> updateStepList(List<StepDTO> requestDTO);
 
@@ -45,7 +45,7 @@ public interface StepService {
 	 * Add a step to a given recipe
 	 * 
 	 * @param requestDTO
-	 * @return
+	 * @return StepDTO
 	 */
 	StepDTO addStep(StepDTO requestDTO);
 

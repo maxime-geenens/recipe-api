@@ -10,6 +10,7 @@ public class ExceptionMessageConstants {
 	public static final String UNIT_REFERENCE_NOT_FOUND = " UnitReference not found.";
 	public static final String INGREDIENT_REFERENCE_NOT_FOUND = " IngredientReference not found.";
 	public static final String STEP_NOT_FOUND = " Step not found.";
+	public static final String INGREDIENT_NOT_FOUND = " Ingredient not found.";
 
 	// INVALID PARAMETER
 	public static final String PARAMETER_NULL = " Parameter shall not be null.";

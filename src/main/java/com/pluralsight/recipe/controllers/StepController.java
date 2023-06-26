@@ -43,24 +43,23 @@ public class StepController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@PutMapping(path = "/list/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<StepDTO>> updateStepList(@RequestBody(required = true) List<StepDTO> requestDTO,
-			@PathVariable(name = "id", required = true) Long recipeId) {
+	@PutMapping(path = "/list/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<StepDTO>> updateStepList(@RequestBody(required = true) List<StepDTO> requestDTO) {
 
 		if (log.isInfoEnabled()) {
-			log.info(" PUT API Call api/steps/list/{} :: {} ", recipeId, requestDTO);
+			log.info(" PUT API Call api/steps/list/update :: {} ", requestDTO);
 		}
 
 		List<StepDTO> response = stepService.updateStepList(requestDTO);
 
 		if (log.isInfoEnabled()) {
-			log.info(" Returning from api/steps/list/{} :: {} ", recipeId, response);
+			log.info(" Returning from api/steps/list/update :: {} ", response);
 		}
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@DeleteMapping(path = "/{id}")
+	@DeleteMapping(path = "/delete/{id}")
 	public void deleteStep(@PathVariable(name = "id", required = true) Long id) {
 
 		if (log.isInfoEnabled()) {

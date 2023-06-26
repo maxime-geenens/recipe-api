@@ -8,7 +8,7 @@ import com.pluralsight.recipe.entities.IngredientReference;
 import com.pluralsight.recipe.entities.RecipeType;
 import com.pluralsight.recipe.entities.UnitReference;
 
-public interface ReferenceService {
+public interface ReferencesService {
 
 	/**
 	 * Retrieves a recipe type for a given code

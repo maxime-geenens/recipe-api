@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pluralsight.recipe.exceptions.EntityNotFoundException;
-import com.pluralsight.recipe.exceptions.InvalidParameterException;
+import com.pluralsight.recipe.exceptions.EntityWasNotFoundException;
+import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.dto.RecipeDTO;
 import com.pluralsight.recipe.dto.RecipeDetailDTO;
 import com.pluralsight.recipe.services.RecipeService;
@@ -32,8 +32,8 @@ public class RecipeController {
 	@Autowired
 	private RecipeService recipeService;
 
-	@GetMapping(path = "/{lang}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<RecipeDTO>> listRecipes(@PathVariable(name="lang", required = false) String lang) {
+	@GetMapping(path = "/lang/{lang}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<RecipeDTO>> listRecipesByLang(@PathVariable(name="lang", required = false) String lang) {
 
 		if (log.isInfoEnabled()) {
 			log.info(" GET API Call api/recipes/{} ", lang);
@@ -50,7 +50,7 @@ public class RecipeController {
 
 	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<RecipeDetailDTO> getRecipeDetail(@PathVariable(name="id", required = true) Long id)
-			throws EntityNotFoundException, InvalidParameterException {
+			throws EntityWasNotFoundException, InvalidParamException {
 
 		if (log.isInfoEnabled()) {
 			log.info(" GET API Call api/recipes/{} ", id);
@@ -61,7 +61,7 @@ public class RecipeController {
 		if (id != null) {
 			dto = recipeService.getRecipeById(id);
 		} else {
-			throw new InvalidParameterException(ExceptionMessageConstants.PARAMETER_NULL);
+			throw new InvalidParamException(ExceptionMessageConstants.PARAMETER_NULL);
 		}
 
 		if (log.isInfoEnabled()) {
@@ -87,7 +87,7 @@ public class RecipeController {
 		return new ResponseEntity<>(recipe, HttpStatus.OK);
 	}
 
-	@PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(path = "/update/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<RecipeDTO> updateRecipe(@RequestBody(required = true) RecipeDTO recipeDTO,
 			@PathVariable(name="id", required = true) Long id) {
 
@@ -104,7 +104,7 @@ public class RecipeController {
 		return new ResponseEntity<>(recipe, HttpStatus.OK);
 	}
 
-	@DeleteMapping(path = "/{id}")
+	@DeleteMapping(path = "/delete/{id}")
 	public void deleteRecipe(@PathVariable(name="id", required = true) Long id) {
 
 		if (log.isInfoEnabled()) {

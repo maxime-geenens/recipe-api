@@ -17,12 +17,12 @@ import com.pluralsight.recipe.dto.mappers.RecipeMapper;
 import com.pluralsight.recipe.entities.QRecipe;
 import com.pluralsight.recipe.entities.Recipe;
 import com.pluralsight.recipe.entities.RecipeType;
-import com.pluralsight.recipe.exceptions.EntityNotFoundException;
-import com.pluralsight.recipe.exceptions.InvalidParameterException;
+import com.pluralsight.recipe.exceptions.EntityWasNotFoundException;
+import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.repositories.RecipeRepository;
 import com.pluralsight.recipe.services.IngredientService;
 import com.pluralsight.recipe.services.RecipeService;
-import com.pluralsight.recipe.services.ReferenceService;
+import com.pluralsight.recipe.services.ReferencesService;
 import com.pluralsight.recipe.services.StepService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 import com.querydsl.core.types.Predicate;
@@ -31,7 +31,7 @@ import com.querydsl.core.types.Predicate;
 public class RecipeServiceImpl implements RecipeService {
 	
 	@Autowired
-	private ReferenceService referenceService;
+	private ReferencesService referenceService;
 
 	@Autowired
 	private IngredientService ingredientService;
@@ -61,7 +61,7 @@ public class RecipeServiceImpl implements RecipeService {
 	}
 
 	@Override
-	public RecipeDetailDTO getRecipeById(Long id) throws EntityNotFoundException {
+	public RecipeDetailDTO getRecipeById(Long id) throws EntityWasNotFoundException {
 
 		RecipeDetailDTO response = new RecipeDetailDTO();
 
@@ -70,17 +70,17 @@ public class RecipeServiceImpl implements RecipeService {
 
 		if (oRecipe.isPresent()) {
 			recipeDTO = RecipeMapper.MAPPER.mapToDTO(oRecipe.get());
-			response.setRecipeDTO(recipeDTO);
+			response.setRecipe(recipeDTO);
 		} else {
-			throw new EntityNotFoundException(ExceptionMessageConstants.RECIPE_NOT_FOUND);
+			throw new EntityWasNotFoundException(ExceptionMessageConstants.RECIPE_NOT_FOUND);
 		}
 
 		List<IngredientDTO> ingredientDTOList = ingredientService.listIngredientsByRecipe(id);
 
 		if (!ingredientDTOList.isEmpty()) {
-			response.setIngredientDTOList(ingredientDTOList);
+			response.setIngredientList(ingredientDTOList);
 		} else {
-			throw new EntityNotFoundException(ExceptionMessageConstants.INGREDIENT_LIST_NOT_FOUND);
+			throw new EntityWasNotFoundException(ExceptionMessageConstants.INGREDIENT_LIST_NOT_FOUND);
 		}
 
 		List<StepDTO> stepDTOList = stepService.listStepsByRecipe(id);
@@ -88,7 +88,7 @@ public class RecipeServiceImpl implements RecipeService {
 		if (!stepDTOList.isEmpty()) {
 			response.setStepList(stepDTOList);
 		} else {
-			throw new EntityNotFoundException(ExceptionMessageConstants.STEPT_LIST_NOT_FOUND);
+			throw new EntityWasNotFoundException(ExceptionMessageConstants.STEPT_LIST_NOT_FOUND);
 		}
 
 		return response;
@@ -124,10 +124,10 @@ public class RecipeServiceImpl implements RecipeService {
 			if (oRecipe.isPresent()) {
 				recipe = oRecipe.get();
 			} else {
-				throw new EntityNotFoundException(ExceptionMessageConstants.RECIPE_NOT_FOUND);
+				throw new EntityWasNotFoundException(ExceptionMessageConstants.RECIPE_NOT_FOUND);
 			}
 		} else {
-			throw new InvalidParameterException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			throw new InvalidParamException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
 		}
 
 		String name = requestDTO.getName();

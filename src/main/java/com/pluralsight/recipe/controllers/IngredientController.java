@@ -44,28 +44,27 @@ public class IngredientController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@PutMapping(path = "/list/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<IngredientDTO>> updateIngredientList(@RequestBody(required = true) List<IngredientDTO> requestDTO,
-			@PathVariable(name="id", required = true) Long recipeId) {
+	@PutMapping(path = "/list/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<IngredientDTO>> updateIngredientList(@RequestBody(required = true) List<IngredientDTO> requestDTO) {
 
 		if (log.isInfoEnabled()) {
-			log.info(" PUT API Call api/ingredients/list/{} :: {} ", recipeId, requestDTO);
+			log.info(" PUT API Call api/ingredients/list/update :: {} ", requestDTO);
 		}
 
 		List<IngredientDTO> response = ingredientService.updateIngredientList(requestDTO);
 
 		if (log.isInfoEnabled()) {
-			log.info(" Returning from api/ingredients/list/{} :: {} ", recipeId, response);
+			log.info(" Returning from api/ingredients/list/update :: {} ", response);
 		}
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@DeleteMapping(path = "/{id}")
+	@DeleteMapping(path = "/delete/{id}")
 	public void deleteIngredient(@PathVariable(name="id", required = true) Long id) {
 
 		if (log.isInfoEnabled()) {
-			log.info(" DELETE API Call api/ingredients/{} ", id);
+			log.info(" DELETE API Call api/ingredients/delete/{} ", id);
 		}
 
 		ingredientService.deleteIngredient(id);

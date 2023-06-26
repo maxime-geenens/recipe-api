@@ -16,12 +16,12 @@ import com.pluralsight.recipe.entities.IngredientReference;
 import com.pluralsight.recipe.entities.QIngredient;
 import com.pluralsight.recipe.entities.Recipe;
 import com.pluralsight.recipe.entities.UnitReference;
-import com.pluralsight.recipe.exceptions.EntityNotFoundException;
-import com.pluralsight.recipe.exceptions.InvalidParameterException;
+import com.pluralsight.recipe.exceptions.EntityWasNotFoundException;
+import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.repositories.IngredientRepository;
 import com.pluralsight.recipe.repositories.RecipeRepository;
 import com.pluralsight.recipe.services.IngredientService;
-import com.pluralsight.recipe.services.ReferenceService;
+import com.pluralsight.recipe.services.ReferencesService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 import com.querydsl.core.types.Predicate;
 
@@ -29,7 +29,7 @@ import com.querydsl.core.types.Predicate;
 public class IngredientServiceImpl implements IngredientService {
 	
 	@Autowired
-	private ReferenceService referenceService;
+	private ReferencesService referenceService;
 
 	@Autowired
 	private IngredientRepository ingredientRepository;
@@ -61,7 +61,7 @@ public class IngredientServiceImpl implements IngredientService {
 		if (oRecipe.isPresent()) {
 			recipe = oRecipe.get();
 		} else {
-			throw new EntityNotFoundException(ExceptionMessageConstants.RECIPE_NOT_FOUND);
+			throw new EntityWasNotFoundException(ExceptionMessageConstants.RECIPE_NOT_FOUND);
 		}
 		
 		UnitReference unitRef = referenceService.getUnitReferenceById(dto.getUnitRefId());
@@ -109,7 +109,7 @@ public class IngredientServiceImpl implements IngredientService {
 		if (oRecipe.isPresent()) {
 			recipe = oRecipe.get();
 		} else {
-			throw new EntityNotFoundException(ExceptionMessageConstants.RECIPE_NOT_FOUND);
+			throw new EntityWasNotFoundException(ExceptionMessageConstants.RECIPE_NOT_FOUND);
 		}
 
 		Ingredient ingredient = builder
@@ -139,10 +139,10 @@ public class IngredientServiceImpl implements IngredientService {
 				if (oIngredient.isPresent()) {
 					ingredient = oIngredient.get();
 				} else {
-					throw new EntityNotFoundException(ExceptionMessageConstants.INGREDIENT_NOT_FOUND);
+					throw new EntityWasNotFoundException(ExceptionMessageConstants.INGREDIENT_NOT_FOUND);
 				}
 			} else {
-				throw new InvalidParameterException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
+				throw new InvalidParamException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
 			}
 
 			Double quantity = dto.getQuantity();

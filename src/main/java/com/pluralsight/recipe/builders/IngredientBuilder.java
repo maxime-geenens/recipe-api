@@ -5,7 +5,7 @@ import com.pluralsight.recipe.entities.IngredientReference;
 import com.pluralsight.recipe.entities.Recipe;
 import com.pluralsight.recipe.entities.UnitReference;
 import com.pluralsight.recipe.enums.Lang;
-import com.pluralsight.recipe.exceptions.InvalidParameterException;
+import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 
 public class IngredientBuilder {
@@ -56,45 +56,45 @@ public class IngredientBuilder {
 
 		if (ingredient.getQuantity() != null) {
 			if (ingredient.getQuantity() < 0.0) {
-				throw new InvalidParameterException(" Quantity ::" + ExceptionMessageConstants.PARAMETER_NEGATIVE);
+				throw new InvalidParamException(" Quantity ::" + ExceptionMessageConstants.PARAMETER_NEGATIVE);
 			}
 		} else {
-			throw new InvalidParameterException(" Name ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			throw new InvalidParamException(" Name ::" + ExceptionMessageConstants.PARAMETER_NULL);
 		}
 
 		try {
 			Lang.valueOf(ingredient.getLang());
 		} catch (IllegalArgumentException e) {
-			throw new InvalidParameterException(" Lang ::" + ExceptionMessageConstants.PARAMETER_INVALID);
+			throw new InvalidParamException(" Lang ::" + ExceptionMessageConstants.PARAMETER_INVALID);
 		}
 
 		if (ingredient.getUnitReference() != null) {
 			if (ingredient.getUnitReference().getCode().isBlank()
 					|| ingredient.getUnitReference().getCode().isEmpty()) {
-				throw new InvalidParameterException(
+				throw new InvalidParamException(
 						" unitReference.code ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY);
 			}
 		} else {
-			throw new InvalidParameterException(" unitReference ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			throw new InvalidParamException(" unitReference ::" + ExceptionMessageConstants.PARAMETER_NULL);
 		}
 
 		if (ingredient.getIngredientReference() != null) {
 			if (ingredient.getIngredientReference().getCode().isBlank()
 					|| ingredient.getIngredientReference().getCode().isEmpty()) {
-				throw new InvalidParameterException(
+				throw new InvalidParamException(
 						" ingredientReference.code ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY);
 			}
 		} else {
-			throw new InvalidParameterException(" ingredientReference ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			throw new InvalidParamException(" ingredientReference ::" + ExceptionMessageConstants.PARAMETER_NULL);
 		}
 
 		if (ingredient.getRecipe() != null) {
 			if (ingredient.getRecipe().getCode().isBlank() || ingredient.getRecipe().getCode().isEmpty()) {
-				throw new InvalidParameterException(
+				throw new InvalidParamException(
 						" recipe.code ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY);
 			}
 		} else {
-			throw new InvalidParameterException(" Recipe ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			throw new InvalidParamException(" Recipe ::" + ExceptionMessageConstants.PARAMETER_NULL);
 		}
 	}
 

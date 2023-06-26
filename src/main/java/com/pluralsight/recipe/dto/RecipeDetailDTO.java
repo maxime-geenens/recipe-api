@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RecipeDetailDTO {
 	
-	private RecipeDTO recipeDTO;
-	private List<IngredientDTO> ingredientDTOList;
+	private RecipeDTO recipe;
+	private List<IngredientDTO> ingredientList;
 	private List<StepDTO> stepList;
 }

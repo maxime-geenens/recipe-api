@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pluralsight.recipe.dto.IngredientReferenceDTO;
 import com.pluralsight.recipe.dto.UnitReferenceDTO;
-import com.pluralsight.recipe.services.ReferenceService;
+import com.pluralsight.recipe.services.ReferencesService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ReferenceController {
 
 	@Autowired
-	private ReferenceService referenceService;
+	private ReferencesService referenceService;
 
 	@GetMapping(path = "/ingredients/{type}/{lang}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<IngredientReferenceDTO>> fetchIngredientListByTypeAndLang(
@@ -67,13 +67,13 @@ public class ReferenceController {
 			@RequestBody(required = true) IngredientReferenceDTO requestDTO) {
 
 		if (log.isInfoEnabled()) {
-			log.info(" POST API Call api/recipes/create :: {} ", requestDTO);
+			log.info(" POST API Call api/references/ingredient :: {} ", requestDTO);
 		}
 
 		IngredientReferenceDTO response = referenceService.addIngredientRef(requestDTO);
 
 		if (log.isInfoEnabled()) {
-			log.info(" Returning from api/recipes/create :: {} ", response);
+			log.info(" Returning from api/references/ingredient :: {} ", response);
 		}
 
 		return new ResponseEntity<>(response, HttpStatus.OK);

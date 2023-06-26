@@ -16,8 +16,8 @@ public interface IngredientMapper {
 	@Mapping(source = "ingredientReference.name", target = "name")
 	@Mapping(source = "ingredientReference.type.name", target = "type")
 	@Mapping(source = "unitReference.symbol", target = "unit")
-	@Mapping(source = "unitReference.id", target = "unitId")
-	@Mapping(source = "ingredientReference.id", target = "refId")
+	@Mapping(source = "unitReference.id", target = "unitRefId")
+	@Mapping(source = "ingredientReference.id", target = "ingredientRefId")
 	@Mapping(source = "recipe.id", target = "recipeId")
 	IngredientDTO mapToDTO(Ingredient entity);
 

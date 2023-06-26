@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.pluralsight.recipe.builders.IngredientReferenceBuilder;
 import com.pluralsight.recipe.dto.IngredientReferenceDTO;
@@ -18,16 +19,17 @@ import com.pluralsight.recipe.entities.QRecipeType;
 import com.pluralsight.recipe.entities.QUnitReference;
 import com.pluralsight.recipe.entities.RecipeType;
 import com.pluralsight.recipe.entities.UnitReference;
-import com.pluralsight.recipe.exceptions.EntityNotFoundException;
+import com.pluralsight.recipe.exceptions.EntityWasNotFoundException;
 import com.pluralsight.recipe.repositories.IngredientReferenceRepository;
 import com.pluralsight.recipe.repositories.IngredientTypeRepository;
 import com.pluralsight.recipe.repositories.RecipeTypeRepository;
 import com.pluralsight.recipe.repositories.UnitReferenceRepository;
-import com.pluralsight.recipe.services.ReferenceService;
+import com.pluralsight.recipe.services.ReferencesService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 import com.querydsl.core.types.Predicate;
 
-public class ReferenceServiceImpl implements ReferenceService {
+@Service
+public class ReferencesServiceImpl implements ReferencesService {
 
 	@Autowired
 	private RecipeTypeRepository recipeTypeRepository;
@@ -54,7 +56,7 @@ public class ReferenceServiceImpl implements ReferenceService {
 		if (oRecipeType.isPresent()) {
 			response = oRecipeType.get();
 		} else {
-			throw new EntityNotFoundException(ExceptionMessageConstants.RECIPE_TYPE_CODE_NOT_FOUND);
+			throw new EntityWasNotFoundException(ExceptionMessageConstants.RECIPE_TYPE_CODE_NOT_FOUND);
 		}
 
 		return response;
@@ -70,7 +72,7 @@ public class ReferenceServiceImpl implements ReferenceService {
 		if (oUnitRef.isPresent()) {
 			response = oUnitRef.get();
 		} else {
-			throw new EntityNotFoundException(ExceptionMessageConstants.UNIT_REFERENCE_NOT_FOUND);
+			throw new EntityWasNotFoundException(ExceptionMessageConstants.UNIT_REFERENCE_NOT_FOUND);
 		}
 
 		return response;
@@ -86,7 +88,7 @@ public class ReferenceServiceImpl implements ReferenceService {
 		if (oIngredientRef.isPresent()) {
 			response = oIngredientRef.get();
 		} else {
-			throw new EntityNotFoundException(ExceptionMessageConstants.INGREDIENT_REFERENCE_NOT_FOUND);
+			throw new EntityWasNotFoundException(ExceptionMessageConstants.INGREDIENT_REFERENCE_NOT_FOUND);
 		}
 
 		return response;
@@ -142,7 +144,7 @@ public class ReferenceServiceImpl implements ReferenceService {
 		if (oType.isPresent()) {
 			return oType.get();
 		} else {
-			throw new EntityNotFoundException(ExceptionMessageConstants.INGREDIENT_TYPE_NOT_FOUND);
+			throw new EntityWasNotFoundException(ExceptionMessageConstants.INGREDIENT_TYPE_NOT_FOUND);
 		}
 
 	}

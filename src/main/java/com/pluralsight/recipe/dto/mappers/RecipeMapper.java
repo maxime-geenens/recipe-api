@@ -13,7 +13,6 @@ public interface RecipeMapper {
 
 	RecipeMapper MAPPER = Mappers.getMapper(RecipeMapper.class);
 
-	@Mapping(source = "type.name", target = "type")
-	@Mapping(source = "type.id", target = "typeId")
+	@Mapping(source = "type.code", target = "typeCode")
 	RecipeDTO mapToDTO(Recipe entity);
 }

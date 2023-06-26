@@ -1,17 +1,18 @@
 package com.pluralsight.recipe.exceptions;
 
-public class EntityNotFoundException extends RuntimeException {
+public class InvalidParamException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
 	private String exceptionMessage;
 
-	public EntityNotFoundException(String message) {
+	public InvalidParamException(String message) {
 		super(message);
 		this.exceptionMessage = message;
 	}
 
-	public EntityNotFoundException() {
+	public InvalidParamException() {
+		super();
 	}
 
 	public String getExceptionMessage() {

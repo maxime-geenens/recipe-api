@@ -22,9 +22,13 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.pluralsight.recipe.dto.IngredientDTO;
 import com.pluralsight.recipe.dto.RecipeDTO;
-import com.pluralsight.recipe.dto.RecipeDetailDTO;
 import com.pluralsight.recipe.dto.StepDTO;
+import com.pluralsight.recipe.entities.Recipe;
+import com.pluralsight.recipe.entities.RecipeType;
+import com.pluralsight.recipe.services.IngredientService;
 import com.pluralsight.recipe.services.RecipeService;
+import com.pluralsight.recipe.services.ReferencesService;
+import com.pluralsight.recipe.services.StepService;
 import com.pluralsight.recipe.utils.TestUtils;
 
 @WebMvcTest(RecipeController.class)
@@ -33,7 +37,16 @@ public class RecipeControllerTest {
 	private static final String BASE_API = "/api/recipes";
 
 	@MockBean
-	RecipeService service;
+	RecipeService recipeService;
+	
+	@MockBean
+	ReferencesService referenceService;
+	
+	@MockBean
+	IngredientService ingredientService;
+	
+	@MockBean
+	StepService stepService;
 
 	@Autowired
 	MockMvc mockMvc;
@@ -45,9 +58,10 @@ public class RecipeControllerTest {
 		RecipeDTO dto = new RecipeDTO(1l, "FR", "Test", "Recette Test", "Entrée");
 		list.add(dto);
 
-		when(service.listRecipes("FR")).thenReturn(list);
+		when(recipeService.listRecipesByLang("FR")).thenReturn(list);
 
-		mockMvc.perform(get(BASE_API + "/lang/FR")).andExpect(status().isOk())
+		mockMvc.perform(get(BASE_API + "/lang/FR"))
+				.andExpect(status().isOk())
 				.andExpect(jsonPath("$", Matchers.hasSize(1))).andExpect(jsonPath("$[0].id", Matchers.is(1)))
 				.andExpect(jsonPath("$[0].lang", Matchers.is("FR")))
 				.andExpect(jsonPath("$[0].name", Matchers.is("Test")))
@@ -57,26 +71,24 @@ public class RecipeControllerTest {
 	}
 
 	@Test
-	public void testGetRecipeById() throws Exception {
+	public void testGetRecipeDetail() throws Exception {
 
-		RecipeDetailDTO dto = new RecipeDetailDTO();
-		RecipeDTO recipeDto = new RecipeDTO(1l, "FR", "Test", "Recette Test", "Entrée");
+		RecipeDTO rDTO = new RecipeDTO(1l, "FR", "Test", "Recette Test", "Entrée");
 
-		List<IngredientDTO> ingredientDTOList = new ArrayList<>();
-		IngredientDTO ingredientDTO = new IngredientDTO(1l, "FR", "Ingr", "Type", 1.0, "mL", 1l, 1l, 1l);
-		ingredientDTOList.add(ingredientDTO);
+		List<IngredientDTO> iList = new ArrayList<>();
+		IngredientDTO iDTO = new IngredientDTO(1l, "FR", "Name", "Type", 1.0, "Unit", 1l, 1l, 1l);
+		iList.add(iDTO);
 
-		List<StepDTO> stepList = new ArrayList<>();
-		StepDTO stepDTO = new StepDTO(1l, "FR", 1, "Step", 1l);
-		stepList.add(stepDTO);
+		List<StepDTO> sList = new ArrayList<>();
+		StepDTO sDTO = new StepDTO(1l, "FR", 1, "Description", 1l);
+		sList.add(sDTO);
 
-		dto.setRecipe(recipeDto);
-		dto.setIngredientList(ingredientDTOList);
-		dto.setStepList(stepList);
+		when(recipeService.getRecipeById(1l)).thenReturn(rDTO);
+		when(ingredientService.listIngredientsByRecipe(1l)).thenReturn(iList);
+		when(stepService.listStepsByRecipe(1l)).thenReturn(sList);
 
-		when(service.getRecipeById(1l)).thenReturn(dto);
-
-		mockMvc.perform(get(BASE_API + "/1")).andExpect(status().isOk())
+		mockMvc.perform(get(BASE_API + "/1"))
+				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.recipe.id", Matchers.is(1)))
 				.andExpect(jsonPath("$.recipe.lang", Matchers.is("FR")))
 				.andExpect(jsonPath("$.recipe.name", Matchers.is("Test")))
@@ -91,8 +103,12 @@ public class RecipeControllerTest {
 	public void testCreateRecipe() throws Exception {
 
 		RecipeDTO dto = new RecipeDTO(1l, "FR", "Test", "Recette Test", "Entrée");
-
-		when(service.createRecipe(dto)).thenReturn(dto);
+		Recipe recipe = new Recipe();
+		RecipeType type = new RecipeType();
+		
+		when(referenceService.getRecipeTypeByCode(dto.getTypeCode())).thenReturn(type);
+		when(recipeService.buildRecipe(dto, type)).thenReturn(recipe);
+		when(recipeService.saveRecipe(recipe)).thenReturn(dto);
 
 		mockMvc.perform(
 				post(BASE_API + "/create").content(TestUtils.objectToJson(dto)).contentType(MediaType.APPLICATION_JSON))
@@ -109,9 +125,11 @@ public class RecipeControllerTest {
 	public void testUpdateRecipe() throws Exception {
 
 		RecipeDTO dto = new RecipeDTO(1l, "FR", "Test", "Recette Test", "Entrée");
+		RecipeType type = new RecipeType();
 		RecipeDTO dto1 = new RecipeDTO(1l, "FR", "Test1", "Recette Test Updated", "Entrée");
 
-		when(service.updateRecipe(dto)).thenReturn(dto1);
+		when(referenceService.getRecipeTypeByCode(dto.getTypeCode())).thenReturn(type);
+		when(recipeService.updateRecipe(dto, type)).thenReturn(dto1);
 
 		mockMvc.perform(
 				put(BASE_API + "/update/1").content(TestUtils.objectToJson(dto)).contentType(MediaType.APPLICATION_JSON))
@@ -127,7 +145,7 @@ public class RecipeControllerTest {
 	@Test
 	public void testDeleteRecipe() throws Exception {
 
-		doNothing().when(service).deleteRecipe(1l);
+		doNothing().when(recipeService).deleteRecipe(1l);
 
 		mockMvc.perform(delete(BASE_API + "/delete/1"))
 				.andExpect(status().isOk());

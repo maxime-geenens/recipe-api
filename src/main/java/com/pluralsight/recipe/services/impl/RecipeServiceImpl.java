@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pluralsight.recipe.builders.RecipeBuilder;
-import com.pluralsight.recipe.dto.IngredientDTO;
 import com.pluralsight.recipe.dto.RecipeDTO;
-import com.pluralsight.recipe.dto.RecipeDetailDTO;
-import com.pluralsight.recipe.dto.StepDTO;
 import com.pluralsight.recipe.dto.mappers.RecipeMapper;
 import com.pluralsight.recipe.entities.QRecipe;
 import com.pluralsight.recipe.entities.Recipe;
@@ -20,30 +17,18 @@ import com.pluralsight.recipe.entities.RecipeType;
 import com.pluralsight.recipe.exceptions.EntityWasNotFoundException;
 import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.repositories.RecipeRepository;
-import com.pluralsight.recipe.services.IngredientService;
 import com.pluralsight.recipe.services.RecipeService;
-import com.pluralsight.recipe.services.ReferencesService;
-import com.pluralsight.recipe.services.StepService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 import com.querydsl.core.types.Predicate;
 
 @Service
 public class RecipeServiceImpl implements RecipeService {
-	
-	@Autowired
-	private ReferencesService referenceService;
-
-	@Autowired
-	private IngredientService ingredientService;
-
-	@Autowired
-	private StepService stepService;
 
 	@Autowired
 	private RecipeRepository recipeRepository;
 
 	@Override
-	public List<RecipeDTO> listRecipes(String lang) {
+	public List<RecipeDTO> listRecipesByLang(String lang) {
 
 		List<Recipe> recipeList = new ArrayList<>();
 
@@ -61,59 +46,28 @@ public class RecipeServiceImpl implements RecipeService {
 	}
 
 	@Override
-	public RecipeDetailDTO getRecipeById(Long id) throws EntityWasNotFoundException {
-
-		RecipeDetailDTO response = new RecipeDetailDTO();
+	public RecipeDTO getRecipeById(Long id) throws EntityWasNotFoundException {
 
 		Optional<Recipe> oRecipe = recipeRepository.findById(id);
-		RecipeDTO recipeDTO = new RecipeDTO();
 
 		if (oRecipe.isPresent()) {
-			recipeDTO = RecipeMapper.MAPPER.mapToDTO(oRecipe.get());
-			response.setRecipe(recipeDTO);
+			return RecipeMapper.MAPPER.mapToDTO(oRecipe.get());
 		} else {
 			throw new EntityWasNotFoundException(ExceptionMessageConstants.RECIPE_NOT_FOUND);
 		}
 
-		List<IngredientDTO> ingredientDTOList = ingredientService.listIngredientsByRecipe(id);
-
-		if (!ingredientDTOList.isEmpty()) {
-			response.setIngredientList(ingredientDTOList);
-		} else {
-			throw new EntityWasNotFoundException(ExceptionMessageConstants.INGREDIENT_LIST_NOT_FOUND);
-		}
-
-		List<StepDTO> stepDTOList = stepService.listStepsByRecipe(id);
-
-		if (!stepDTOList.isEmpty()) {
-			response.setStepList(stepDTOList);
-		} else {
-			throw new EntityWasNotFoundException(ExceptionMessageConstants.STEPT_LIST_NOT_FOUND);
-		}
-
-		return response;
 	}
 
 	@Override
-	public RecipeDTO createRecipe(RecipeDTO requestDTO) {
-
-		RecipeType recipeType = referenceService.getRecipeTypeByCode(requestDTO.getTypeCode());
-
-		RecipeBuilder builder = new RecipeBuilder();
-		Recipe recipe = builder
-				.addName(requestDTO.getName())
-				.addDescription(requestDTO.getDescription())
-				.addLang(requestDTO.getLang())
-				.addType(recipeType)
-				.build();
-
-		Recipe recipeResult = recipeRepository.save(recipe);
+	public RecipeDTO saveRecipe(Recipe recipe) {
 		
-		return RecipeMapper.MAPPER.mapToDTO(recipeResult);
+		Recipe result = recipeRepository.save(recipe);
+		
+		return RecipeMapper.MAPPER.mapToDTO(result);
 	}
 
 	@Override
-	public RecipeDTO updateRecipe(RecipeDTO requestDTO) {
+	public RecipeDTO updateRecipe(RecipeDTO requestDTO, RecipeType recipeType) {
 
 		Recipe recipe = new Recipe();
 
@@ -140,10 +94,7 @@ public class RecipeServiceImpl implements RecipeService {
 			recipe.setDescription(description);
 		}
 
-		String typeCode = requestDTO.getTypeCode();
-		if (typeCode != null && !typeCode.isEmpty() && !typeCode.isBlank()) {
-			recipe.setType(referenceService.getRecipeTypeByCode(typeCode));
-		}
+		recipe.setType(recipeType);
 
 		Recipe updatedRecipe = recipeRepository.save(recipe);
 
@@ -153,6 +104,20 @@ public class RecipeServiceImpl implements RecipeService {
 	@Override
 	public void deleteRecipe(Long id) {
 		recipeRepository.deleteById(id);
+	}
+
+	@Override
+	public Recipe buildRecipe(RecipeDTO requestDTO, RecipeType recipeType) {
+		
+		RecipeBuilder builder = new RecipeBuilder();
+		Recipe recipe = builder
+				.addName(requestDTO.getName())
+				.addDescription(requestDTO.getDescription())
+				.addLang(requestDTO.getLang())
+				.addType(recipeType)
+				.build();
+		
+		return recipe;
 	}
 
 }

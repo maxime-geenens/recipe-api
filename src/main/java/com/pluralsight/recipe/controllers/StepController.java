@@ -33,6 +33,8 @@ public class StepController {
 		if (log.isInfoEnabled()) {
 			log.info(" POST API Call api/steps/list/create :: {} ", requestDTO);
 		}
+		
+		// TODO validateRequestDTO
 
 		List<StepDTO> response = stepService.createStepList(requestDTO);
 
@@ -49,6 +51,8 @@ public class StepController {
 		if (log.isInfoEnabled()) {
 			log.info(" PUT API Call api/steps/list/update :: {} ", requestDTO);
 		}
+		
+		// TODO validateRequestDTO
 
 		List<StepDTO> response = stepService.updateStepList(requestDTO);
 
@@ -79,6 +83,8 @@ public class StepController {
 		if (log.isInfoEnabled()) {
 			log.info(" POST API Call api/steps/add :: {} ", requestDTO);
 		}
+		
+		// TODO validateRequestDTO
 
 		StepDTO response = stepService.addStep(requestDTO);
 

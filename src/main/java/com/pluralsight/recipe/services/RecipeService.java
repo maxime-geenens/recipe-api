@@ -3,7 +3,8 @@ package com.pluralsight.recipe.services;
 import java.util.List;
 
 import com.pluralsight.recipe.dto.RecipeDTO;
-import com.pluralsight.recipe.dto.RecipeDetailDTO;
+import com.pluralsight.recipe.entities.Recipe;
+import com.pluralsight.recipe.entities.RecipeType;
 
 public interface RecipeService {
 
@@ -15,7 +16,7 @@ public interface RecipeService {
 	 * @param lang String optional parameter referring to the recipe Language
 	 * @return RecipeResponseDTO
 	 */
-	List<RecipeDTO> listRecipes(String lang);
+	List<RecipeDTO> listRecipesByLang(String lang);
 
 	/**
 	 * Retrieves 1 recipe with all details for given id
@@ -23,7 +24,7 @@ public interface RecipeService {
 	 * @param id Long
 	 * @return
 	 */
-	RecipeDetailDTO getRecipeById(Long id);
+	RecipeDTO getRecipeById(Long id);
 
 	/**
 	 * Create a new recipe and persist it in database
@@ -31,16 +32,17 @@ public interface RecipeService {
 	 * @param recipeDTO
 	 * @return RecipeDetailDTO
 	 */
-	RecipeDTO createRecipe(RecipeDTO recipeDTO);
+	RecipeDTO saveRecipe(Recipe recipe);
 
 	/**
 	 * 
 	 * Update a recipe
 	 * 
 	 * @param recipeDTO
+	 * @param recipeType 
 	 * @return RecipeDetailDTO
 	 */
-	RecipeDTO updateRecipe(RecipeDTO recipeDTO);
+	RecipeDTO updateRecipe(RecipeDTO recipeDTO, RecipeType recipeType);
 
 	/**
 	 * 
@@ -49,5 +51,15 @@ public interface RecipeService {
 	 * @param id
 	 */
 	void deleteRecipe(Long id);
+
+	/**
+	 * 
+	 * Build a Recipe entity from DTO and RecipeType
+	 * 
+	 * @param requestDTO
+	 * @param recipeType
+	 * @return Recipe
+	 */
+	Recipe buildRecipe(RecipeDTO requestDTO, RecipeType recipeType);
 
 }

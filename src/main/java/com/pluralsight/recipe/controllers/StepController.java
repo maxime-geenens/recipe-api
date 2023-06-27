@@ -41,7 +41,11 @@ public class StepController {
 		}
 
 		for (StepDTO stepDTO : requestDTO) {
-			dtoValidationService.validateStepDTO(stepDTO);
+			if (stepDTO != null) {
+				dtoValidationService.validateStepDTO(stepDTO);
+			} else {
+				throw new InvalidParamException(" StepDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			}
 		}
 
 		List<StepDTO> response = stepService.createStepList(requestDTO);
@@ -102,7 +106,11 @@ public class StepController {
 			log.info(" POST API Call api/steps/add :: {} ", requestDTO);
 		}
 
-		dtoValidationService.validateStepDTO(requestDTO);
+		if (requestDTO != null) {
+			dtoValidationService.validateStepDTO(requestDTO);
+		} else {
+			throw new InvalidParamException(" StepDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+		}
 
 		StepDTO response = stepService.addStep(requestDTO);
 

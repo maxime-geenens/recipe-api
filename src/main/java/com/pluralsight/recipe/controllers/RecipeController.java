@@ -1,5 +1,6 @@
 package com.pluralsight.recipe.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,19 @@ public class RecipeController {
 			log.info(" GET API Call api/recipes/{} ", lang);
 		}
 
-		List<RecipeDTO> list = recipeService.listRecipesByLang(lang);
+		List<RecipeDTO> list = new ArrayList<>();
+
+		if (lang != null) {
+
+			if (lang.isEmpty() || lang.isBlank()) {
+				throw new InvalidParamException(" Lang ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY);
+			}
+
+			list = recipeService.listRecipesByLang(lang);
+
+		} else {
+			throw new InvalidParamException(" Type or Lang ::" + ExceptionMessageConstants.PARAMETER_NULL);
+		}
 
 		if (log.isInfoEnabled()) {
 			log.info(" Returning from api/recipes/{} :: {}", lang, list.toString());
@@ -117,7 +130,11 @@ public class RecipeController {
 			log.info(" POST API Call api/recipes/create :: {} ", requestDTO);
 		}
 
-		dtoValidationService.validateRecipeDTO(requestDTO);
+		if (requestDTO != null) {
+			dtoValidationService.validateRecipeDTO(requestDTO);
+		} else {
+			throw new InvalidParamException(" requestDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+		}
 
 		RecipeType recipeType = referenceService.getRecipeTypeByCode(requestDTO.getTypeCode());
 
@@ -144,7 +161,11 @@ public class RecipeController {
 
 		if (id != null) {
 
-			dtoValidationService.validateRecipeDTO(requestDTO);
+			if (requestDTO != null) {
+				dtoValidationService.validateRecipeDTO(requestDTO);
+			} else {
+				throw new InvalidParamException(" requestDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			}
 
 			RecipeType recipeType = new RecipeType();
 

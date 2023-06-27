@@ -1,5 +1,6 @@
 package com.pluralsight.recipe.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pluralsight.recipe.dto.IngredientReferenceDTO;
 import com.pluralsight.recipe.dto.UnitReferenceDTO;
+import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.services.ReferencesService;
 import com.pluralsight.recipe.services.VaildationDTOService;
+import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,7 +43,23 @@ public class ReferenceController {
 			log.info(" GET API Call api/references/ingredients/{}/{} ", type, lang);
 		}
 
-		List<IngredientReferenceDTO> list = referenceService.listIngredientsByTypeAndLang(type, lang);
+		List<IngredientReferenceDTO> list = new ArrayList<>();
+
+		if (type != null && lang != null) {
+
+			if (type.isEmpty() || type.isBlank()) {
+				throw new InvalidParamException(" Type ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY);
+			}
+
+			if (lang.isEmpty() || lang.isBlank()) {
+				throw new InvalidParamException(" Lang ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY);
+			}
+
+			list = referenceService.listIngredientsByTypeAndLang(type, lang);
+
+		} else {
+			throw new InvalidParamException(" Type or Lang ::" + ExceptionMessageConstants.PARAMETER_NULL);
+		}
 
 		if (log.isInfoEnabled()) {
 			log.info(" Returning from api/references/ingredients/{}/{} :: {}", type, lang, list.toString());
@@ -57,7 +76,19 @@ public class ReferenceController {
 			log.info(" GET API Call api/references/units/{} ", lang);
 		}
 
-		List<UnitReferenceDTO> list = referenceService.listUnitsByLang(lang);
+		List<UnitReferenceDTO> list = new ArrayList<>();
+
+		if (lang != null) {
+
+			if (lang.isEmpty() || lang.isBlank()) {
+				throw new InvalidParamException(" Lang ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY);
+			}
+
+			list = referenceService.listUnitsByLang(lang);
+
+		} else {
+			throw new InvalidParamException(" Type or Lang ::" + ExceptionMessageConstants.PARAMETER_NULL);
+		}
 
 		if (log.isInfoEnabled()) {
 			log.info(" Returning from api/references/units/{} :: {}", lang, list.toString());
@@ -73,8 +104,12 @@ public class ReferenceController {
 		if (log.isInfoEnabled()) {
 			log.info(" POST API Call api/references/ingredient :: {} ", requestDTO);
 		}
-		
-		dtoValidationService.validateIngredientReferenceDTO(requestDTO);
+
+		if (requestDTO != null) {
+			dtoValidationService.validateIngredientReferenceDTO(requestDTO);
+		} else {
+			throw new InvalidParamException(" requestDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+		}
 
 		IngredientReferenceDTO response = referenceService.addIngredientRef(requestDTO);
 

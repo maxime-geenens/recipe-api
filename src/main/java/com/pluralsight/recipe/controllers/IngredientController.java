@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pluralsight.recipe.dto.IngredientDTO;
+import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.services.IngredientService;
 import com.pluralsight.recipe.services.VaildationDTOService;
+import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,7 +42,12 @@ public class IngredientController {
 		}
 
 		for (IngredientDTO ingredientDTO : requestDTO) {
-			dtoValidationService.validateIngredientDTO(ingredientDTO);
+
+			if (ingredientDTO != null) {
+				dtoValidationService.validateIngredientDTO(ingredientDTO);
+			} else {
+				throw new InvalidParamException(" ingredientDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			}
 		}
 
 		List<IngredientDTO> response = ingredientService.createIngredientList(requestDTO);
@@ -61,7 +68,12 @@ public class IngredientController {
 		}
 
 		for (IngredientDTO ingredientDTO : requestDTO) {
-			dtoValidationService.validateIngredientDTO(ingredientDTO);
+
+			if (ingredientDTO != null && ingredientDTO.getId() != null) {
+				dtoValidationService.validateIngredientDTO(ingredientDTO);
+			} else {
+				throw new InvalidParamException(" ingredientDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			}
 		}
 
 		List<IngredientDTO> response = ingredientService.updateIngredientList(requestDTO);
@@ -80,7 +92,11 @@ public class IngredientController {
 			log.info(" DELETE API Call api/ingredients/delete/{} ", id);
 		}
 
-		ingredientService.deleteIngredient(id);
+		if (id != null) {
+			ingredientService.deleteIngredient(id);
+		} else {
+			throw new InvalidParamException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
+		}
 
 		if (log.isInfoEnabled()) {
 			log.info(" Ingredient (id :: {}) has been deleted.", id);
@@ -94,7 +110,11 @@ public class IngredientController {
 			log.info(" POST API Call api/ingredients/add :: {} ", requestDTO);
 		}
 
-		dtoValidationService.validateIngredientDTO(requestDTO);
+		if (requestDTO != null) {
+			dtoValidationService.validateIngredientDTO(requestDTO);
+		} else {
+			throw new InvalidParamException(" requestDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+		}
 
 		IngredientDTO response = ingredientService.addIngredient(requestDTO);
 

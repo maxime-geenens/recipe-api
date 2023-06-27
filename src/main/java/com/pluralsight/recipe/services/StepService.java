@@ -49,4 +49,13 @@ public interface StepService {
 	 */
 	StepDTO addStep(StepDTO requestDTO);
 
+	/**
+	 * 
+	 * Updates a single Step
+	 * 
+	 * @param requestDTO
+	 * @return StepDTO
+	 */
+	StepDTO updateStep(StepDTO requestDTO);
+
 }

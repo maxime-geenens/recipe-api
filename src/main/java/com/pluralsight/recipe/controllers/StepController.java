@@ -57,6 +57,28 @@ public class StepController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
+	@PostMapping(path = "/add", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<StepDTO> addStep(@RequestBody(required = true) StepDTO requestDTO) {
+
+		if (log.isInfoEnabled()) {
+			log.info(" POST API Call api/steps/add :: {} ", requestDTO);
+		}
+
+		if (requestDTO != null) {
+			dtoValidationService.validateStepDTO(requestDTO);
+		} else {
+			throw new InvalidParamException(" StepDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+		}
+
+		StepDTO response = stepService.addStep(requestDTO);
+
+		if (log.isInfoEnabled()) {
+			log.info(" Returning from api/steps/add :: {} ", response);
+		}
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
 	@PutMapping(path = "/list/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<StepDTO>> updateStepList(@RequestBody(required = true) List<StepDTO> requestDTO) {
 
@@ -81,6 +103,28 @@ public class StepController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
+	@PutMapping(path = "/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<StepDTO> updateStep(@RequestBody(required = true) StepDTO requestDTO) {
+
+		if (log.isInfoEnabled()) {
+			log.info(" PUT API Call api/steps/update :: {} ", requestDTO);
+		}
+
+		if (requestDTO != null && requestDTO.getId() != null) {
+			dtoValidationService.validateStepDTO(requestDTO);
+		} else {
+			throw new InvalidParamException(" StepDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+		}
+
+		StepDTO response = stepService.updateStep(requestDTO);
+
+		if (log.isInfoEnabled()) {
+			log.info(" Returning from api/steps/update :: {} ", response);
+		}
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
 	@DeleteMapping(path = "/delete/{id}")
 	public void deleteStep(@PathVariable(name = "id", required = true) Long id) {
 
@@ -97,28 +141,6 @@ public class StepController {
 		if (log.isInfoEnabled()) {
 			log.info(" Step (id :: {}) has been deleted.", id);
 		}
-	}
-
-	@PostMapping(path = "/add", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<StepDTO> addStep(@RequestBody(required = true) StepDTO requestDTO) {
-
-		if (log.isInfoEnabled()) {
-			log.info(" POST API Call api/steps/add :: {} ", requestDTO);
-		}
-
-		if (requestDTO != null) {
-			dtoValidationService.validateStepDTO(requestDTO);
-		} else {
-			throw new InvalidParamException(" StepDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
-		}
-
-		StepDTO response = stepService.addStep(requestDTO);
-
-		if (log.isInfoEnabled()) {
-			log.info(" Returning from api/steps/add :: {} ", response);
-		}
-
-		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 }

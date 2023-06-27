@@ -85,6 +85,20 @@ public class StepControllerTest {
 	}
 	
 	@Test
+	public void testUpdateStep() throws Exception {
+		
+		StepDTO dto = new StepDTO(1l, "FR", 1, "Description", 1l);
+
+		when(dtoValidationService.validateStepDTO(dto)).thenReturn(true);
+		when(service.updateStep(dto)).thenReturn(dto);
+
+		mockMvc.perform(put(BASE_API + "/update").content(TestUtils.objectToJson(dto))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.id", Matchers.is(1)));
+	}
+	
+	@Test
 	public void testDeleteStep() throws Exception {
 		
 		doNothing().when(service).deleteStep(1l);

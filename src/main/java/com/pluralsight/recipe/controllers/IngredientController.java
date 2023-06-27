@@ -59,6 +59,28 @@ public class IngredientController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
+	@PostMapping(path = "/add", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<IngredientDTO> addIngredient(@RequestBody(required = true) IngredientDTO requestDTO) {
+
+		if (log.isInfoEnabled()) {
+			log.info(" POST API Call api/ingredients/add :: {} ", requestDTO);
+		}
+
+		if (requestDTO != null) {
+			dtoValidationService.validateIngredientDTO(requestDTO);
+		} else {
+			throw new InvalidParamException(" requestDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+		}
+
+		IngredientDTO response = ingredientService.addIngredient(requestDTO);
+
+		if (log.isInfoEnabled()) {
+			log.info(" Returning from api/ingredients/add :: {} ", response);
+		}
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
 	@PutMapping(path = "/list/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<IngredientDTO>> updateIngredientList(
 			@RequestBody(required = true) List<IngredientDTO> requestDTO) {
@@ -85,6 +107,28 @@ public class IngredientController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
+	@PutMapping(path = "/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<IngredientDTO> updateIngredient(@RequestBody(required = true) IngredientDTO requestDTO) {
+
+		if (log.isInfoEnabled()) {
+			log.info(" PUT API Call api/ingredients/update :: {} ", requestDTO);
+		}
+
+		if (requestDTO != null && requestDTO.getId() != null) {
+			dtoValidationService.validateIngredientDTO(requestDTO);
+		} else {
+			throw new InvalidParamException(" ingredientDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+		}
+
+		IngredientDTO response = ingredientService.updateIngredient(requestDTO);
+
+		if (log.isInfoEnabled()) {
+			log.info(" Returning from api/ingredients/update :: {} ", response);
+		}
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
 	@DeleteMapping(path = "/delete/{id}")
 	public void deleteIngredient(@PathVariable(name = "id", required = true) Long id) {
 
@@ -101,28 +145,6 @@ public class IngredientController {
 		if (log.isInfoEnabled()) {
 			log.info(" Ingredient (id :: {}) has been deleted.", id);
 		}
-	}
-
-	@PostMapping(path = "/add", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<IngredientDTO> addIngredient(@RequestBody(required = true) IngredientDTO requestDTO) {
-
-		if (log.isInfoEnabled()) {
-			log.info(" POST API Call api/ingredients/add :: {} ", requestDTO);
-		}
-
-		if (requestDTO != null) {
-			dtoValidationService.validateIngredientDTO(requestDTO);
-		} else {
-			throw new InvalidParamException(" requestDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
-		}
-
-		IngredientDTO response = ingredientService.addIngredient(requestDTO);
-
-		if (log.isInfoEnabled()) {
-			log.info(" Returning from api/ingredients/add :: {} ", response);
-		}
-
-		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 }

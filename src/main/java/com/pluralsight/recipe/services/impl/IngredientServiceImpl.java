@@ -130,33 +130,7 @@ public class IngredientServiceImpl implements IngredientService {
 
 		for (IngredientDTO dto : requestDTO) {
 
-			Ingredient ingredient = new Ingredient();
-
-			if (dto.getId() != null) {
-
-				Optional<Ingredient> oIngredient = ingredientRepository.findById(dto.getId());
-
-				if (oIngredient.isPresent()) {
-					ingredient = oIngredient.get();
-				} else {
-					throw new EntityWasNotFoundException(ExceptionMessageConstants.INGREDIENT_NOT_FOUND);
-				}
-			} else {
-				throw new InvalidParamException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
-			}
-
-			Double quantity = dto.getQuantity();
-			if (quantity != null) {
-				ingredient.setQuantity(quantity);
-			}
-
-			Long unitRefId = dto.getUnitRefId();
-			if (unitRefId != null) {
-				UnitReference unitRef = referenceService.getUnitReferenceById(unitRefId);
-				ingredient.setUnitReference(unitRef);
-			}
-
-			ingredientList.add(ingredient);
+			ingredientList.add(fetchAndUpdateIngredient(dto));
 		}
 
 		List<Ingredient> updatedIngredientList = ingredientRepository.saveAll(ingredientList);
@@ -168,5 +142,44 @@ public class IngredientServiceImpl implements IngredientService {
 	@Override
 	public void deleteIngredient(Long id) {
 		ingredientRepository.deleteById(id);
+	}
+
+	@Override
+	public IngredientDTO updateIngredient(IngredientDTO requestDTO) {
+
+		Ingredient ingredient = fetchAndUpdateIngredient(requestDTO);
+
+		return IngredientMapper.MAPPER.mapToDTO(ingredient);
+	}
+
+	private Ingredient fetchAndUpdateIngredient(IngredientDTO dto) {
+
+		Ingredient ingredient = new Ingredient();
+
+		if (dto.getId() != null) {
+
+			Optional<Ingredient> oIngredient = ingredientRepository.findById(dto.getId());
+
+			if (oIngredient.isPresent()) {
+				ingredient = oIngredient.get();
+			} else {
+				throw new EntityWasNotFoundException(ExceptionMessageConstants.INGREDIENT_NOT_FOUND);
+			}
+		} else {
+			throw new InvalidParamException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
+		}
+
+		Double quantity = dto.getQuantity();
+		if (quantity != null) {
+			ingredient.setQuantity(quantity);
+		}
+
+		Long unitRefId = dto.getUnitRefId();
+		if (unitRefId != null) {
+			UnitReference unitRef = referenceService.getUnitReferenceById(unitRefId);
+			ingredient.setUnitReference(unitRef);
+		}
+
+		return ingredient;
 	}
 }

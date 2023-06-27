@@ -48,4 +48,13 @@ public interface IngredientService {
 	 */
 	IngredientDTO addIngredient(IngredientDTO requestDTO);
 
+	/**
+	 * 
+	 * Updates a single Ingredient
+	 * 
+	 * @param requestDTO
+	 * @return IngredientDTO
+	 */
+	IngredientDTO updateIngredient(IngredientDTO requestDTO);
+
 }

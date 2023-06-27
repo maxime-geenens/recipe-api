@@ -133,33 +133,7 @@ public class StepServiceImpl implements StepService {
 		List<Step> stepList = new ArrayList<>();
 
 		for (StepDTO dto : requestDTO) {
-
-			Step step = new Step();
-
-			if (dto.getId() != null) {
-
-				Optional<Step> oStep = stepRepository.findById(dto.getId());
-
-				if (oStep.isPresent()) {
-					step = oStep.get();
-				} else {
-					throw new EntityWasNotFoundException(ExceptionMessageConstants.STEP_NOT_FOUND);
-				}
-			} else {
-				throw new InvalidParamException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
-			}
-
-			String description = dto.getDescription();
-			if (description != null && !description.isEmpty() && !description.isBlank()) {
-				step.setDescription(description);
-			}
-
-			Integer position = dto.getPosition();
-			if (position != null) {
-				step.setPosition(position);
-			}
-
-			stepList.add(step);
+			stepList.add(fetchAndUpdateStep(dto));
 		}
 
 		List<Step> updatedStepList = stepRepository.saveAll(stepList);
@@ -171,6 +145,44 @@ public class StepServiceImpl implements StepService {
 	@Override
 	public void deleteStep(Long id) {
 		stepRepository.deleteById(id);
+	}
+
+	@Override
+	public StepDTO updateStep(StepDTO stepDTO) {
+		
+		Step step = fetchAndUpdateStep(stepDTO);
+		
+		return StepMapper.MAPPER.mapToDTO(step);
+	}
+	
+	private Step fetchAndUpdateStep(StepDTO dto) {
+
+		Step step = new Step();
+
+		if (dto.getId() != null) {
+
+			Optional<Step> oStep = stepRepository.findById(dto.getId());
+
+			if (oStep.isPresent()) {
+				step = oStep.get();
+			} else {
+				throw new EntityWasNotFoundException(ExceptionMessageConstants.STEP_NOT_FOUND);
+			}
+		} else {
+			throw new InvalidParamException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
+		}
+
+		String description = dto.getDescription();
+		if (description != null && !description.isEmpty() && !description.isBlank()) {
+			step.setDescription(description);
+		}
+
+		Integer position = dto.getPosition();
+		if (position != null) {
+			step.setPosition(position);
+		}
+
+		return step;
 	}
 
 }

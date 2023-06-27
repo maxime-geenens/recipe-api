@@ -85,6 +85,21 @@ public class IngredientControllerTest {
 	}
 
 	@Test
+	public void testUpdateIngredient() throws Exception {
+
+		IngredientDTO dto = new IngredientDTO(1l, "FR", "Name", 1.0, 1l, 1l, 1l);
+
+		when(dtoValidationService.validateIngredientDTO(dto)).thenReturn(true);
+		when(service.updateIngredient(dto)).thenReturn(dto);
+
+		mockMvc.perform(put(BASE_API + "/update").content(TestUtils.objectToJson(dto))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.id", Matchers.is(1)));
+
+	}
+
+	@Test
 	public void testDeleteIngredient() throws Exception {
 
 		doNothing().when(service).deleteIngredient(1l);

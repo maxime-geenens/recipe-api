@@ -27,6 +27,7 @@ import com.pluralsight.recipe.services.IngredientService;
 import com.pluralsight.recipe.services.RecipeService;
 import com.pluralsight.recipe.services.ReferencesService;
 import com.pluralsight.recipe.services.StepService;
+import com.pluralsight.recipe.services.VaildationDTOService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +48,9 @@ public class RecipeController {
 
 	@Autowired
 	private StepService stepService;
+
+	@Autowired
+	private VaildationDTOService dtoValidationService;
 
 	@GetMapping(path = "/lang/{lang}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<RecipeDTO>> listRecipesByLang(
@@ -113,7 +117,7 @@ public class RecipeController {
 			log.info(" POST API Call api/recipes/create :: {} ", requestDTO);
 		}
 
-		// TODO validateRequestDTO
+		dtoValidationService.validateRecipeDTO(requestDTO);
 
 		RecipeType recipeType = referenceService.getRecipeTypeByCode(requestDTO.getTypeCode());
 
@@ -136,22 +140,30 @@ public class RecipeController {
 			log.info(" PUT API Call api/recipes/{} :: {} ", id, requestDTO);
 		}
 
-		// TODO validateRequestDTO (see if we make type code required in validation)
+		RecipeDTO response = new RecipeDTO();
 
-		RecipeType recipeType = new RecipeType();
+		if (id != null) {
 
-		String typeCode = requestDTO.getTypeCode();
-		if (typeCode != null && !typeCode.isEmpty() && !typeCode.isBlank()) {
-			recipeType = referenceService.getRecipeTypeByCode(requestDTO.getTypeCode());
+			dtoValidationService.validateRecipeDTO(requestDTO);
+
+			RecipeType recipeType = new RecipeType();
+
+			String typeCode = requestDTO.getTypeCode();
+			if (typeCode != null && !typeCode.isEmpty() && !typeCode.isBlank()) {
+				recipeType = referenceService.getRecipeTypeByCode(requestDTO.getTypeCode());
+			}
+
+			response = recipeService.updateRecipe(requestDTO, recipeType);
+
+		} else {
+			throw new InvalidParamException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
 		}
-
-		RecipeDTO recipe = recipeService.updateRecipe(requestDTO, recipeType);
 
 		if (log.isInfoEnabled()) {
-			log.info(" Returning from api/recipes/{} :: {} ", id, recipe);
+			log.info(" Returning from api/recipes/{} :: {} ", id, response);
 		}
 
-		return new ResponseEntity<>(recipe, HttpStatus.OK);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@DeleteMapping(path = "/delete/{id}")
@@ -161,7 +173,11 @@ public class RecipeController {
 			log.info(" DELETE API Call api/recipes/{} ", id);
 		}
 
-		recipeService.deleteRecipe(id);
+		if (id != null) {
+			recipeService.deleteRecipe(id);
+		} else {
+			throw new InvalidParamException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
+		}
 
 		if (log.isInfoEnabled()) {
 			log.info(" Recipe (id :: {}) has been deleted.", id);

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pluralsight.recipe.dto.IngredientDTO;
 import com.pluralsight.recipe.services.IngredientService;
+import com.pluralsight.recipe.services.VaildationDTOService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,6 +28,9 @@ public class IngredientController {
 	@Autowired
 	private IngredientService ingredientService;
 
+	@Autowired
+	private VaildationDTOService dtoValidationService;
+
 	@PostMapping(path = "/list/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<IngredientDTO>> createIngredientList(
 			@RequestBody(required = true) List<IngredientDTO> requestDTO) {
@@ -34,8 +38,10 @@ public class IngredientController {
 		if (log.isInfoEnabled()) {
 			log.info(" POST API Call api/ingredients/list/create :: {} ", requestDTO);
 		}
-		
-		// TODO validateRequestDTO
+
+		for (IngredientDTO ingredientDTO : requestDTO) {
+			dtoValidationService.validateIngredientDTO(ingredientDTO);
+		}
 
 		List<IngredientDTO> response = ingredientService.createIngredientList(requestDTO);
 
@@ -47,13 +53,16 @@ public class IngredientController {
 	}
 
 	@PutMapping(path = "/list/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<IngredientDTO>> updateIngredientList(@RequestBody(required = true) List<IngredientDTO> requestDTO) {
+	public ResponseEntity<List<IngredientDTO>> updateIngredientList(
+			@RequestBody(required = true) List<IngredientDTO> requestDTO) {
 
 		if (log.isInfoEnabled()) {
 			log.info(" PUT API Call api/ingredients/list/update :: {} ", requestDTO);
 		}
-		
-		// TODO validateRequestDTO
+
+		for (IngredientDTO ingredientDTO : requestDTO) {
+			dtoValidationService.validateIngredientDTO(ingredientDTO);
+		}
 
 		List<IngredientDTO> response = ingredientService.updateIngredientList(requestDTO);
 
@@ -65,7 +74,7 @@ public class IngredientController {
 	}
 
 	@DeleteMapping(path = "/delete/{id}")
-	public void deleteIngredient(@PathVariable(name="id", required = true) Long id) {
+	public void deleteIngredient(@PathVariable(name = "id", required = true) Long id) {
 
 		if (log.isInfoEnabled()) {
 			log.info(" DELETE API Call api/ingredients/delete/{} ", id);
@@ -84,8 +93,8 @@ public class IngredientController {
 		if (log.isInfoEnabled()) {
 			log.info(" POST API Call api/ingredients/add :: {} ", requestDTO);
 		}
-		
-		// TODO validateRequestDTO
+
+		dtoValidationService.validateIngredientDTO(requestDTO);
 
 		IngredientDTO response = ingredientService.addIngredient(requestDTO);
 

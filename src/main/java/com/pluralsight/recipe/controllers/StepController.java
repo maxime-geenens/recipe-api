@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pluralsight.recipe.dto.StepDTO;
+import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.services.StepService;
+import com.pluralsight.recipe.services.VaildationDTOService;
+import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,14 +30,19 @@ public class StepController {
 	@Autowired
 	private StepService stepService;
 
+	@Autowired
+	private VaildationDTOService dtoValidationService;
+
 	@PostMapping(path = "/list/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<StepDTO>> createStepList(@RequestBody(required = true) List<StepDTO> requestDTO) {
 
 		if (log.isInfoEnabled()) {
 			log.info(" POST API Call api/steps/list/create :: {} ", requestDTO);
 		}
-		
-		// TODO validateRequestDTO
+
+		for (StepDTO stepDTO : requestDTO) {
+			dtoValidationService.validateStepDTO(stepDTO);
+		}
 
 		List<StepDTO> response = stepService.createStepList(requestDTO);
 
@@ -51,8 +59,14 @@ public class StepController {
 		if (log.isInfoEnabled()) {
 			log.info(" PUT API Call api/steps/list/update :: {} ", requestDTO);
 		}
-		
-		// TODO validateRequestDTO
+
+		for (StepDTO stepDTO : requestDTO) {
+			if (stepDTO != null && stepDTO.getId() != null) {
+				dtoValidationService.validateStepDTO(stepDTO);
+			} else {
+				throw new InvalidParamException(" StepDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			}
+		}
 
 		List<StepDTO> response = stepService.updateStepList(requestDTO);
 
@@ -70,7 +84,11 @@ public class StepController {
 			log.info(" DELETE API Call api/steps/{} ", id);
 		}
 
-		stepService.deleteStep(id);
+		if (id != null) {
+			stepService.deleteStep(id);
+		} else {
+			throw new InvalidParamException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
+		}
 
 		if (log.isInfoEnabled()) {
 			log.info(" Step (id :: {}) has been deleted.", id);
@@ -83,8 +101,8 @@ public class StepController {
 		if (log.isInfoEnabled()) {
 			log.info(" POST API Call api/steps/add :: {} ", requestDTO);
 		}
-		
-		// TODO validateRequestDTO
+
+		dtoValidationService.validateStepDTO(requestDTO);
 
 		StepDTO response = stepService.addStep(requestDTO);
 

@@ -2,9 +2,6 @@ package com.pluralsight.recipe.builders;
 
 import com.pluralsight.recipe.entities.Recipe;
 import com.pluralsight.recipe.entities.Step;
-import com.pluralsight.recipe.enums.Lang;
-import com.pluralsight.recipe.exceptions.InvalidParamException;
-import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 
 public class StepBuilder {
 
@@ -40,28 +37,7 @@ public class StepBuilder {
 	}
 
 	public Step build() {
-		validate();
 		return step;
-	}
-
-	// Validations
-	private void validate() {
-
-		try {
-			Lang.valueOf(step.getLang());
-		} catch (IllegalArgumentException e) {
-			throw new InvalidParamException(" Lang ::" + ExceptionMessageConstants.PARAMETER_INVALID);
-		}
-
-		if (step.getRecipe() != null) {
-			if (step.getRecipe().getCode().isBlank() || step.getRecipe().getCode().isEmpty()) {
-				throw new InvalidParamException(
-						" recipe.code ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY);
-			}
-		} else {
-			throw new InvalidParamException(" Recipe ::" + ExceptionMessageConstants.PARAMETER_NULL);
-		}
-
 	}
 
 }

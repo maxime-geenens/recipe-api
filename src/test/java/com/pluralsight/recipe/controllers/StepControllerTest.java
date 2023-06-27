@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.pluralsight.recipe.dto.StepDTO;
 import com.pluralsight.recipe.services.StepService;
+import com.pluralsight.recipe.services.VaildationDTOService;
 import com.pluralsight.recipe.utils.TestUtils;
 
 @WebMvcTest(StepController.class)
@@ -30,6 +31,9 @@ public class StepControllerTest {
 
 	@MockBean
 	StepService service;
+	
+	@MockBean
+	VaildationDTOService dtoValidationService;
 
 	@Autowired
 	MockMvc mockMvc;
@@ -41,6 +45,7 @@ public class StepControllerTest {
 		StepDTO dto = new StepDTO(1l, "FR", 1, "Description", 1l);
 		list.add(dto);
 
+		when(dtoValidationService.validateStepDTO(dto)).thenReturn(true);
 		when(service.createStepList(list)).thenReturn(list);
 
 		mockMvc.perform(post(BASE_API + "/list/create").content(TestUtils.objectToJson(list))
@@ -54,6 +59,7 @@ public class StepControllerTest {
 
 		StepDTO dto = new StepDTO(1l, "FR", 1, "Description", 1l);
 
+		when(dtoValidationService.validateStepDTO(dto)).thenReturn(true);
 		when(service.addStep(dto)).thenReturn(dto);
 
 		mockMvc.perform(post(BASE_API + "/add").content(TestUtils.objectToJson(dto))
@@ -68,6 +74,7 @@ public class StepControllerTest {
 		StepDTO dto = new StepDTO(1l, "FR", 1, "Description", 1l);
 		list.add(dto);
 
+		when(dtoValidationService.validateStepDTO(dto)).thenReturn(true);
 		when(service.updateStepList(list)).thenReturn(list);
 
 		mockMvc.perform(put(BASE_API + "/list/update").content(TestUtils.objectToJson(list))

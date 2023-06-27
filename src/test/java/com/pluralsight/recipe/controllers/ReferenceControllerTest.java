@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.pluralsight.recipe.dto.IngredientReferenceDTO;
 import com.pluralsight.recipe.dto.UnitReferenceDTO;
 import com.pluralsight.recipe.services.ReferencesService;
+import com.pluralsight.recipe.services.VaildationDTOService;
 import com.pluralsight.recipe.utils.TestUtils;
 
 @WebMvcTest(ReferenceController.class)
@@ -29,6 +30,9 @@ public class ReferenceControllerTest {
 
 	@MockBean
 	ReferencesService service;
+	
+	@MockBean
+	VaildationDTOService dtoValidationService;
 
 	@Autowired
 	MockMvc mockMvc;
@@ -37,7 +41,7 @@ public class ReferenceControllerTest {
 	public void testFetchIngredientListByTypeAndLang() throws Exception {
 		
 		List<IngredientReferenceDTO> list = new ArrayList<>();
-		IngredientReferenceDTO dto = new IngredientReferenceDTO(1l, "FR", "Name", "Type", 1l);
+		IngredientReferenceDTO dto = new IngredientReferenceDTO(1l, "FR", "Name", 1l);
 		list.add(dto);
 		
 		when(service.listIngredientsByTypeAndLang("Type", "FR")).thenReturn(list);
@@ -48,7 +52,6 @@ public class ReferenceControllerTest {
 		.andExpect(jsonPath("$[0].id", Matchers.is(1)))
 		.andExpect(jsonPath("$[0].lang", Matchers.is("FR")))
 		.andExpect(jsonPath("$[0].name", Matchers.is("Name")))
-		.andExpect(jsonPath("$[0].type", Matchers.is("Type")))
 		.andExpect(jsonPath("$[0].typeId", Matchers.is(1)));
 		
 	}
@@ -76,8 +79,9 @@ public class ReferenceControllerTest {
 	@Test
 	public void testAddIngredientRef() throws Exception {
 
-		IngredientReferenceDTO dto = new IngredientReferenceDTO(1l, "FR", "Name", "Type", 1l);
+		IngredientReferenceDTO dto = new IngredientReferenceDTO(1l, "FR", "Name", 1l);
 
+		when(dtoValidationService.validateIngredientReferenceDTO(dto)).thenReturn(true);
 		when(service.addIngredientRef(dto)).thenReturn(dto);
 
 		mockMvc.perform(
@@ -86,7 +90,6 @@ public class ReferenceControllerTest {
 				.andExpect(jsonPath("$.id", Matchers.is(1)))
 				.andExpect(jsonPath("$.lang", Matchers.is("FR")))
 				.andExpect(jsonPath("$.name", Matchers.is("Name")))
-				.andExpect(jsonPath("$.type", Matchers.is("Type")))
 				.andExpect(jsonPath("$.typeId", Matchers.is(1)));
 
 	}

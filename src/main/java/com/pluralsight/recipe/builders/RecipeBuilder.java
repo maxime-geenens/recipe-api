@@ -2,9 +2,6 @@ package com.pluralsight.recipe.builders;
 
 import com.pluralsight.recipe.entities.Recipe;
 import com.pluralsight.recipe.entities.RecipeType;
-import com.pluralsight.recipe.enums.Lang;
-import com.pluralsight.recipe.exceptions.InvalidParamException;
-import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 
 public class RecipeBuilder {
 
@@ -40,7 +37,6 @@ public class RecipeBuilder {
 	}
 
 	public Recipe build() {
-		validate();
 		addCode();
 		return recipe;
 	}
@@ -48,42 +44,6 @@ public class RecipeBuilder {
 	private RecipeBuilder addCode() {
 		recipe.setCode(recipe.getLang() + recipe.getName());
 		return this;
-	}
-
-	// Validations
-	private void validate() {
-
-		if (recipe.getName() != null) {
-			if (recipe.getName().isBlank() || recipe.getName().isEmpty()) {
-				throw new InvalidParamException(" Name ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY);
-			}
-		} else {
-			throw new InvalidParamException(" Name ::" + ExceptionMessageConstants.PARAMETER_NULL);
-		}
-
-		if (recipe.getDescription() != null) {
-			if (recipe.getDescription().isBlank() || recipe.getDescription().isEmpty()) {
-				throw new InvalidParamException(
-						" Description ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY);
-			}
-		} else {
-			throw new InvalidParamException(" Description ::" + ExceptionMessageConstants.PARAMETER_NULL);
-		}
-
-		try {
-			Lang.valueOf(recipe.getLang());
-		} catch (IllegalArgumentException e) {
-			throw new InvalidParamException(" Lang ::" + ExceptionMessageConstants.PARAMETER_INVALID);
-		}
-
-		if (recipe.getType() != null) {
-			if (recipe.getType().getCode().isBlank() || recipe.getType().getCode().isEmpty()) {
-				throw new InvalidParamException(
-						" RecipeType.code ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY);
-			}
-		} else {
-			throw new InvalidParamException(" RecipeType ::" + ExceptionMessageConstants.PARAMETER_NULL);
-		}
 	}
 
 }

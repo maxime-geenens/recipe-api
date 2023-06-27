@@ -13,7 +13,6 @@ public interface IngredientReferenceMapper {
 
 	IngredientReferenceMapper MAPPER = Mappers.getMapper(IngredientReferenceMapper.class);
 
-	@Mapping(source = "type.name", target = "type")
 	@Mapping(source = "type.id", target = "typeId")
 	IngredientReferenceDTO mapToDTO(IngredientReference entity);
 

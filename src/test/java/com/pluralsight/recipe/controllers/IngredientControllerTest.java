@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.pluralsight.recipe.dto.IngredientDTO;
 import com.pluralsight.recipe.services.IngredientService;
+import com.pluralsight.recipe.services.VaildationDTOService;
 import com.pluralsight.recipe.utils.TestUtils;
 
 @WebMvcTest(IngredientController.class)
@@ -31,6 +32,9 @@ public class IngredientControllerTest {
 	@MockBean
 	IngredientService service;
 
+	@MockBean
+	VaildationDTOService dtoValidationService;
+
 	@Autowired
 	MockMvc mockMvc;
 
@@ -38,9 +42,10 @@ public class IngredientControllerTest {
 	public void testCreateIngredientList() throws Exception {
 
 		List<IngredientDTO> list = new ArrayList<>();
-		IngredientDTO dto = new IngredientDTO(1l, "FR", "Name", "Type", 1.0, "Unit", 1l, 1l, 1l);
+		IngredientDTO dto = new IngredientDTO(1l, "FR", "Name", 1.0, 1l, 1l, 1l);
 		list.add(dto);
 
+		when(dtoValidationService.validateIngredientDTO(dto)).thenReturn(true);
 		when(service.createIngredientList(list)).thenReturn(list);
 
 		mockMvc.perform(post(BASE_API + "/list/create").content(TestUtils.objectToJson(list))
@@ -52,12 +57,14 @@ public class IngredientControllerTest {
 	@Test
 	public void testAddIngredient() throws Exception {
 
-		IngredientDTO dto = new IngredientDTO(1l, "FR", "Name", "Type", 1.0, "Unit", 1l, 1l, 1l);
+		IngredientDTO dto = new IngredientDTO(1l, "FR", "Name", 1.0, 1l, 1l, 1l);
 
+		when(dtoValidationService.validateIngredientDTO(dto)).thenReturn(true);
 		when(service.addIngredient(dto)).thenReturn(dto);
 
-		mockMvc.perform(post(BASE_API + "/add").content(TestUtils.objectToJson(dto))
-				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+		mockMvc.perform(
+				post(BASE_API + "/add").content(TestUtils.objectToJson(dto)).contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
 
 	}
 
@@ -65,25 +72,24 @@ public class IngredientControllerTest {
 	public void testUpdateIngredientList() throws Exception {
 
 		List<IngredientDTO> list = new ArrayList<>();
-		IngredientDTO dto = new IngredientDTO(1l, "FR", "Name", "Type", 1.0, "Unit", 1l, 1l, 1l);
+		IngredientDTO dto = new IngredientDTO(1l, "FR", "Name", 1.0, 1l, 1l, 1l);
 		list.add(dto);
 
+		when(dtoValidationService.validateIngredientDTO(dto)).thenReturn(true);
 		when(service.updateIngredientList(list)).thenReturn(list);
 
 		mockMvc.perform(put(BASE_API + "/list/update").content(TestUtils.objectToJson(list))
-				.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
+				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
 				.andExpect(jsonPath("$", Matchers.hasSize(1)));
 
 	}
-	
+
 	@Test
 	public void testDeleteIngredient() throws Exception {
-		
+
 		doNothing().when(service).deleteIngredient(1l);
 
-		mockMvc.perform(delete(BASE_API + "/delete/1"))
-				.andExpect(status().isOk());
+		mockMvc.perform(delete(BASE_API + "/delete/1")).andExpect(status().isOk());
 	}
 
 }

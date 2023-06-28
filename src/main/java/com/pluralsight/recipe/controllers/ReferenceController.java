@@ -34,13 +34,13 @@ public class ReferenceController {
 	@Autowired
 	private VaildationDTOService dtoValidationService;
 
-	@GetMapping(path = "/ingredients/{type}/{lang}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/ingredients/type/{type}/lang/{lang}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<IngredientReferenceDTO>> fetchIngredientListByTypeAndLang(
 			@PathVariable(name = "type", required = false) String type,
 			@PathVariable(name = "lang", required = false) String lang) {
 
 		if (log.isInfoEnabled()) {
-			log.info(" GET API Call api/references/ingredients/{}/{} ", type, lang);
+			log.info(" GET API Call api/references/ingredients/type/{}/lang/{} ", type, lang);
 		}
 
 		List<IngredientReferenceDTO> list = new ArrayList<>();
@@ -62,18 +62,18 @@ public class ReferenceController {
 		}
 
 		if (log.isInfoEnabled()) {
-			log.info(" Returning from api/references/ingredients/{}/{} :: {}", type, lang, list.toString());
+			log.info(" Returning from api/references/ingredients/type/{}/lang/{} :: {}", type, lang, list.toString());
 		}
 
 		return new ResponseEntity<List<IngredientReferenceDTO>>(list, HttpStatus.OK);
 	}
 
-	@GetMapping(path = "/units/{lang}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/units/lang/{lang}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<UnitReferenceDTO>> fetchUnitListByLang(
-			@PathVariable(name = "lang", required = false) String lang) {
+			@PathVariable(name = "lang", required = true) String lang) {
 
 		if (log.isInfoEnabled()) {
-			log.info(" GET API Call api/references/units/{} ", lang);
+			log.info(" GET API Call api/references/units/lang/{} ", lang);
 		}
 
 		List<UnitReferenceDTO> list = new ArrayList<>();
@@ -91,7 +91,7 @@ public class ReferenceController {
 		}
 
 		if (log.isInfoEnabled()) {
-			log.info(" Returning from api/references/units/{} :: {}", lang, list.toString());
+			log.info(" Returning from api/references/units/lang/{} :: {}", lang, list.toString());
 		}
 
 		return new ResponseEntity<List<UnitReferenceDTO>>(list, HttpStatus.OK);

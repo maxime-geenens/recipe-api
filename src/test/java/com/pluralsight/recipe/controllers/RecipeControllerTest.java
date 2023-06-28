@@ -100,7 +100,7 @@ public class RecipeControllerTest {
 		when(ingredientService.listIngredientsByRecipe(1l)).thenReturn(iList);
 		when(stepService.listStepsByRecipe(1l)).thenReturn(sList);
 
-		mockMvc.perform(get(BASE_API + "/1"))
+		mockMvc.perform(get(BASE_API + "/detail/1"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.recipe.id", Matchers.is(1)))
 				.andExpect(jsonPath("$.recipe.lang", Matchers.is("FR")))
@@ -145,13 +145,87 @@ public class RecipeControllerTest {
 		when(recipeService.updateRecipe(dto, type)).thenReturn(dto1);
 
 		mockMvc.perform(
-				put(BASE_API + "/update/1").content(TestUtils.objectToJson(dto)).contentType(MediaType.APPLICATION_JSON))
+				put(BASE_API + "/update").content(TestUtils.objectToJson(dto)).contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.id", Matchers.is(1)))
 				.andExpect(jsonPath("$.lang", Matchers.is("FR")))
 				.andExpect(jsonPath("$.name", Matchers.is("Test1")))
 				.andExpect(jsonPath("$.description", Matchers.is("Recette Test Updated")))
 				.andExpect(jsonPath("$.typeCode", Matchers.is("Entrée")));
+	}
+
+	@Test
+	public void testUpdateRecipe_withIdNull_thenThrowInvalidParamException() throws Exception {
+
+		RecipeDTO dto = TestUtils.buildRecipeDTO(false, true);
+		RecipeType type = new RecipeType();
+
+		when(dtoValidationService.validateRecipeDTO(dto)).thenReturn(true);
+		when(referenceService.getRecipeTypeByCode(dto.getTypeCode())).thenReturn(type);
+		when(recipeService.updateRecipe(dto, type)).thenReturn(dto);
+
+		mockMvc.perform(
+				put(BASE_API + "/update").content(TestUtils.objectToJson(dto)).contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().is5xxServerError())
+				.andExpect(result -> assertTrue(result.getResolvedException() instanceof InvalidParamException))
+				.andExpect(result -> assertEquals(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL,
+						result.getResolvedException().getMessage()));
+	}
+
+	@Test
+	public void testUpdateRecipe_withTypeCodeNull_thenThrowInvalidParamException() throws Exception {
+
+		RecipeDTO dto = TestUtils.buildRecipeDTO(true, false);
+		RecipeType type = new RecipeType();
+
+		when(dtoValidationService.validateRecipeDTO(dto)).thenReturn(true);
+		when(referenceService.getRecipeTypeByCode(dto.getTypeCode())).thenReturn(type);
+		when(recipeService.updateRecipe(dto, type)).thenReturn(dto);
+
+		mockMvc.perform(
+				put(BASE_API + "/update").content(TestUtils.objectToJson(dto)).contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().is5xxServerError())
+				.andExpect(result -> assertTrue(result.getResolvedException() instanceof InvalidParamException))
+				.andExpect(result -> assertEquals(" TypeCode ::" + ExceptionMessageConstants.PARAMETER_NULL,
+						result.getResolvedException().getMessage()));
+	}
+
+	@Test
+	public void testUpdateRecipe_withTypeCodeBlank_thenThrowInvalidParamException() throws Exception {
+
+		RecipeDTO dto = TestUtils.buildRecipeDTO(true, false);
+		dto.setTypeCode("  ");
+		RecipeType type = new RecipeType();
+
+		when(dtoValidationService.validateRecipeDTO(dto)).thenReturn(true);
+		when(referenceService.getRecipeTypeByCode(dto.getTypeCode())).thenReturn(type);
+		when(recipeService.updateRecipe(dto, type)).thenReturn(dto);
+
+		mockMvc.perform(
+				put(BASE_API + "/update").content(TestUtils.objectToJson(dto)).contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().is5xxServerError())
+				.andExpect(result -> assertTrue(result.getResolvedException() instanceof InvalidParamException))
+				.andExpect(result -> assertEquals(" TypeCode ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY,
+						result.getResolvedException().getMessage()));
+	}
+
+	@Test
+	public void testUpdateRecipe_withTypeCodeEmpty_thenThrowInvalidParamException() throws Exception {
+
+		RecipeDTO dto = TestUtils.buildRecipeDTO(true, false);
+		dto.setTypeCode("");
+		RecipeType type = new RecipeType();
+
+		when(dtoValidationService.validateRecipeDTO(dto)).thenReturn(true);
+		when(referenceService.getRecipeTypeByCode(dto.getTypeCode())).thenReturn(type);
+		when(recipeService.updateRecipe(dto, type)).thenReturn(dto);
+
+		mockMvc.perform(
+				put(BASE_API + "/update").content(TestUtils.objectToJson(dto)).contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().is5xxServerError())
+				.andExpect(result -> assertTrue(result.getResolvedException() instanceof InvalidParamException))
+				.andExpect(result -> assertEquals(" TypeCode ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY,
+						result.getResolvedException().getMessage()));
 	}
 	
 	@Test

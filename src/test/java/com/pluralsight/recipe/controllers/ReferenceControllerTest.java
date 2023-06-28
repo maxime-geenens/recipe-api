@@ -50,7 +50,7 @@ public class ReferenceControllerTest {
 		
 		when(service.listIngredientsByTypeAndLang("Type", "FR")).thenReturn(list);
 		
-		mockMvc.perform(get(BASE_API + "/ingredients/Type/FR"))
+		mockMvc.perform(get(BASE_API + "/ingredients/type/Type/lang/FR"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$", Matchers.hasSize(1)))
 				.andExpect(jsonPath("$[0].id", Matchers.is(1)))
@@ -63,7 +63,7 @@ public class ReferenceControllerTest {
 	@Test
 	public void testFetchIngredientListByTypeAndLang_withLangBlank_thenThrowsInvalidParamException() throws Exception {
 		
-		mockMvc.perform(get(BASE_API + "/ingredients/Type/  "))
+		mockMvc.perform(get(BASE_API + "/ingredients/type/Type/lang/  "))
 				.andExpect(status().is5xxServerError())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof InvalidParamException))
 				.andExpect(result -> assertEquals(" Lang ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY,
@@ -74,7 +74,7 @@ public class ReferenceControllerTest {
 	@Test
 	public void testFetchIngredientListByTypeAndLang_withTypeBlank_thenThrowsInvalidParamException() throws Exception {
 		
-		mockMvc.perform(get(BASE_API + "/ingredients/  /FR"))
+		mockMvc.perform(get(BASE_API + "/ingredients/type/  /lang/FR"))
 				.andExpect(status().is5xxServerError())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof InvalidParamException))
 				.andExpect(result -> assertEquals(" Type ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY,
@@ -91,7 +91,7 @@ public class ReferenceControllerTest {
 		
 		when(service.listUnitsByLang("FR")).thenReturn(list);
 		
-		mockMvc.perform(get(BASE_API + "/units/FR"))
+		mockMvc.perform(get(BASE_API + "/units/lang/FR"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$", Matchers.hasSize(1)))
 				.andExpect(jsonPath("$[0].id", Matchers.is(1)))
@@ -105,7 +105,7 @@ public class ReferenceControllerTest {
 	@Test
 	public void testFetchUnitListByLang_withLangBlank_thenThrowsInvalidParamException() throws Exception {
 		
-		mockMvc.perform(get(BASE_API + "/units/  "))
+		mockMvc.perform(get(BASE_API + "/units/lang/  "))
 				.andExpect(status().is5xxServerError())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof InvalidParamException))
 				.andExpect(result -> assertEquals(" Lang ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY,

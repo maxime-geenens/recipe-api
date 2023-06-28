@@ -98,18 +98,30 @@ public class TestUtils {
 
 		return dto;
 	}
-	
-	public static List<RecipeDTO> buildRecipeDTOList(int quantity, boolean withId) {
-		
+
+	public static List<RecipeDTO> buildRecipeDTOList(int quantity, boolean withId, boolean withTypeCode) {
+
 		List<RecipeDTO> list = new ArrayList<>();
-		
-		
-		
-		
+
+		for (int i = 0; i < quantity; i++) {
+
+			RecipeDTO dto = new RecipeDTO();
+
+			if (withId) {
+				dto.setId(Long.valueOf(i + 1));
+			}
+			dto.setDescription("Recette Numero " + String.valueOf(i + 1));
+			dto.setLang("FR");
+			dto.setName("Recette" + String.valueOf(i + 1));
+			dto.setTypeCode(dto.getLang() + dto.getName());
+
+			list.add(dto);
+		}
+
 		return list;
 	}
 
-	public static final RecipeDTO buildRecipeDTO(boolean withId) {
+	public static final RecipeDTO buildRecipeDTO(boolean withId, boolean withTypeCode) {
 
 		RecipeDTO dto = new RecipeDTO();
 
@@ -119,7 +131,9 @@ public class TestUtils {
 		dto.setDescription("Recette Numero 1");
 		dto.setLang("FR");
 		dto.setName("Recette1");
-		dto.setTypeCode(dto.getLang() + dto.getName());
+		if (withTypeCode) {
+			dto.setTypeCode(dto.getLang() + dto.getName());
+		}
 
 		return dto;
 	}

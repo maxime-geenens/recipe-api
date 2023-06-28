@@ -82,12 +82,12 @@ public class RecipeController {
 		return new ResponseEntity<List<RecipeDTO>>(list, HttpStatus.OK);
 	}
 
-	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/detail/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<RecipeDetailDTO> getRecipeDetail(@PathVariable(name = "id", required = true) Long id)
 			throws EntityWasNotFoundException, InvalidParamException {
 
 		if (log.isInfoEnabled()) {
-			log.info(" GET API Call api/recipes/{} ", id);
+			log.info(" GET API Call api/recipes/detail/{} ", id);
 		}
 
 		RecipeDetailDTO response = new RecipeDetailDTO();
@@ -117,7 +117,7 @@ public class RecipeController {
 		}
 
 		if (log.isInfoEnabled()) {
-			log.info(" Returning from api/recipes/{} :: {}", id, response.toString());
+			log.info(" Returning from api/recipes/detail/{} :: {}", id, response.toString());
 		}
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
@@ -149,39 +149,43 @@ public class RecipeController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@PutMapping(path = "/update/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<RecipeDTO> updateRecipe(@RequestBody(required = true) RecipeDTO requestDTO,
-			@PathVariable(name = "id", required = true) Long id) {
+	@PutMapping(path = "/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<RecipeDTO> updateRecipe(@RequestBody(required = true) RecipeDTO requestDTO) {
 
 		if (log.isInfoEnabled()) {
-			log.info(" PUT API Call api/recipes/{} :: {} ", id, requestDTO);
+			log.info(" PUT API Call api/recipes/update :: {} ", requestDTO);
 		}
 
 		RecipeDTO response = new RecipeDTO();
 
-		if (id != null) {
-
-			if (requestDTO != null) {
+		if (requestDTO != null) {
+			Long id = requestDTO.getId();
+			if (id != null) {
 				dtoValidationService.validateRecipeDTO(requestDTO);
 			} else {
-				throw new InvalidParamException(" requestDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+				throw new InvalidParamException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
 			}
-
-			RecipeType recipeType = new RecipeType();
-
-			String typeCode = requestDTO.getTypeCode();
-			if (typeCode != null && !typeCode.isEmpty() && !typeCode.isBlank()) {
-				recipeType = referenceService.getRecipeTypeByCode(requestDTO.getTypeCode());
-			}
-
-			response = recipeService.updateRecipe(requestDTO, recipeType);
-
 		} else {
-			throw new InvalidParamException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			throw new InvalidParamException(" RecipeDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
 		}
 
+		RecipeType recipeType = new RecipeType();
+
+		String typeCode = requestDTO.getTypeCode();
+		if (typeCode != null) {
+			if (!typeCode.isEmpty() && !typeCode.isBlank()) {
+				recipeType = referenceService.getRecipeTypeByCode(requestDTO.getTypeCode());
+			} else {
+				throw new InvalidParamException(" TypeCode ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY);
+			}
+		} else {
+			throw new InvalidParamException(" TypeCode ::" + ExceptionMessageConstants.PARAMETER_NULL);
+		}
+
+		response = recipeService.updateRecipe(requestDTO, recipeType);
+
 		if (log.isInfoEnabled()) {
-			log.info(" Returning from api/recipes/{} :: {} ", id, response);
+			log.info(" Returning from api/recipes/update :: {} ", response);
 		}
 
 		return new ResponseEntity<>(response, HttpStatus.OK);

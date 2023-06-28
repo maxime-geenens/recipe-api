@@ -6,6 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pluralsight.recipe.dto.IngredientDTO;
+import com.pluralsight.recipe.dto.IngredientReferenceDTO;
 import com.pluralsight.recipe.dto.RecipeDTO;
 import com.pluralsight.recipe.dto.StepDTO;
 
@@ -134,6 +135,20 @@ public class TestUtils {
 		if (withTypeCode) {
 			dto.setTypeCode(dto.getLang() + dto.getName());
 		}
+
+		return dto;
+	}
+
+	public static IngredientReferenceDTO buildIngredientReferenceDTO(boolean withId) {
+
+		IngredientReferenceDTO dto = new IngredientReferenceDTO();
+
+		if (withId) {
+			dto.setId(1l);
+		}
+		dto.setLang("FR");
+		dto.setName("Ref1");
+		dto.setTypeId(1l);
 
 		return dto;
 	}

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pluralsight.recipe.dto.StepDTO;
 import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.services.StepService;
-import com.pluralsight.recipe.services.VaildationDTOService;
+import com.pluralsight.recipe.services.ValidationDTOService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +31,7 @@ public class StepController {
 	private StepService stepService;
 
 	@Autowired
-	private VaildationDTOService dtoValidationService;
+	private ValidationDTOService dtoValidationService;
 
 	@PostMapping(path = "/list/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<StepDTO>> createStepList(@RequestBody(required = true) List<StepDTO> requestDTO) {

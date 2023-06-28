@@ -28,7 +28,7 @@ import com.pluralsight.recipe.services.IngredientService;
 import com.pluralsight.recipe.services.RecipeService;
 import com.pluralsight.recipe.services.ReferencesService;
 import com.pluralsight.recipe.services.StepService;
-import com.pluralsight.recipe.services.VaildationDTOService;
+import com.pluralsight.recipe.services.ValidationDTOService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +51,7 @@ public class RecipeController {
 	private StepService stepService;
 
 	@Autowired
-	private VaildationDTOService dtoValidationService;
+	private ValidationDTOService dtoValidationService;
 
 	@GetMapping(path = "/lang/{lang}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<RecipeDTO>> listRecipesByLang(

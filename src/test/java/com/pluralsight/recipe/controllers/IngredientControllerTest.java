@@ -24,7 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.pluralsight.recipe.dto.IngredientDTO;
 import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.services.IngredientService;
-import com.pluralsight.recipe.services.VaildationDTOService;
+import com.pluralsight.recipe.services.ValidationDTOService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 import com.pluralsight.recipe.utils.TestUtils;
 
@@ -37,7 +37,7 @@ public class IngredientControllerTest {
 	IngredientService service;
 
 	@MockBean
-	VaildationDTOService dtoValidationService;
+	ValidationDTOService dtoValidationService;
 
 	@Autowired
 	MockMvc mockMvc;

@@ -23,7 +23,7 @@ import com.pluralsight.recipe.dto.IngredientReferenceDTO;
 import com.pluralsight.recipe.dto.UnitReferenceDTO;
 import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.services.ReferencesService;
-import com.pluralsight.recipe.services.VaildationDTOService;
+import com.pluralsight.recipe.services.ValidationDTOService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 import com.pluralsight.recipe.utils.TestUtils;
 
@@ -36,7 +36,7 @@ public class ReferenceControllerTest {
 	ReferencesService service;
 	
 	@MockBean
-	VaildationDTOService dtoValidationService;
+	ValidationDTOService dtoValidationService;
 
 	@Autowired
 	MockMvc mockMvc;

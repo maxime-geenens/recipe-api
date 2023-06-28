@@ -5,7 +5,7 @@ import com.pluralsight.recipe.dto.IngredientReferenceDTO;
 import com.pluralsight.recipe.dto.RecipeDTO;
 import com.pluralsight.recipe.dto.StepDTO;
 
-public interface VaildationDTOService {
+public interface ValidationDTOService {
 
 	/**
 	 * 

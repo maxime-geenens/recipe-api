@@ -32,7 +32,7 @@ import com.pluralsight.recipe.services.IngredientService;
 import com.pluralsight.recipe.services.RecipeService;
 import com.pluralsight.recipe.services.ReferencesService;
 import com.pluralsight.recipe.services.StepService;
-import com.pluralsight.recipe.services.VaildationDTOService;
+import com.pluralsight.recipe.services.ValidationDTOService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 import com.pluralsight.recipe.utils.TestUtils;
 
@@ -54,7 +54,7 @@ public class RecipeControllerTest {
 	StepService stepService;
 	
 	@MockBean
-	VaildationDTOService dtoValidationService;
+	ValidationDTOService dtoValidationService;
 
 	@Autowired
 	MockMvc mockMvc;

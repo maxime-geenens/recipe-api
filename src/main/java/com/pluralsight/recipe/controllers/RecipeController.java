@@ -72,7 +72,7 @@ public class RecipeController {
 			list = recipeService.listRecipesByLang(lang);
 
 		} else {
-			throw new InvalidParamException(" Type or Lang ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			throw new InvalidParamException(" Lang ::" + ExceptionMessageConstants.PARAMETER_NULL);
 		}
 
 		if (log.isInfoEnabled()) {

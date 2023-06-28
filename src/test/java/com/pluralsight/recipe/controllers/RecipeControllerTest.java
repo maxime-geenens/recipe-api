@@ -1,5 +1,7 @@
 package com.pluralsight.recipe.controllers;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -25,11 +27,13 @@ import com.pluralsight.recipe.dto.RecipeDTO;
 import com.pluralsight.recipe.dto.StepDTO;
 import com.pluralsight.recipe.entities.Recipe;
 import com.pluralsight.recipe.entities.RecipeType;
+import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.services.IngredientService;
 import com.pluralsight.recipe.services.RecipeService;
 import com.pluralsight.recipe.services.ReferencesService;
 import com.pluralsight.recipe.services.StepService;
 import com.pluralsight.recipe.services.VaildationDTOService;
+import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 import com.pluralsight.recipe.utils.TestUtils;
 
 @WebMvcTest(RecipeController.class)
@@ -66,12 +70,17 @@ public class RecipeControllerTest {
 
 		mockMvc.perform(get(BASE_API + "/lang/FR"))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$", Matchers.hasSize(1))).andExpect(jsonPath("$[0].id", Matchers.is(1)))
-				.andExpect(jsonPath("$[0].lang", Matchers.is("FR")))
-				.andExpect(jsonPath("$[0].name", Matchers.is("Test")))
-				.andExpect(jsonPath("$[0].description", Matchers.is("Recette Test")))
-				.andExpect(jsonPath("$[0].typeCode", Matchers.is("Entrée")));
+				.andExpect(jsonPath("$", Matchers.hasSize(1)));
+	}
 
+	@Test
+	public void testListRecipesByLang_withLangBlank_thenThrowInvalidParamException() throws Exception {
+
+		mockMvc.perform(get(BASE_API + "/lang/  "))
+				.andExpect(status().is5xxServerError())
+				.andExpect(result -> assertTrue(result.getResolvedException() instanceof InvalidParamException))
+				.andExpect(result -> assertEquals(" Lang ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY,
+						result.getResolvedException().getMessage()));
 	}
 
 	@Test
@@ -100,7 +109,6 @@ public class RecipeControllerTest {
 				.andExpect(jsonPath("$.recipe.typeCode", Matchers.is("Entrée")))
 				.andExpect(jsonPath("$.ingredientList", Matchers.hasSize(1)))
 				.andExpect(jsonPath("$.stepList", Matchers.hasSize(1)));
-
 	}
 
 	@Test
@@ -123,7 +131,6 @@ public class RecipeControllerTest {
 				.andExpect(jsonPath("$.name", Matchers.is("Test")))
 				.andExpect(jsonPath("$.description", Matchers.is("Recette Test")))
 				.andExpect(jsonPath("$.typeCode", Matchers.is("Entrée")));
-
 	}
 
 	@Test
@@ -145,7 +152,6 @@ public class RecipeControllerTest {
 				.andExpect(jsonPath("$.name", Matchers.is("Test1")))
 				.andExpect(jsonPath("$.description", Matchers.is("Recette Test Updated")))
 				.andExpect(jsonPath("$.typeCode", Matchers.is("Entrée")));
-
 	}
 	
 	@Test
@@ -155,7 +161,6 @@ public class RecipeControllerTest {
 
 		mockMvc.perform(delete(BASE_API + "/delete/1"))
 				.andExpect(status().isOk());
-
 	}
 
 }

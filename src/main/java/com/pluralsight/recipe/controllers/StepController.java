@@ -87,8 +87,12 @@ public class StepController {
 		}
 
 		for (StepDTO stepDTO : requestDTO) {
-			if (stepDTO != null && stepDTO.getId() != null) {
-				dtoValidationService.validateStepDTO(stepDTO);
+			if (stepDTO != null) {
+				if (stepDTO.getId() != null) {
+					dtoValidationService.validateStepDTO(stepDTO);
+				} else {
+					throw new InvalidParamException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
+				}
 			} else {
 				throw new InvalidParamException(" StepDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
 			}
@@ -110,8 +114,13 @@ public class StepController {
 			log.info(" PUT API Call api/steps/update :: {} ", requestDTO);
 		}
 
-		if (requestDTO != null && requestDTO.getId() != null) {
-			dtoValidationService.validateStepDTO(requestDTO);
+		if (requestDTO != null) {
+			if (requestDTO.getId() != null) {
+				dtoValidationService.validateStepDTO(requestDTO);
+			} else {
+				throw new InvalidParamException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			}
+			
 		} else {
 			throw new InvalidParamException(" StepDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
 		}

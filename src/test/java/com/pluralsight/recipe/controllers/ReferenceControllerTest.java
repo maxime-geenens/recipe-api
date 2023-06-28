@@ -1,5 +1,7 @@
 package com.pluralsight.recipe.controllers;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -19,8 +21,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.pluralsight.recipe.dto.IngredientReferenceDTO;
 import com.pluralsight.recipe.dto.UnitReferenceDTO;
+import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.services.ReferencesService;
 import com.pluralsight.recipe.services.VaildationDTOService;
+import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 import com.pluralsight.recipe.utils.TestUtils;
 
 @WebMvcTest(ReferenceController.class)
@@ -47,12 +51,34 @@ public class ReferenceControllerTest {
 		when(service.listIngredientsByTypeAndLang("Type", "FR")).thenReturn(list);
 		
 		mockMvc.perform(get(BASE_API + "/ingredients/Type/FR"))
-		.andExpect(status().isOk())
-		.andExpect(jsonPath("$", Matchers.hasSize(1)))
-		.andExpect(jsonPath("$[0].id", Matchers.is(1)))
-		.andExpect(jsonPath("$[0].lang", Matchers.is("FR")))
-		.andExpect(jsonPath("$[0].name", Matchers.is("Name")))
-		.andExpect(jsonPath("$[0].typeId", Matchers.is(1)));
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", Matchers.hasSize(1)))
+				.andExpect(jsonPath("$[0].id", Matchers.is(1)))
+				.andExpect(jsonPath("$[0].lang", Matchers.is("FR")))
+				.andExpect(jsonPath("$[0].name", Matchers.is("Name")))
+				.andExpect(jsonPath("$[0].typeId", Matchers.is(1)));
+		
+	}
+	
+	@Test
+	public void testFetchIngredientListByTypeAndLang_withLangBlank_thenThrowsInvalidParamException() throws Exception {
+		
+		mockMvc.perform(get(BASE_API + "/ingredients/Type/  "))
+				.andExpect(status().is5xxServerError())
+				.andExpect(result -> assertTrue(result.getResolvedException() instanceof InvalidParamException))
+				.andExpect(result -> assertEquals(" Lang ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY,
+						result.getResolvedException().getMessage()));
+		
+	}
+	
+	@Test
+	public void testFetchIngredientListByTypeAndLang_withTypeBlank_thenThrowsInvalidParamException() throws Exception {
+		
+		mockMvc.perform(get(BASE_API + "/ingredients/  /FR"))
+				.andExpect(status().is5xxServerError())
+				.andExpect(result -> assertTrue(result.getResolvedException() instanceof InvalidParamException))
+				.andExpect(result -> assertEquals(" Type ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY,
+						result.getResolvedException().getMessage()));
 		
 	}
 	
@@ -66,13 +92,24 @@ public class ReferenceControllerTest {
 		when(service.listUnitsByLang("FR")).thenReturn(list);
 		
 		mockMvc.perform(get(BASE_API + "/units/FR"))
-		.andExpect(status().isOk())
-		.andExpect(jsonPath("$", Matchers.hasSize(1)))
-		.andExpect(jsonPath("$[0].id", Matchers.is(1)))
-		.andExpect(jsonPath("$[0].lang", Matchers.is("FR")))
-		.andExpect(jsonPath("$[0].name", Matchers.is("Name")))
-		.andExpect(jsonPath("$[0].symbol", Matchers.is("Symbol")))
-		.andExpect(jsonPath("$[0].description", Matchers.is("Description")));
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", Matchers.hasSize(1)))
+				.andExpect(jsonPath("$[0].id", Matchers.is(1)))
+				.andExpect(jsonPath("$[0].lang", Matchers.is("FR")))
+				.andExpect(jsonPath("$[0].name", Matchers.is("Name")))
+				.andExpect(jsonPath("$[0].symbol", Matchers.is("Symbol")))
+				.andExpect(jsonPath("$[0].description", Matchers.is("Description")));
+		
+	}
+	
+	@Test
+	public void testFetchUnitListByLang_withLangBlank_thenThrowsInvalidParamException() throws Exception {
+		
+		mockMvc.perform(get(BASE_API + "/units/  "))
+				.andExpect(status().is5xxServerError())
+				.andExpect(result -> assertTrue(result.getResolvedException() instanceof InvalidParamException))
+				.andExpect(result -> assertEquals(" Lang ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY,
+						result.getResolvedException().getMessage()));
 		
 	}
 

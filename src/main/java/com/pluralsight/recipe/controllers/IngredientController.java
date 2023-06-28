@@ -46,7 +46,7 @@ public class IngredientController {
 			if (ingredientDTO != null) {
 				dtoValidationService.validateIngredientDTO(ingredientDTO);
 			} else {
-				throw new InvalidParamException(" ingredientDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+				throw new InvalidParamException(" IngredientDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
 			}
 		}
 
@@ -69,7 +69,7 @@ public class IngredientController {
 		if (requestDTO != null) {
 			dtoValidationService.validateIngredientDTO(requestDTO);
 		} else {
-			throw new InvalidParamException(" requestDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			throw new InvalidParamException(" IngredientDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
 		}
 
 		IngredientDTO response = ingredientService.addIngredient(requestDTO);
@@ -91,10 +91,14 @@ public class IngredientController {
 
 		for (IngredientDTO ingredientDTO : requestDTO) {
 
-			if (ingredientDTO != null && ingredientDTO.getId() != null) {
-				dtoValidationService.validateIngredientDTO(ingredientDTO);
+			if (ingredientDTO != null) {
+				if (ingredientDTO.getId() != null) {
+					dtoValidationService.validateIngredientDTO(ingredientDTO);
+				} else {
+					throw new InvalidParamException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
+				}
 			} else {
-				throw new InvalidParamException(" ingredientDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+				throw new InvalidParamException(" IngredientDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
 			}
 		}
 
@@ -114,10 +118,14 @@ public class IngredientController {
 			log.info(" PUT API Call api/ingredients/update :: {} ", requestDTO);
 		}
 
-		if (requestDTO != null && requestDTO.getId() != null) {
-			dtoValidationService.validateIngredientDTO(requestDTO);
+		if (requestDTO != null) {
+			if (requestDTO.getId() != null) {
+				dtoValidationService.validateIngredientDTO(requestDTO);
+			} else {
+				throw new InvalidParamException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			}
 		} else {
-			throw new InvalidParamException(" ingredientDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			throw new InvalidParamException(" IngredientDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
 		}
 
 		IngredientDTO response = ingredientService.updateIngredient(requestDTO);

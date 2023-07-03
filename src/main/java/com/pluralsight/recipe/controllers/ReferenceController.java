@@ -20,7 +20,9 @@ import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.services.ReferencesService;
 import com.pluralsight.recipe.services.ValidationDTOService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
+import com.pluralsight.recipe.utils.ValidationUtils;
 
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -48,17 +50,20 @@ public class ReferenceController {
 		if (type != null && lang != null) {
 
 			if (type.isEmpty() || type.isBlank()) {
-				throw new InvalidParamException(" Type ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY);
+				throw new InvalidParamException(
+						ValidationUtils.buildExceptionMessage("type", ExceptionMessageConstants.PARAMETER_BLANK_EMPTY));
 			}
 
 			if (lang.isEmpty() || lang.isBlank()) {
-				throw new InvalidParamException(" Lang ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY);
+				throw new InvalidParamException(
+						ValidationUtils.buildExceptionMessage("lang", ExceptionMessageConstants.PARAMETER_BLANK_EMPTY));
 			}
 
-			list = referenceService.listIngredientsByTypeAndLang(type, lang);
+			list = referenceService.listIngredientsRefByTypeAndLang(type, lang);
 
 		} else {
-			throw new InvalidParamException(" Type or Lang ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			throw new InvalidParamException(
+					ValidationUtils.buildExceptionMessage("type or lang", ExceptionMessageConstants.PARAMETER_NULL));
 		}
 
 		if (log.isInfoEnabled()) {
@@ -81,13 +86,15 @@ public class ReferenceController {
 		if (lang != null) {
 
 			if (lang.isEmpty() || lang.isBlank()) {
-				throw new InvalidParamException(" Lang ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY);
+				throw new InvalidParamException(
+						ValidationUtils.buildExceptionMessage("lang", ExceptionMessageConstants.PARAMETER_BLANK_EMPTY));
 			}
 
 			list = referenceService.listUnitsByLang(lang);
 
 		} else {
-			throw new InvalidParamException(" Type or Lang ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			throw new InvalidParamException(
+					ValidationUtils.buildExceptionMessage("lang", ExceptionMessageConstants.PARAMETER_NULL));
 		}
 
 		if (log.isInfoEnabled()) {
@@ -98,6 +105,7 @@ public class ReferenceController {
 	}
 
 	@PostMapping(path = "/ingredient", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Transactional
 	public ResponseEntity<IngredientReferenceDTO> addIngredientReference(
 			@RequestBody(required = true) IngredientReferenceDTO requestDTO) {
 
@@ -108,7 +116,8 @@ public class ReferenceController {
 		if (requestDTO != null) {
 			dtoValidationService.validateIngredientReferenceDTO(requestDTO);
 		} else {
-			throw new InvalidParamException(" requestDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
+					ExceptionMessageConstants.INGREDIENT_REF_DTO, ExceptionMessageConstants.PARAMETER_NULL));
 		}
 
 		IngredientReferenceDTO response = referenceService.addIngredientRef(requestDTO);

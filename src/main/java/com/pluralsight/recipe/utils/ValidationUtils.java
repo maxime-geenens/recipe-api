@@ -11,18 +11,19 @@ public class ValidationUtils {
 
 		if (param != null) {
 			if (param.isBlank() || param.isEmpty()) {
-				throw new InvalidParamException(paramName + " ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY);
+				throw new InvalidParamException(
+						buildExceptionMessage(paramName, ExceptionMessageConstants.PARAMETER_BLANK_EMPTY));
 			} else {
 				isValid = true;
 			}
 		} else {
-			throw new InvalidParamException(paramName + " ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			throw new InvalidParamException(buildExceptionMessage(paramName, ExceptionMessageConstants.PARAMETER_NULL));
 		}
 
 		return isValid;
 	}
 
-	public static final boolean validateLang(String value) {
+	public static final boolean validateLang(String value, String object) {
 
 		boolean isValid = false;
 
@@ -34,10 +35,17 @@ public class ValidationUtils {
 		}
 
 		if (!isValid) {
-			throw new InvalidParamException(" Lang ::" + ExceptionMessageConstants.PARAMETER_INVALID);
+			throw new InvalidParamException(
+					buildExceptionMessage(object + ".lang", ExceptionMessageConstants.PARAMETER_INVALID));
 		}
 
 		return isValid;
+	}
+
+	public static final String buildExceptionMessage(String paramName, String message) {
+
+		StringBuilder builder = new StringBuilder();
+		return builder.append(paramName).append(" :: ").append(message).toString();
 	}
 
 }

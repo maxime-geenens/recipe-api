@@ -19,7 +19,9 @@ import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.services.IngredientService;
 import com.pluralsight.recipe.services.ValidationDTOService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
+import com.pluralsight.recipe.utils.ValidationUtils;
 
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -34,6 +36,7 @@ public class IngredientController {
 	private ValidationDTOService dtoValidationService;
 
 	@PostMapping(path = "/list/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@Transactional
 	public ResponseEntity<List<IngredientDTO>> createIngredientList(
 			@RequestBody(required = true) List<IngredientDTO> requestDTO) {
 
@@ -46,11 +49,12 @@ public class IngredientController {
 			if (ingredientDTO != null) {
 				dtoValidationService.validateIngredientDTO(ingredientDTO);
 			} else {
-				throw new InvalidParamException(" IngredientDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+				throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
+						ExceptionMessageConstants.INGREDIENT_DTO, ExceptionMessageConstants.PARAMETER_NULL));
 			}
 		}
 
-		List<IngredientDTO> response = ingredientService.createIngredientList(requestDTO);
+		List<IngredientDTO> response = ingredientService.saveIngredientList(requestDTO);
 
 		if (log.isInfoEnabled()) {
 			log.info(" Returning from api/ingredients/list/create :: {} ", response);
@@ -60,6 +64,7 @@ public class IngredientController {
 	}
 
 	@PostMapping(path = "/add", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@Transactional
 	public ResponseEntity<IngredientDTO> addIngredient(@RequestBody(required = true) IngredientDTO requestDTO) {
 
 		if (log.isInfoEnabled()) {
@@ -69,10 +74,11 @@ public class IngredientController {
 		if (requestDTO != null) {
 			dtoValidationService.validateIngredientDTO(requestDTO);
 		} else {
-			throw new InvalidParamException(" IngredientDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
+					ExceptionMessageConstants.INGREDIENT_DTO, ExceptionMessageConstants.PARAMETER_NULL));
 		}
 
-		IngredientDTO response = ingredientService.addIngredient(requestDTO);
+		IngredientDTO response = ingredientService.saveIngredient(requestDTO);
 
 		if (log.isInfoEnabled()) {
 			log.info(" Returning from api/ingredients/add :: {} ", response);
@@ -82,6 +88,7 @@ public class IngredientController {
 	}
 
 	@PutMapping(path = "/list/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@Transactional
 	public ResponseEntity<List<IngredientDTO>> updateIngredientList(
 			@RequestBody(required = true) List<IngredientDTO> requestDTO) {
 
@@ -95,14 +102,17 @@ public class IngredientController {
 				if (ingredientDTO.getId() != null) {
 					dtoValidationService.validateIngredientDTO(ingredientDTO);
 				} else {
-					throw new InvalidParamException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
+					throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
+							ExceptionMessageConstants.INGREDIENT_DTO + ExceptionMessageConstants.PARAM_ID,
+							ExceptionMessageConstants.PARAMETER_NULL));
 				}
 			} else {
-				throw new InvalidParamException(" IngredientDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+				throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
+						ExceptionMessageConstants.INGREDIENT_DTO, ExceptionMessageConstants.PARAMETER_NULL));
 			}
 		}
 
-		List<IngredientDTO> response = ingredientService.updateIngredientList(requestDTO);
+		List<IngredientDTO> response = ingredientService.saveIngredientList(requestDTO);
 
 		if (log.isInfoEnabled()) {
 			log.info(" Returning from api/ingredients/list/update :: {} ", response);
@@ -112,6 +122,7 @@ public class IngredientController {
 	}
 
 	@PutMapping(path = "/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@Transactional
 	public ResponseEntity<IngredientDTO> updateIngredient(@RequestBody(required = true) IngredientDTO requestDTO) {
 
 		if (log.isInfoEnabled()) {
@@ -122,13 +133,16 @@ public class IngredientController {
 			if (requestDTO.getId() != null) {
 				dtoValidationService.validateIngredientDTO(requestDTO);
 			} else {
-				throw new InvalidParamException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
+				throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
+						ExceptionMessageConstants.INGREDIENT_DTO + ExceptionMessageConstants.PARAM_ID,
+						ExceptionMessageConstants.PARAMETER_NULL));
 			}
 		} else {
-			throw new InvalidParamException(" IngredientDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
+					ExceptionMessageConstants.INGREDIENT_DTO, ExceptionMessageConstants.PARAMETER_NULL));
 		}
 
-		IngredientDTO response = ingredientService.updateIngredient(requestDTO);
+		IngredientDTO response = ingredientService.saveIngredient(requestDTO);
 
 		if (log.isInfoEnabled()) {
 			log.info(" Returning from api/ingredients/update :: {} ", response);
@@ -147,7 +161,7 @@ public class IngredientController {
 		if (id != null) {
 			ingredientService.deleteIngredient(id);
 		} else {
-			throw new InvalidParamException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			throw new InvalidParamException("id :: " + ExceptionMessageConstants.PARAMETER_NULL);
 		}
 
 		if (log.isInfoEnabled()) {

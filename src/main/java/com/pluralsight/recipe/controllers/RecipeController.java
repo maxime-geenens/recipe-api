@@ -22,15 +22,14 @@ import com.pluralsight.recipe.dto.IngredientDTO;
 import com.pluralsight.recipe.dto.RecipeDTO;
 import com.pluralsight.recipe.dto.RecipeDetailDTO;
 import com.pluralsight.recipe.dto.StepDTO;
-import com.pluralsight.recipe.entities.Recipe;
-import com.pluralsight.recipe.entities.RecipeType;
 import com.pluralsight.recipe.services.IngredientService;
 import com.pluralsight.recipe.services.RecipeService;
-import com.pluralsight.recipe.services.ReferencesService;
 import com.pluralsight.recipe.services.StepService;
 import com.pluralsight.recipe.services.ValidationDTOService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
+import com.pluralsight.recipe.utils.ValidationUtils;
 
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -40,9 +39,6 @@ public class RecipeController {
 
 	@Autowired
 	private RecipeService recipeService;
-
-	@Autowired
-	private ReferencesService referenceService;
 
 	@Autowired
 	private IngredientService ingredientService;
@@ -55,7 +51,7 @@ public class RecipeController {
 
 	@GetMapping(path = "/lang/{lang}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<RecipeDTO>> listRecipesByLang(
-			@PathVariable(name = "lang", required = false) String lang) {
+			@PathVariable(name = "lang", required = true) String lang) {
 
 		if (log.isInfoEnabled()) {
 			log.info(" GET API Call api/recipes/{} ", lang);
@@ -66,13 +62,13 @@ public class RecipeController {
 		if (lang != null) {
 
 			if (lang.isEmpty() || lang.isBlank()) {
-				throw new InvalidParamException(" Lang ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY);
+				throw new InvalidParamException("lang :: " + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY);
 			}
 
 			list = recipeService.listRecipesByLang(lang);
 
 		} else {
-			throw new InvalidParamException(" Lang ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			throw new InvalidParamException("lang :: " + ExceptionMessageConstants.PARAMETER_NULL);
 		}
 
 		if (log.isInfoEnabled()) {
@@ -94,10 +90,12 @@ public class RecipeController {
 		RecipeDTO dto = new RecipeDTO();
 
 		if (id != null) {
-			dto = recipeService.getRecipeById(id);
+			dto = recipeService.getRecipeDTOById(id);
 			response.setRecipe(dto);
 		} else {
-			throw new InvalidParamException(ExceptionMessageConstants.PARAMETER_NULL);
+			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
+					ExceptionMessageConstants.RECIPE_DTO + ExceptionMessageConstants.PARAM_ID,
+					ExceptionMessageConstants.PARAMETER_NULL));
 		}
 
 		List<IngredientDTO> ingredientDTOList = ingredientService.listIngredientsByRecipe(id);
@@ -124,6 +122,7 @@ public class RecipeController {
 	}
 
 	@PostMapping(path = "/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@Transactional
 	public ResponseEntity<RecipeDTO> createRecipe(@RequestBody(required = true) RecipeDTO requestDTO) {
 
 		if (log.isInfoEnabled()) {
@@ -133,14 +132,11 @@ public class RecipeController {
 		if (requestDTO != null) {
 			dtoValidationService.validateRecipeDTO(requestDTO);
 		} else {
-			throw new InvalidParamException(" requestDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(ExceptionMessageConstants.RECIPE_DTO,
+					ExceptionMessageConstants.PARAMETER_NULL));
 		}
 
-		RecipeType recipeType = referenceService.getRecipeTypeByCode(requestDTO.getTypeCode());
-
-		Recipe recipe = recipeService.buildRecipe(requestDTO, recipeType);
-
-		RecipeDTO response = recipeService.saveRecipe(recipe);
+		RecipeDTO response = recipeService.saveRecipe(requestDTO);
 
 		if (log.isInfoEnabled()) {
 			log.info(" Returning from api/recipes/create :: {} ", response);
@@ -150,6 +146,7 @@ public class RecipeController {
 	}
 
 	@PutMapping(path = "/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@Transactional
 	public ResponseEntity<RecipeDTO> updateRecipe(@RequestBody(required = true) RecipeDTO requestDTO) {
 
 		if (log.isInfoEnabled()) {
@@ -163,26 +160,16 @@ public class RecipeController {
 			if (id != null) {
 				dtoValidationService.validateRecipeDTO(requestDTO);
 			} else {
-				throw new InvalidParamException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
+				throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
+						ExceptionMessageConstants.RECIPE_DTO + ExceptionMessageConstants.PARAM_ID,
+						ExceptionMessageConstants.PARAMETER_NULL));
 			}
 		} else {
-			throw new InvalidParamException(" RecipeDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(ExceptionMessageConstants.RECIPE_DTO,
+					ExceptionMessageConstants.PARAMETER_NULL));
 		}
 
-		RecipeType recipeType = new RecipeType();
-
-		String typeCode = requestDTO.getTypeCode();
-		if (typeCode != null) {
-			if (!typeCode.isEmpty() && !typeCode.isBlank()) {
-				recipeType = referenceService.getRecipeTypeByCode(requestDTO.getTypeCode());
-			} else {
-				throw new InvalidParamException(" TypeCode ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY);
-			}
-		} else {
-			throw new InvalidParamException(" TypeCode ::" + ExceptionMessageConstants.PARAMETER_NULL);
-		}
-
-		response = recipeService.updateRecipe(requestDTO, recipeType);
+		response = recipeService.saveRecipe(requestDTO);
 
 		if (log.isInfoEnabled()) {
 			log.info(" Returning from api/recipes/update :: {} ", response);
@@ -192,6 +179,7 @@ public class RecipeController {
 	}
 
 	@DeleteMapping(path = "/delete/{id}")
+	@Transactional
 	public void deleteRecipe(@PathVariable(name = "id", required = true) Long id) {
 
 		if (log.isInfoEnabled()) {
@@ -201,7 +189,8 @@ public class RecipeController {
 		if (id != null) {
 			recipeService.deleteRecipe(id);
 		} else {
-			throw new InvalidParamException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			throw new InvalidParamException(
+					ValidationUtils.buildExceptionMessage("id", ExceptionMessageConstants.PARAMETER_NULL));
 		}
 
 		if (log.isInfoEnabled()) {

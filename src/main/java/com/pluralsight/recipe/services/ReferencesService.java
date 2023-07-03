@@ -42,7 +42,7 @@ public interface ReferencesService {
 	 * @param lang
 	 * @return List<IngredientReferenceDTO>
 	 */
-	List<IngredientReferenceDTO> listIngredientsByTypeAndLang(String type, String lang);
+	List<IngredientReferenceDTO> listIngredientsRefByTypeAndLang(String type, String lang);
 
 	/**
 	 * 

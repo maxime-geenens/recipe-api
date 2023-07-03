@@ -20,16 +20,7 @@ public interface IngredientService {
 	 * @param requestDTO
 	 * @return List<Ingredient>
 	 */
-	List<IngredientDTO> createIngredientList(List<IngredientDTO> requestDTO);
-
-	/**
-	 * 
-	 * Update a list of ingredients for a given recipe
-	 * 
-	 * @param requestDTO
-	 * @return List<IngredientDTO>
-	 */
-	List<IngredientDTO> updateIngredientList(List<IngredientDTO> requestDTO);
+	List<IngredientDTO> saveIngredientList(List<IngredientDTO> requestDTO);
 
 	/**
 	 * 
@@ -41,20 +32,11 @@ public interface IngredientService {
 
 	/**
 	 * 
-	 * Add an ingredient to a given recipe
+	 * Add/Update an ingredient for a given recipe
 	 * 
 	 * @param requestDTO
 	 * @return IngredientDTO
 	 */
-	IngredientDTO addIngredient(IngredientDTO requestDTO);
-
-	/**
-	 * 
-	 * Updates a single Ingredient
-	 * 
-	 * @param requestDTO
-	 * @return IngredientDTO
-	 */
-	IngredientDTO updateIngredient(IngredientDTO requestDTO);
+	IngredientDTO saveIngredient(IngredientDTO dto);
 
 }

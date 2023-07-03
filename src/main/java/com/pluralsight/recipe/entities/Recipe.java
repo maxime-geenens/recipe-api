@@ -38,7 +38,7 @@ public class Recipe {
 	private String lang;
 
 	/**
-	 * To ensure it stays a reference and no duplicates are created in the table
+	 * To ensure that no duplicates are created in the table
 	 * 
 	 * Has to be set as lang + name (See @RecipeBuilder)
 	 */

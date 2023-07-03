@@ -19,7 +19,9 @@ import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.services.StepService;
 import com.pluralsight.recipe.services.ValidationDTOService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
+import com.pluralsight.recipe.utils.ValidationUtils;
 
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -34,6 +36,7 @@ public class StepController {
 	private ValidationDTOService dtoValidationService;
 
 	@PostMapping(path = "/list/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@Transactional
 	public ResponseEntity<List<StepDTO>> createStepList(@RequestBody(required = true) List<StepDTO> requestDTO) {
 
 		if (log.isInfoEnabled()) {
@@ -44,11 +47,12 @@ public class StepController {
 			if (stepDTO != null) {
 				dtoValidationService.validateStepDTO(stepDTO);
 			} else {
-				throw new InvalidParamException(" StepDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+				throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
+						ExceptionMessageConstants.STEP_DTO, ExceptionMessageConstants.PARAMETER_NULL));
 			}
 		}
 
-		List<StepDTO> response = stepService.createStepList(requestDTO);
+		List<StepDTO> response = stepService.saveStepList(requestDTO);
 
 		if (log.isInfoEnabled()) {
 			log.info(" Returning from api/steps/list/create :: {} ", response);
@@ -58,6 +62,7 @@ public class StepController {
 	}
 
 	@PostMapping(path = "/add", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@Transactional
 	public ResponseEntity<StepDTO> addStep(@RequestBody(required = true) StepDTO requestDTO) {
 
 		if (log.isInfoEnabled()) {
@@ -67,7 +72,8 @@ public class StepController {
 		if (requestDTO != null) {
 			dtoValidationService.validateStepDTO(requestDTO);
 		} else {
-			throw new InvalidParamException(" StepDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(ExceptionMessageConstants.STEP_DTO,
+					ExceptionMessageConstants.PARAMETER_NULL));
 		}
 
 		StepDTO response = stepService.addStep(requestDTO);
@@ -80,6 +86,7 @@ public class StepController {
 	}
 
 	@PutMapping(path = "/list/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@Transactional
 	public ResponseEntity<List<StepDTO>> updateStepList(@RequestBody(required = true) List<StepDTO> requestDTO) {
 
 		if (log.isInfoEnabled()) {
@@ -91,14 +98,17 @@ public class StepController {
 				if (stepDTO.getId() != null) {
 					dtoValidationService.validateStepDTO(stepDTO);
 				} else {
-					throw new InvalidParamException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
+					throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
+							ExceptionMessageConstants.STEP_DTO + ExceptionMessageConstants.PARAM_ID,
+							ExceptionMessageConstants.PARAMETER_NULL));
 				}
 			} else {
-				throw new InvalidParamException(" StepDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+				throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
+						ExceptionMessageConstants.STEP_DTO, ExceptionMessageConstants.PARAMETER_NULL));
 			}
 		}
 
-		List<StepDTO> response = stepService.updateStepList(requestDTO);
+		List<StepDTO> response = stepService.saveStepList(requestDTO);
 
 		if (log.isInfoEnabled()) {
 			log.info(" Returning from api/steps/list/update :: {} ", response);
@@ -108,6 +118,7 @@ public class StepController {
 	}
 
 	@PutMapping(path = "/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@Transactional
 	public ResponseEntity<StepDTO> updateStep(@RequestBody(required = true) StepDTO requestDTO) {
 
 		if (log.isInfoEnabled()) {
@@ -118,11 +129,14 @@ public class StepController {
 			if (requestDTO.getId() != null) {
 				dtoValidationService.validateStepDTO(requestDTO);
 			} else {
-				throw new InvalidParamException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
+				throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
+						ExceptionMessageConstants.STEP_DTO + ExceptionMessageConstants.PARAM_ID,
+						ExceptionMessageConstants.PARAMETER_NULL));
 			}
-			
+
 		} else {
-			throw new InvalidParamException(" StepDTO ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(ExceptionMessageConstants.STEP_DTO,
+					ExceptionMessageConstants.PARAMETER_NULL));
 		}
 
 		StepDTO response = stepService.updateStep(requestDTO);
@@ -135,6 +149,7 @@ public class StepController {
 	}
 
 	@DeleteMapping(path = "/delete/{id}")
+	@Transactional
 	public void deleteStep(@PathVariable(name = "id", required = true) Long id) {
 
 		if (log.isInfoEnabled()) {
@@ -144,7 +159,8 @@ public class StepController {
 		if (id != null) {
 			stepService.deleteStep(id);
 		} else {
-			throw new InvalidParamException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
+			throw new InvalidParamException(
+					ValidationUtils.buildExceptionMessage("id", ExceptionMessageConstants.PARAMETER_NULL));
 		}
 
 		if (log.isInfoEnabled()) {

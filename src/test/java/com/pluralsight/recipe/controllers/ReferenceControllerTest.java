@@ -42,13 +42,13 @@ public class ReferenceControllerTest {
 	MockMvc mockMvc;
 	
 	@Test
-	public void testFetchIngredientListByTypeAndLang() throws Exception {
+	public void testFetchIngredientRefListByTypeAndLang() throws Exception {
 		
 		List<IngredientReferenceDTO> list = new ArrayList<>();
-		IngredientReferenceDTO dto = new IngredientReferenceDTO(1l, "FR", "Name", 1l);
+		IngredientReferenceDTO dto = TestUtils.buildIngredientReferenceDTO(true);
 		list.add(dto);
 		
-		when(service.listIngredientsByTypeAndLang("Type", "FR")).thenReturn(list);
+		when(service.listIngredientsRefByTypeAndLang("Type", "FR")).thenReturn(list);
 		
 		mockMvc.perform(get(BASE_API + "/ingredients/type/Type/lang/FR"))
 				.andExpect(status().isOk())
@@ -66,7 +66,7 @@ public class ReferenceControllerTest {
 		mockMvc.perform(get(BASE_API + "/ingredients/type/Type/lang/  "))
 				.andExpect(status().is5xxServerError())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof InvalidParamException))
-				.andExpect(result -> assertEquals(" Lang ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY,
+				.andExpect(result -> assertEquals("lang :: " + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY,
 						result.getResolvedException().getMessage()));
 		
 	}
@@ -77,7 +77,7 @@ public class ReferenceControllerTest {
 		mockMvc.perform(get(BASE_API + "/ingredients/type/  /lang/FR"))
 				.andExpect(status().is5xxServerError())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof InvalidParamException))
-				.andExpect(result -> assertEquals(" Type ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY,
+				.andExpect(result -> assertEquals("type :: " + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY,
 						result.getResolvedException().getMessage()));
 		
 	}
@@ -108,7 +108,7 @@ public class ReferenceControllerTest {
 		mockMvc.perform(get(BASE_API + "/units/lang/  "))
 				.andExpect(status().is5xxServerError())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof InvalidParamException))
-				.andExpect(result -> assertEquals(" Lang ::" + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY,
+				.andExpect(result -> assertEquals("lang :: " + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY,
 						result.getResolvedException().getMessage()));
 		
 	}

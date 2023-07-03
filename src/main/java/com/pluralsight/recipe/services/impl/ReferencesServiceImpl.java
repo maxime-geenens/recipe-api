@@ -42,6 +42,12 @@ public class ReferencesServiceImpl implements ReferencesService {
 
 	@Autowired
 	private IngredientTypeRepository ingredientTypeRepository;
+	
+	@Autowired
+	private IngredientReferenceMapper ingredientRefMapper;
+	
+	@Autowired
+	private UnitReferenceMapper unitRefMapper;
 
 	@Override
 	public RecipeType getRecipeTypeByCode(String typeCode) {
@@ -95,7 +101,7 @@ public class ReferencesServiceImpl implements ReferencesService {
 	}
 
 	@Override
-	public List<IngredientReferenceDTO> listIngredientsByTypeAndLang(String type, String lang) {
+	public List<IngredientReferenceDTO> listIngredientsRefByTypeAndLang(String type, String lang) {
 
 		QIngredientReference qIngredientRef = QIngredientReference.ingredientReference;
 		Predicate predicate = qIngredientRef.type.name.eq(type).and(qIngredientRef.lang.eq(lang));
@@ -103,7 +109,7 @@ public class ReferencesServiceImpl implements ReferencesService {
 		List<IngredientReference> ingredientList = (List<IngredientReference>) ingredientReferenceRepository
 				.findAll(predicate);
 
-		return ingredientList.stream().map((entity) -> IngredientReferenceMapper.MAPPER.mapToDTO(entity))
+		return ingredientList.stream().map((entity) -> ingredientRefMapper.mapToDTO(entity))
 				.collect(Collectors.toList());
 	}
 
@@ -115,7 +121,7 @@ public class ReferencesServiceImpl implements ReferencesService {
 
 		List<UnitReference> unitList = (List<UnitReference>) unitReferenceRepository.findAll(predicate);
 
-		return unitList.stream().map((entity) -> UnitReferenceMapper.MAPPER.mapToDTO(entity))
+		return unitList.stream().map((entity) -> unitRefMapper.mapToDTO(entity))
 				.collect(Collectors.toList());
 	}
 
@@ -134,7 +140,7 @@ public class ReferencesServiceImpl implements ReferencesService {
 
 		IngredientReference savedIngredientRef = ingredientReferenceRepository.save(ingredientRef);
 
-		return IngredientReferenceMapper.MAPPER.mapToDTO(savedIngredientRef);
+		return ingredientRefMapper.mapToDTO(savedIngredientRef);
 	}
 
 	private IngredientType findIngredientTypeById(Long id) {

@@ -5,12 +5,31 @@ import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pluralsight.recipe.builders.IngredientBuilder;
+import com.pluralsight.recipe.builders.RecipeBuilder;
+import com.pluralsight.recipe.builders.StepBuilder;
 import com.pluralsight.recipe.dto.IngredientDTO;
 import com.pluralsight.recipe.dto.IngredientReferenceDTO;
 import com.pluralsight.recipe.dto.RecipeDTO;
 import com.pluralsight.recipe.dto.StepDTO;
+import com.pluralsight.recipe.entities.Ingredient;
+import com.pluralsight.recipe.entities.IngredientReference;
+import com.pluralsight.recipe.entities.IngredientType;
+import com.pluralsight.recipe.entities.Recipe;
+import com.pluralsight.recipe.entities.RecipeType;
+import com.pluralsight.recipe.entities.UnitReference;
+import com.pluralsight.recipe.entities.Step;
 
 public class TestUtils {
+	
+	private static final Long ID = 1l;
+	private static final String LANG = "FR";
+	private static final int POSITION = 1;
+	private static final double QUANTITY = 1.0;
+	private static final String NAME = "Name";
+	private static final String DESCRIPTION = "Description";
+	private static final String SYMBOL = "g";
+	
 
 	public static String objectToJson(Object obj) {
 
@@ -25,6 +44,8 @@ public class TestUtils {
 
 		return result;
 	}
+	
+	// DTO Build
 
 	public static List<StepDTO> buildStepDTOList(int quantity, boolean withId) {
 
@@ -33,12 +54,12 @@ public class TestUtils {
 		for (int i = 0; i < quantity; i++) {
 			StepDTO dto = new StepDTO();
 			if (withId) {
-				dto.setId(Long.valueOf(i + 1));
+				dto.setId(ID + Long.valueOf(i));
 			}
-			dto.setLang("FR");
-			dto.setPosition(i + 1);
-			dto.setDescription("Step" + String.valueOf(dto.getPosition()));
-			dto.setRecipeId(1l);
+			dto.setLang(LANG);
+			dto.setPosition(POSITION + i);
+			dto.setDescription(DESCRIPTION + String.valueOf(dto.getPosition()));
+			dto.setRecipeId(ID);
 
 			list.add(dto);
 		}
@@ -50,12 +71,12 @@ public class TestUtils {
 
 		StepDTO dto = new StepDTO();
 		if (withId) {
-			dto.setId(1l);
+			dto.setId(ID);
 		}
-		dto.setLang("FR");
-		dto.setPosition(1);
-		dto.setDescription("Step1");
-		dto.setRecipeId(1l);
+		dto.setLang(LANG);
+		dto.setPosition(POSITION);
+		dto.setDescription(DESCRIPTION + String.valueOf(dto.getPosition()));
+		dto.setRecipeId(ID);
 
 		return dto;
 	}
@@ -68,14 +89,14 @@ public class TestUtils {
 			IngredientDTO dto = new IngredientDTO();
 
 			if (withId) {
-				dto.setId(Long.valueOf(i + 1));
+				dto.setId(ID + Long.valueOf(i));
 			}
-			dto.setLang("FR");
-			dto.setName("Ingredient" + String.valueOf(i + 1));
-			dto.setQuantity(1.0);
-			dto.setIngredientRefId(Long.valueOf(i + 1));
-			dto.setRecipeId(1l);
-			dto.setUnitRefId(1l);
+			dto.setLang(LANG);
+			dto.setName(NAME + String.valueOf(i + 1));
+			dto.setQuantity(QUANTITY);
+			dto.setIngredientRefId(ID + Long.valueOf(i));
+			dto.setRecipeId(ID);
+			dto.setUnitRefId(ID);
 
 			list.add(dto);
 		}
@@ -90,17 +111,17 @@ public class TestUtils {
 		if (withId) {
 			dto.setId(1l);
 		}
-		dto.setLang("FR");
-		dto.setName("Ingredient1");
-		dto.setQuantity(1.0);
-		dto.setIngredientRefId(1l);
-		dto.setRecipeId(1l);
-		dto.setUnitRefId(1l);
+		dto.setLang(LANG);
+		dto.setName(NAME);
+		dto.setQuantity(QUANTITY);
+		dto.setIngredientRefId(ID);
+		dto.setRecipeId(ID);
+		dto.setUnitRefId(ID);
 
 		return dto;
 	}
 
-	public static List<RecipeDTO> buildRecipeDTOList(int quantity, boolean withId, boolean withTypeCode) {
+	public static List<RecipeDTO> buildRecipeDTOList(int quantity, boolean withId, boolean withTypeId) {
 
 		List<RecipeDTO> list = new ArrayList<>();
 
@@ -109,12 +130,12 @@ public class TestUtils {
 			RecipeDTO dto = new RecipeDTO();
 
 			if (withId) {
-				dto.setId(Long.valueOf(i + 1));
+				dto.setId(ID + Long.valueOf(i));
 			}
-			dto.setDescription("Recette Numero " + String.valueOf(i + 1));
-			dto.setLang("FR");
-			dto.setName("Recette" + String.valueOf(i + 1));
-			dto.setTypeCode(dto.getLang() + dto.getName());
+			dto.setDescription(DESCRIPTION + String.valueOf(i + 1));
+			dto.setLang(LANG);
+			dto.setName(NAME + String.valueOf(i + 1));
+			dto.setTypeId(ID + Long.valueOf(i));
 
 			list.add(dto);
 		}
@@ -122,18 +143,18 @@ public class TestUtils {
 		return list;
 	}
 
-	public static final RecipeDTO buildRecipeDTO(boolean withId, boolean withTypeCode) {
+	public static final RecipeDTO buildRecipeDTO(boolean withId, boolean withTypeId) {
 
 		RecipeDTO dto = new RecipeDTO();
 
 		if (withId) {
 			dto.setId(1l);
 		}
-		dto.setDescription("Recette Numero 1");
-		dto.setLang("FR");
-		dto.setName("Recette1");
-		if (withTypeCode) {
-			dto.setTypeCode(dto.getLang() + dto.getName());
+		dto.setDescription(DESCRIPTION);
+		dto.setLang(LANG);
+		dto.setName(NAME);
+		if (withTypeId) {
+			dto.setTypeId(ID);
 		}
 
 		return dto;
@@ -144,13 +165,230 @@ public class TestUtils {
 		IngredientReferenceDTO dto = new IngredientReferenceDTO();
 
 		if (withId) {
-			dto.setId(1l);
+			dto.setId(ID);
 		}
-		dto.setLang("FR");
-		dto.setName("Ref1");
-		dto.setTypeId(1l);
+		dto.setLang(LANG);
+		dto.setName(NAME);
+		dto.setTypeId(ID);
 
 		return dto;
+	}
+	
+	// Entity Build
+
+	public static List<Recipe> buildRecipeList(int quantity) {
+
+		List<Recipe> list = new ArrayList<>();
+
+		for (int i = 0; i < quantity; i++) {
+
+			RecipeBuilder builder = new RecipeBuilder();
+
+			RecipeType type = new RecipeType(ID, LANG, NAME, LANG + NAME);
+
+			list.add(builder
+					.addId(ID + Long.valueOf(i))
+					.addName(NAME)
+					.addLang(LANG)
+					.addDescription(DESCRIPTION)
+					.addType(type)
+					.build()
+					);
+		}
+
+		return list;
+	}
+
+	public static Recipe buildRecipe(boolean withId) {
+
+		RecipeBuilder builder = new RecipeBuilder();
+
+		RecipeType type = new RecipeType(ID, LANG, NAME, LANG + NAME);
+
+		if (withId) {
+			builder.addId(ID);
+		}
+
+		return builder
+				.addName(NAME)
+				.addLang(LANG)
+				.addDescription(DESCRIPTION)
+				.addType(type)
+				.build();
+	}
+
+	public static List<Ingredient> buildIngredientList(int quantity) {
+
+		List<Ingredient> list = new ArrayList<>();
+
+		for (int i = 0; i < quantity; i++) {
+
+			IngredientBuilder builder = new IngredientBuilder();
+
+			UnitReference unit = new UnitReference(ID + Long.valueOf(i), LANG, "g", "gramme", "USI", "FRg");
+			IngredientType type = new IngredientType(ID + Long.valueOf(i), LANG, "Type", "FRType");
+			IngredientReference ref = new IngredientReference(ID + Long.valueOf(i), LANG, "Ref", "FRRef", type);
+			Recipe recipe = buildRecipe(true);
+
+			list.add(builder
+					.addId(ID + Long.valueOf(i))
+					.addLang(LANG)
+					.addQuantity(QUANTITY)
+					.addUnit(unit)
+					.addIngredient(ref)
+					.addRecipe(recipe)
+					.build()
+					);
+		}
+
+		return list;
+	}
+
+	public static Ingredient buildIngredient() {
+
+		IngredientBuilder builder = new IngredientBuilder();
+
+		UnitReference unit = new UnitReference(ID, LANG, "g", "gramme", "USI", "FRg");
+		IngredientType type = new IngredientType(ID, LANG, "Type", "FRType");
+		IngredientReference ref = new IngredientReference(ID, LANG, NAME, "FRName", type);
+		Recipe recipe = buildRecipe(true);
+
+		return builder
+				.addId(ID)
+				.addLang(LANG)
+				.addQuantity(QUANTITY)
+				.addUnit(unit)
+				.addIngredient(ref)
+				.addRecipe(recipe)
+				.build();
+	}
+
+	public static RecipeType buildRecipeType() {
+
+		RecipeType result = new RecipeType();
+
+		result.setId(ID);
+		result.setLang(LANG);
+		result.setName(NAME);
+		result.setCode(LANG + NAME);
+
+		return result;
+	}
+
+	public static UnitReference buildUnitReference() {
+
+		UnitReference result = new UnitReference();
+		
+		result.setId(ID);
+		result.setLang(LANG);
+		result.setName(NAME);
+		result.setSymbol(SYMBOL);
+		result.setDescription(DESCRIPTION);
+		result.setCode(LANG + NAME);
+		
+		return result;
+	}
+
+	public static List<UnitReference> buildUnitReferenceList(int quantity) {
+
+		List<UnitReference> list = new ArrayList<>();
+
+		for (int i = 0; i < quantity; i++) {
+
+			UnitReference result = new UnitReference();
+
+			result.setId(ID + Long.valueOf(i));
+			result.setLang(LANG);
+			result.setName(NAME);
+			result.setSymbol(SYMBOL);
+			result.setDescription(DESCRIPTION);
+			result.setCode(LANG + NAME);
+
+			list.add(result);
+		}
+
+		return list;
+	}
+
+	public static IngredientReference buildIngredientReference(boolean withId, IngredientType type) {
+
+		IngredientReference result = new IngredientReference();
+
+		if (withId) {
+			result.setId(ID);
+		}
+		result.setLang(LANG);
+		result.setName(NAME);
+		result.setCode(LANG + NAME);
+		result.setType(type);
+
+		return result;
+	}
+
+	public static List<IngredientReference> buildIngredientReferenceList(int quantity) {
+
+		List<IngredientReference> list = new ArrayList<>();
+
+		for (int i = 0; i < quantity; i++) {
+
+			IngredientReference result = new IngredientReference();
+
+			IngredientType type = new IngredientType();
+
+			result.setId(ID + Long.valueOf(i));
+			result.setLang(LANG);
+			result.setName(NAME);
+			result.setCode(LANG + NAME);
+			result.setType(type);
+
+			list.add(result);
+		}
+		
+		return list;
+	}
+
+	public static IngredientType buildIngredientType() {
+
+		IngredientType result = new IngredientType();
+
+		result.setId(ID);
+		result.setLang(LANG);
+		result.setName(NAME);
+		result.setCode(LANG + NAME);
+		
+		return result;
+	}
+
+	public static List<Step> buildStepList(int quantity) {
+
+		List<Step> list = new ArrayList<>();
+
+		for (int i = 0; i < quantity; i++) {
+
+			StepBuilder builder = new StepBuilder();
+			Recipe recipe = buildRecipe(true);
+			
+			list.add(builder
+					.addId(ID + Long.valueOf(i))
+					.addLang(LANG)
+					.addPosition(i + POSITION)
+					.addRecipe(recipe)
+					.build());
+		}
+		return list;
+	}
+
+	public static Step buildStep() {
+
+		StepBuilder builder = new StepBuilder();
+		Recipe recipe = buildRecipe(true);
+		
+		return builder
+				.addId(ID)
+				.addLang(LANG)
+				.addPosition(POSITION)
+				.addRecipe(recipe)
+				.build();
 	}
 
 }

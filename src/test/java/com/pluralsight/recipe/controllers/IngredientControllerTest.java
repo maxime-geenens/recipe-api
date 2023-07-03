@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hamcrest.Matchers;
@@ -49,7 +48,7 @@ public class IngredientControllerTest {
 		IngredientDTO dto = list.get(0);
 
 		when(dtoValidationService.validateIngredientDTO(dto)).thenReturn(true);
-		when(service.createIngredientList(list)).thenReturn(list);
+		when(service.saveIngredientList(list)).thenReturn(list);
 
 		mockMvc.perform(post(BASE_API + "/list/create").content(TestUtils.objectToJson(list))
 				.contentType(MediaType.APPLICATION_JSON))
@@ -71,7 +70,7 @@ public class IngredientControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is5xxServerError())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof InvalidParamException))
-				.andExpect(result -> assertEquals(" IngredientDTO ::" + ExceptionMessageConstants.PARAMETER_NULL,
+				.andExpect(result -> assertEquals("IngredientDTO :: " + ExceptionMessageConstants.PARAMETER_NULL,
 						result.getResolvedException().getMessage()));
 
 	}
@@ -79,10 +78,10 @@ public class IngredientControllerTest {
 	@Test
 	public void testAddIngredient() throws Exception {
 
-		IngredientDTO dto = new IngredientDTO(1l, "FR", "Name", 1.0, 1l, 1l, 1l);
+		IngredientDTO dto = TestUtils.buildIngredientDTO(false);
 
 		when(dtoValidationService.validateIngredientDTO(dto)).thenReturn(true);
-		when(service.addIngredient(dto)).thenReturn(dto);
+		when(service.saveIngredient(dto)).thenReturn(dto);
 
 		mockMvc.perform(
 				post(BASE_API + "/add").content(TestUtils.objectToJson(dto)).contentType(MediaType.APPLICATION_JSON))
@@ -93,16 +92,15 @@ public class IngredientControllerTest {
 	@Test
 	public void testUpdateIngredientList() throws Exception {
 
-		List<IngredientDTO> list = new ArrayList<>();
-		IngredientDTO dto = new IngredientDTO(1l, "FR", "Name", 1.0, 1l, 1l, 1l);
-		list.add(dto);
+		List<IngredientDTO> list = TestUtils.buildIngredientDTOList(5, true);
+		IngredientDTO dto = list.get(0);
 
 		when(dtoValidationService.validateIngredientDTO(dto)).thenReturn(true);
-		when(service.updateIngredientList(list)).thenReturn(list);
+		when(service.saveIngredientList(list)).thenReturn(list);
 
 		mockMvc.perform(put(BASE_API + "/list/update").content(TestUtils.objectToJson(list))
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-				.andExpect(jsonPath("$", Matchers.hasSize(1)));
+				.andExpect(jsonPath("$", Matchers.hasSize(5)));
 
 	}
 
@@ -119,7 +117,7 @@ public class IngredientControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is5xxServerError())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof InvalidParamException))
-				.andExpect(result -> assertEquals(" IngredientDTO ::" + ExceptionMessageConstants.PARAMETER_NULL,
+				.andExpect(result -> assertEquals("IngredientDTO :: " + ExceptionMessageConstants.PARAMETER_NULL,
 						result.getResolvedException().getMessage()));
 
 	}
@@ -136,7 +134,7 @@ public class IngredientControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is5xxServerError())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof InvalidParamException))
-				.andExpect(result -> assertEquals(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL,
+				.andExpect(result -> assertEquals("IngredientDTO.id :: " + ExceptionMessageConstants.PARAMETER_NULL,
 						result.getResolvedException().getMessage()));
 
 	}
@@ -144,10 +142,10 @@ public class IngredientControllerTest {
 	@Test
 	public void testUpdateIngredient() throws Exception {
 
-		IngredientDTO dto = new IngredientDTO(1l, "FR", "Name", 1.0, 1l, 1l, 1l);
+		IngredientDTO dto = TestUtils.buildIngredientDTO(true);
 
 		when(dtoValidationService.validateIngredientDTO(dto)).thenReturn(true);
-		when(service.updateIngredient(dto)).thenReturn(dto);
+		when(service.saveIngredient(dto)).thenReturn(dto);
 
 		mockMvc.perform(put(BASE_API + "/update").content(TestUtils.objectToJson(dto))
 				.contentType(MediaType.APPLICATION_JSON))
@@ -162,13 +160,13 @@ public class IngredientControllerTest {
 		IngredientDTO dto = TestUtils.buildIngredientDTO(false);
 
 		when(dtoValidationService.validateIngredientDTO(dto)).thenReturn(true);
-		when(service.updateIngredient(dto)).thenReturn(dto);
+		when(service.saveIngredient(dto)).thenReturn(dto);
 
 		mockMvc.perform(put(BASE_API + "/update").content(TestUtils.objectToJson(dto))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is5xxServerError())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof InvalidParamException))
-				.andExpect(result -> assertEquals(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL,
+				.andExpect(result -> assertEquals("IngredientDTO.id :: " + ExceptionMessageConstants.PARAMETER_NULL,
 						result.getResolvedException().getMessage()));
 
 	}

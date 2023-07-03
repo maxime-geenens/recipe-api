@@ -3,21 +3,16 @@ package com.pluralsight.recipe.services.impl;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.pluralsight.recipe.builders.StepBuilder;
 import com.pluralsight.recipe.dto.StepDTO;
 import com.pluralsight.recipe.dto.mappers.StepMapper;
 import com.pluralsight.recipe.entities.QStep;
-import com.pluralsight.recipe.entities.Recipe;
 import com.pluralsight.recipe.entities.Step;
-import com.pluralsight.recipe.exceptions.EntityWasNotFoundException;
 import com.pluralsight.recipe.exceptions.InvalidParamException;
-import com.pluralsight.recipe.repositories.RecipeRepository;
 import com.pluralsight.recipe.repositories.StepRepository;
 import com.pluralsight.recipe.services.StepService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
@@ -28,9 +23,9 @@ public class StepServiceImpl implements StepService {
 
 	@Autowired
 	private StepRepository stepRepository;
-
+	
 	@Autowired
-	private RecipeRepository recipeRepository;
+	private StepMapper mapper;
 
 	@Override
 	public List<StepDTO> listStepsByRecipe(Long id) {
@@ -42,7 +37,7 @@ public class StepServiceImpl implements StepService {
 
 		stepList = (List<Step>) stepRepository.findAll(predicate);
 
-		return stepList.stream().map((entity) -> StepMapper.MAPPER.mapToDTO(entity))
+		return stepList.stream().map((entity) -> mapper.mapToDTO(entity))
 				.sorted(Comparator.comparingInt(StepDTO::getPosition)).collect(Collectors.toList());
 	}
 
@@ -58,87 +53,32 @@ public class StepServiceImpl implements StepService {
 
 		List<Integer> positionList = stepList.stream().map(Step::getPosition).sorted().collect(Collectors.toList());
 		Integer lastPosition = positionList.get(positionList.size() - 1);
+		
 		if (!dto.getPosition().equals(lastPosition + 1)) {
 			dto.setPosition(lastPosition + 1);
 		}
 
-		StepBuilder builder = new StepBuilder();
+		Step savedStep = stepRepository.save(mapper.mapToEntity(dto));
 
-		Recipe recipe = new Recipe();
-		Optional<Recipe> oRecipe = recipeRepository.findById(dto.getRecipeId());
-		if (oRecipe.isPresent()) {
-			recipe = oRecipe.get();
-		} else {
-			throw new EntityWasNotFoundException(ExceptionMessageConstants.RECIPE_NOT_FOUND);
-		}
-
-		Step step = builder
-				.addLang(dto.getLang())
-				.addPosition(dto.getPosition())
-				.addDescription(dto.getDescription())
-				.addRecipe(recipe)
-				.build();
-
-		Step savedStep = stepRepository.save(step);
-
-		return StepMapper.MAPPER.mapToDTO(savedStep);
+		return mapper.mapToDTO(savedStep);
 	}
 
 	@Override
-	public List<StepDTO> createStepList(List<StepDTO> stepDTOList) {
+	public List<StepDTO> saveStepList(List<StepDTO> stepDTOList) {
 
-		List<Integer> distinctPositionList = stepDTOList.stream().map(StepDTO::getPosition).distinct()
-				.collect(Collectors.toList());
-
-		if (distinctPositionList.size() != stepDTOList.size()) {
+		if (!isPositionUnique(stepDTOList)) {
 			throw new InvalidParamException(" Position ::" + ExceptionMessageConstants.PARAMETER_UNIQUE);
 		}
 
 		List<Step> stepList = new ArrayList<>();
 
 		for (StepDTO dto : stepDTOList) {
-			stepList.add(buildStep(dto));
+			stepList.add(mapper.mapToEntity(dto));
 		}
 
 		List<Step> stepListResult = stepRepository.saveAll(stepList);
 
-		return stepListResult.stream().map((entity) -> StepMapper.MAPPER.mapToDTO(entity)).collect(Collectors.toList());
-	}
-
-	private Step buildStep(StepDTO dto) {
-
-		StepBuilder builder = new StepBuilder();
-
-		Recipe recipe = new Recipe();
-		Optional<Recipe> oRecipe = recipeRepository.findById(dto.getRecipeId());
-		if (oRecipe.isPresent()) {
-			recipe = oRecipe.get();
-		} else {
-			throw new EntityWasNotFoundException(ExceptionMessageConstants.RECIPE_NOT_FOUND);
-		}
-		
-		Step step = builder
-				.addLang(dto.getLang())
-				.addPosition(dto.getPosition())
-				.addDescription(dto.getDescription())
-				.addRecipe(recipe)
-				.build();
-
-		return step;
-	}
-
-	@Override
-	public List<StepDTO> updateStepList(List<StepDTO> requestDTO) {
-
-		List<Step> stepList = new ArrayList<>();
-
-		for (StepDTO dto : requestDTO) {
-			stepList.add(fetchAndUpdateStep(dto));
-		}
-
-		List<Step> updatedStepList = stepRepository.saveAll(stepList);
-
-		return updatedStepList.stream().map((entity) -> StepMapper.MAPPER.mapToDTO(entity))
+		return stepListResult.stream().map((entity) -> mapper.mapToDTO(entity))
 				.sorted(Comparator.comparingInt(StepDTO::getPosition)).collect(Collectors.toList());
 	}
 
@@ -148,41 +88,27 @@ public class StepServiceImpl implements StepService {
 	}
 
 	@Override
-	public StepDTO updateStep(StepDTO stepDTO) {
-		
-		Step step = fetchAndUpdateStep(stepDTO);
-		
-		return StepMapper.MAPPER.mapToDTO(step);
+	public StepDTO updateStep(StepDTO dto) {
+
+		List<StepDTO> stepDTOList = listStepsByRecipe(dto.getRecipeId());
+
+		if (!isPositionUnique(stepDTOList)) {
+			throw new InvalidParamException(" Position :: " + ExceptionMessageConstants.PARAMETER_UNIQUE);
+		}
+
+		Step step = mapper.mapToEntity(dto);
+
+		Step updatedStep = stepRepository.save(step);
+
+		return mapper.mapToDTO(updatedStep);
 	}
-	
-	private Step fetchAndUpdateStep(StepDTO dto) {
 
-		Step step = new Step();
+	private boolean isPositionUnique(List<StepDTO> stepDTOList) {
 
-		if (dto.getId() != null) {
+		List<Integer> distinctPositionList = stepDTOList.stream().map(StepDTO::getPosition).distinct()
+				.collect(Collectors.toList());
 
-			Optional<Step> oStep = stepRepository.findById(dto.getId());
-
-			if (oStep.isPresent()) {
-				step = oStep.get();
-			} else {
-				throw new EntityWasNotFoundException(ExceptionMessageConstants.STEP_NOT_FOUND);
-			}
-		} else {
-			throw new InvalidParamException(" Id ::" + ExceptionMessageConstants.PARAMETER_NULL);
-		}
-
-		String description = dto.getDescription();
-		if (description != null && !description.isEmpty() && !description.isBlank()) {
-			step.setDescription(description);
-		}
-
-		Integer position = dto.getPosition();
-		if (position != null) {
-			step.setPosition(position);
-		}
-
-		return step;
+		return distinctPositionList.size() == stepDTOList.size();
 	}
 
 }

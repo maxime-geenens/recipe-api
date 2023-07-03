@@ -11,6 +11,10 @@ public class RecipeBuilder {
 		this.recipe = new Recipe();
 	}
 
+	public RecipeBuilder(Recipe recipe) {
+		this.recipe = recipe;
+	}
+
 	public RecipeBuilder addId(Long id) {
 		recipe.setId(id);
 		return this;

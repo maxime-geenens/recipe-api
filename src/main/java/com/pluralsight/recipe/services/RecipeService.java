@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.pluralsight.recipe.dto.RecipeDTO;
 import com.pluralsight.recipe.entities.Recipe;
-import com.pluralsight.recipe.entities.RecipeType;
 
 public interface RecipeService {
 
@@ -22,27 +21,25 @@ public interface RecipeService {
 	 * Retrieves 1 recipe with all details for given id
 	 * 
 	 * @param id Long
-	 * @return
+	 * @return RecipeDTO
 	 */
-	RecipeDTO getRecipeById(Long id);
+	RecipeDTO getRecipeDTOById(Long id);
 
 	/**
-	 * Create a new recipe and persist it in database
+	 * Retrieves 1 recipe with all details for given id
+	 * 
+	 * @param id Long
+	 * @return Recipe
+	 */
+	Recipe getRecipeById(Long id);
+
+	/**
+	 * Create/Update a recipe
 	 * 
 	 * @param recipeDTO
 	 * @return RecipeDetailDTO
 	 */
-	RecipeDTO saveRecipe(Recipe recipe);
-
-	/**
-	 * 
-	 * Update a recipe
-	 * 
-	 * @param recipeDTO
-	 * @param recipeType 
-	 * @return RecipeDetailDTO
-	 */
-	RecipeDTO updateRecipe(RecipeDTO recipeDTO, RecipeType recipeType);
+	RecipeDTO saveRecipe(RecipeDTO dto);
 
 	/**
 	 * 
@@ -51,15 +48,5 @@ public interface RecipeService {
 	 * @param id
 	 */
 	void deleteRecipe(Long id);
-
-	/**
-	 * 
-	 * Build a Recipe entity from DTO and RecipeType
-	 * 
-	 * @param requestDTO
-	 * @param recipeType
-	 * @return Recipe
-	 */
-	Recipe buildRecipe(RecipeDTO requestDTO, RecipeType recipeType);
 
 }

@@ -16,21 +16,12 @@ public interface StepService {
 
 	/**
 	 * 
-	 * Creates and persists a step list
+	 * Create/Update a step list for a given recipe
 	 * 
 	 * @param requestDTO
 	 * @return List<Step>
 	 */
-	List<StepDTO> createStepList(List<StepDTO> requestDTO);
-
-	/**
-	 * 
-	 * Update a list of steps for a given recipe
-	 * 
-	 * @param requestDTO
-	 * @return List<StepDTO>
-	 */
-	List<StepDTO> updateStepList(List<StepDTO> requestDTO);
+	List<StepDTO> saveStepList(List<StepDTO> requestDTO);
 
 	/**
 	 * 

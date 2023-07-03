@@ -25,7 +25,7 @@ import com.pluralsight.recipe.dto.StepDTO;
 import com.pluralsight.recipe.services.IngredientService;
 import com.pluralsight.recipe.services.RecipeService;
 import com.pluralsight.recipe.services.StepService;
-import com.pluralsight.recipe.services.ValidationDTOService;
+import com.pluralsight.recipe.services.ValidationService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 import com.pluralsight.recipe.utils.ValidationUtils;
 
@@ -47,7 +47,7 @@ public class RecipeController {
 	private StepService stepService;
 
 	@Autowired
-	private ValidationDTOService dtoValidationService;
+	private ValidationService validationService;
 
 	@GetMapping(path = "/lang/{lang}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<RecipeDTO>> listRecipesByLang(
@@ -130,7 +130,7 @@ public class RecipeController {
 		}
 
 		if (requestDTO != null) {
-			dtoValidationService.validateRecipeDTO(requestDTO);
+			validationService.validateRecipeDTO(requestDTO, true);
 		} else {
 			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(ExceptionMessageConstants.RECIPE_DTO,
 					ExceptionMessageConstants.PARAMETER_NULL));
@@ -158,7 +158,7 @@ public class RecipeController {
 		if (requestDTO != null) {
 			Long id = requestDTO.getId();
 			if (id != null) {
-				dtoValidationService.validateRecipeDTO(requestDTO);
+				validationService.validateRecipeDTO(requestDTO, false);
 			} else {
 				throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
 						ExceptionMessageConstants.RECIPE_DTO + ExceptionMessageConstants.PARAM_ID,

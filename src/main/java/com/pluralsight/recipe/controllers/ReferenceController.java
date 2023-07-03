@@ -18,7 +18,7 @@ import com.pluralsight.recipe.dto.IngredientReferenceDTO;
 import com.pluralsight.recipe.dto.UnitReferenceDTO;
 import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.services.ReferencesService;
-import com.pluralsight.recipe.services.ValidationDTOService;
+import com.pluralsight.recipe.services.ValidationService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 import com.pluralsight.recipe.utils.ValidationUtils;
 
@@ -34,7 +34,7 @@ public class ReferenceController {
 	private ReferencesService referenceService;
 
 	@Autowired
-	private ValidationDTOService dtoValidationService;
+	private ValidationService validationService;
 
 	@GetMapping(path = "/ingredients/type/{type}/lang/{lang}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<IngredientReferenceDTO>> fetchIngredientListByTypeAndLang(
@@ -114,7 +114,7 @@ public class ReferenceController {
 		}
 
 		if (requestDTO != null) {
-			dtoValidationService.validateIngredientReferenceDTO(requestDTO);
+			validationService.validateIngredientReferenceDTO(requestDTO, true);
 		} else {
 			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
 					ExceptionMessageConstants.INGREDIENT_REF_DTO, ExceptionMessageConstants.PARAMETER_NULL));

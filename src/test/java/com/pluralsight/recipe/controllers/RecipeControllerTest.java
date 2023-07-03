@@ -29,7 +29,7 @@ import com.pluralsight.recipe.services.IngredientService;
 import com.pluralsight.recipe.services.RecipeService;
 import com.pluralsight.recipe.services.ReferencesService;
 import com.pluralsight.recipe.services.StepService;
-import com.pluralsight.recipe.services.ValidationDTOService;
+import com.pluralsight.recipe.services.ValidationService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 import com.pluralsight.recipe.utils.TestUtils;
 
@@ -51,7 +51,7 @@ public class RecipeControllerTest {
 	StepService stepService;
 	
 	@MockBean
-	ValidationDTOService dtoValidationService;
+	ValidationService dtoValidationService;
 
 	@Autowired
 	MockMvc mockMvc;
@@ -105,7 +105,7 @@ public class RecipeControllerTest {
 
 		RecipeDTO dto = TestUtils.buildRecipeDTO(true, true);
 		
-		when(dtoValidationService.validateRecipeDTO(dto)).thenReturn(true);
+		when(dtoValidationService.validateRecipeDTO(dto, true)).thenReturn(true);
 		when(recipeService.saveRecipe(dto)).thenReturn(dto);
 
 		mockMvc.perform(
@@ -124,7 +124,7 @@ public class RecipeControllerTest {
 		RecipeDTO dto = TestUtils.buildRecipeDTO(true, true);
 		RecipeDTO dto1 = new RecipeDTO(1l, "FR", "Name", "Updated", 1l);
 
-		when(dtoValidationService.validateRecipeDTO(dto)).thenReturn(true);
+		when(dtoValidationService.validateRecipeDTO(dto, false)).thenReturn(true);
 		when(recipeService.saveRecipe(dto)).thenReturn(dto1);
 
 		mockMvc.perform(
@@ -142,7 +142,7 @@ public class RecipeControllerTest {
 
 		RecipeDTO dto = TestUtils.buildRecipeDTO(false, true);
 
-		when(dtoValidationService.validateRecipeDTO(dto)).thenReturn(true);
+		when(dtoValidationService.validateRecipeDTO(dto, false)).thenReturn(true);
 		when(recipeService.saveRecipe(dto)).thenReturn(dto);
 
 		mockMvc.perform(

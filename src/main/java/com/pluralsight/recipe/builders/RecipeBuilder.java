@@ -46,7 +46,7 @@ public class RecipeBuilder {
 	}
 
 	private RecipeBuilder addCode() {
-		recipe.setCode(recipe.getLang() + recipe.getName());
+		recipe.setCode();
 		return this;
 	}
 

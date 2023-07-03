@@ -34,5 +34,9 @@ public class RecipeType {
 	 */
 	@Column(name = "code", unique = true)
 	private String code;
+	
+	public void setCode() {
+		code = getLang() + getName();
+	}
 
 }

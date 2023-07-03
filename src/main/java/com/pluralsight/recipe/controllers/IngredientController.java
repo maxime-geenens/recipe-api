@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pluralsight.recipe.dto.IngredientDTO;
 import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.services.IngredientService;
-import com.pluralsight.recipe.services.ValidationDTOService;
+import com.pluralsight.recipe.services.ValidationService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 import com.pluralsight.recipe.utils.ValidationUtils;
 
@@ -33,7 +33,7 @@ public class IngredientController {
 	private IngredientService ingredientService;
 
 	@Autowired
-	private ValidationDTOService dtoValidationService;
+	private ValidationService validationService;
 
 	@PostMapping(path = "/list/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
@@ -47,7 +47,7 @@ public class IngredientController {
 		for (IngredientDTO ingredientDTO : requestDTO) {
 
 			if (ingredientDTO != null) {
-				dtoValidationService.validateIngredientDTO(ingredientDTO);
+				validationService.validateIngredientDTO(ingredientDTO);
 			} else {
 				throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
 						ExceptionMessageConstants.INGREDIENT_DTO, ExceptionMessageConstants.PARAMETER_NULL));
@@ -72,7 +72,7 @@ public class IngredientController {
 		}
 
 		if (requestDTO != null) {
-			dtoValidationService.validateIngredientDTO(requestDTO);
+			validationService.validateIngredientDTO(requestDTO);
 		} else {
 			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
 					ExceptionMessageConstants.INGREDIENT_DTO, ExceptionMessageConstants.PARAMETER_NULL));
@@ -100,7 +100,7 @@ public class IngredientController {
 
 			if (ingredientDTO != null) {
 				if (ingredientDTO.getId() != null) {
-					dtoValidationService.validateIngredientDTO(ingredientDTO);
+					validationService.validateIngredientDTO(ingredientDTO);
 				} else {
 					throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
 							ExceptionMessageConstants.INGREDIENT_DTO + ExceptionMessageConstants.PARAM_ID,
@@ -131,7 +131,7 @@ public class IngredientController {
 
 		if (requestDTO != null) {
 			if (requestDTO.getId() != null) {
-				dtoValidationService.validateIngredientDTO(requestDTO);
+				validationService.validateIngredientDTO(requestDTO);
 			} else {
 				throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
 						ExceptionMessageConstants.INGREDIENT_DTO + ExceptionMessageConstants.PARAM_ID,

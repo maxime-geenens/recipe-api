@@ -19,12 +19,15 @@ public class ExceptionMessageConstants {
 	public static final String PARAMETER_BLANK_EMPTY = "Parameter shall not be blank or empty.";
 	public static final String PARAMETER_NEGATIVE = "Parameter shall not < 0 .";
 	public static final String PARAMETER_UNIQUE = "Parameter shall be unique.";
+	public static final String CODE_ALREADY_EXISTS_IN_DB = "Name already exists for this language in Database.";
 
 	// OBJECTS AND PARAMS
 	public static final String RECIPE_DTO = "RecipeDTO";
+	public static final String RECIPE = "Recipe";
 	public static final String INGREDIENT_DTO = "IngredientDTO";
 	public static final String STEP_DTO = "StepDTO";
 	public static final String INGREDIENT_REF_DTO = "IngredientReferenceDTO";
+	public static final String INGREDIENT_REF = "IngredientReference";
 
 	public static final String PARAM_ID = ".id";
 	public static final String PARAM_NAME = ".name";

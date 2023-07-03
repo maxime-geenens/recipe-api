@@ -155,4 +155,21 @@ public class ReferencesServiceImpl implements ReferencesService {
 
 	}
 
+	@Override
+	public IngredientReference findIngredientRefByCode(String code) {
+
+		IngredientReference result = null;
+
+		QIngredientReference qIngredientReference = QIngredientReference.ingredientReference;
+		Predicate predicate = qIngredientReference.code.eq(code);
+
+		Optional<IngredientReference> oIngredientRef = ingredientReferenceRepository.findOne(predicate);
+
+		if (oIngredientRef.isPresent()) {
+			result = oIngredientRef.get();
+		}
+
+		return result;
+	}
+
 }

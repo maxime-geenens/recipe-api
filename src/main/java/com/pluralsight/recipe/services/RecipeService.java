@@ -49,4 +49,13 @@ public interface RecipeService {
 	 */
 	void deleteRecipe(Long id);
 
+	/**
+	 * 
+	 * Find a recipe for a given code
+	 * 
+	 * @param code
+	 * @return Recipe
+	 */
+	Recipe findByCode(String code);
+
 }

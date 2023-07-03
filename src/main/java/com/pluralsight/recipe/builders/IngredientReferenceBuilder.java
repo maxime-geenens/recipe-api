@@ -27,7 +27,7 @@ public class IngredientReferenceBuilder {
 	}
 
 	public IngredientReferenceBuilder addCode() {
-		ingredientRef.setCode(ingredientRef.getLang() + ingredientRef.getName());
+		ingredientRef.setCode();
 		return this;
 	}
 

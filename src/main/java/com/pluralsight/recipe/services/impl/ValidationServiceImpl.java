@@ -1,5 +1,6 @@
 package com.pluralsight.recipe.services.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pluralsight.recipe.dto.IngredientDTO;
@@ -7,15 +8,25 @@ import com.pluralsight.recipe.dto.IngredientReferenceDTO;
 import com.pluralsight.recipe.dto.RecipeDTO;
 import com.pluralsight.recipe.dto.StepDTO;
 import com.pluralsight.recipe.exceptions.InvalidParamException;
-import com.pluralsight.recipe.services.ValidationDTOService;
+import com.pluralsight.recipe.services.RecipeService;
+import com.pluralsight.recipe.services.ReferencesService;
+import com.pluralsight.recipe.services.ValidationService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 import com.pluralsight.recipe.utils.ValidationUtils;
 
 @Service
-public class ValidationDTOServiceImpl implements ValidationDTOService {
+public class ValidationServiceImpl implements ValidationService {
+
+	@Autowired
+	private RecipeService recipeService;
+
+	@Autowired
+	private ReferencesService referenceService;
+
+	// DTO Validations
 
 	@Override
-	public boolean validateRecipeDTO(RecipeDTO dto) {
+	public boolean validateRecipeDTO(RecipeDTO dto, boolean checkCode) {
 
 		boolean isValid = false;
 
@@ -33,6 +44,17 @@ public class ValidationDTOServiceImpl implements ValidationDTOService {
 			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
 					ExceptionMessageConstants.RECIPE_DTO + ExceptionMessageConstants.PARAM_TYPE_ID,
 					ExceptionMessageConstants.PARAMETER_NULL));
+		}
+
+		if (checkCode) {
+			String code = dto.getLang() + dto.getName();
+
+			if (recipeService.findByCode(code) != null) {
+				throw new InvalidParamException(ValidationUtils.buildExceptionMessage(ExceptionMessageConstants.RECIPE,
+						ExceptionMessageConstants.CODE_ALREADY_EXISTS_IN_DB));
+			} else {
+				isValid = true;
+			}
 		}
 
 		return isValid;
@@ -125,7 +147,7 @@ public class ValidationDTOServiceImpl implements ValidationDTOService {
 	}
 
 	@Override
-	public boolean validateIngredientReferenceDTO(IngredientReferenceDTO dto) {
+	public boolean validateIngredientReferenceDTO(IngredientReferenceDTO dto, boolean checkCode) {
 
 		boolean isValid = false;
 
@@ -141,6 +163,17 @@ public class ValidationDTOServiceImpl implements ValidationDTOService {
 			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
 					ExceptionMessageConstants.INGREDIENT_REF_DTO + ExceptionMessageConstants.PARAM_TYPE_ID,
 					ExceptionMessageConstants.PARAMETER_NULL));
+		}
+
+		if (checkCode) {
+			String code = dto.getLang() + dto.getName();
+
+			if (referenceService.findIngredientRefByCode(code) != null) {
+				throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
+						ExceptionMessageConstants.INGREDIENT_REF, ExceptionMessageConstants.CODE_ALREADY_EXISTS_IN_DB));
+			} else {
+				isValid = true;
+			}
 		}
 
 		return isValid;

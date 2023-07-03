@@ -48,5 +48,9 @@ public class Recipe {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "type", referencedColumnName = "id")
 	private RecipeType type;
+	
+	public void setCode() {
+		code = getLang() + getName();
+	}
 
 }

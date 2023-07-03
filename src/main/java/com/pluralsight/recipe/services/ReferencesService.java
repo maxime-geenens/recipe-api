@@ -61,4 +61,13 @@ public interface ReferencesService {
 	 * @return IngredientReferenceDTO
 	 */
 	IngredientReferenceDTO addIngredientRef(IngredientReferenceDTO requestDTO);
+
+	/**
+	 * 
+	 * Find IngredientReference for a given code
+	 * 
+	 * @param code
+	 * @return IngredientReference
+	 */
+	IngredientReference findIngredientRefByCode(String code);
 }

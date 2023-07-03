@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pluralsight.recipe.dto.StepDTO;
 import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.services.StepService;
-import com.pluralsight.recipe.services.ValidationDTOService;
+import com.pluralsight.recipe.services.ValidationService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 import com.pluralsight.recipe.utils.ValidationUtils;
 
@@ -33,7 +33,7 @@ public class StepController {
 	private StepService stepService;
 
 	@Autowired
-	private ValidationDTOService dtoValidationService;
+	private ValidationService validationService;
 
 	@PostMapping(path = "/list/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
@@ -45,7 +45,7 @@ public class StepController {
 
 		for (StepDTO stepDTO : requestDTO) {
 			if (stepDTO != null) {
-				dtoValidationService.validateStepDTO(stepDTO);
+				validationService.validateStepDTO(stepDTO);
 			} else {
 				throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
 						ExceptionMessageConstants.STEP_DTO, ExceptionMessageConstants.PARAMETER_NULL));
@@ -70,7 +70,7 @@ public class StepController {
 		}
 
 		if (requestDTO != null) {
-			dtoValidationService.validateStepDTO(requestDTO);
+			validationService.validateStepDTO(requestDTO);
 		} else {
 			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(ExceptionMessageConstants.STEP_DTO,
 					ExceptionMessageConstants.PARAMETER_NULL));
@@ -96,7 +96,7 @@ public class StepController {
 		for (StepDTO stepDTO : requestDTO) {
 			if (stepDTO != null) {
 				if (stepDTO.getId() != null) {
-					dtoValidationService.validateStepDTO(stepDTO);
+					validationService.validateStepDTO(stepDTO);
 				} else {
 					throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
 							ExceptionMessageConstants.STEP_DTO + ExceptionMessageConstants.PARAM_ID,
@@ -127,7 +127,7 @@ public class StepController {
 
 		if (requestDTO != null) {
 			if (requestDTO.getId() != null) {
-				dtoValidationService.validateStepDTO(requestDTO);
+				validationService.validateStepDTO(requestDTO);
 			} else {
 				throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
 						ExceptionMessageConstants.STEP_DTO + ExceptionMessageConstants.PARAM_ID,

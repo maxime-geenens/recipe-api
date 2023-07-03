@@ -23,7 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.pluralsight.recipe.dto.StepDTO;
 import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.services.StepService;
-import com.pluralsight.recipe.services.ValidationDTOService;
+import com.pluralsight.recipe.services.ValidationService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 import com.pluralsight.recipe.utils.TestUtils;
 
@@ -36,7 +36,7 @@ public class StepControllerTest {
 	StepService service;
 	
 	@MockBean
-	ValidationDTOService dtoValidationService;
+	ValidationService dtoValidationService;
 
 	@Autowired
 	MockMvc mockMvc;

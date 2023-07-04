@@ -169,7 +169,7 @@ INSERT INTO INGREDIENT_TYPE (id, lang, name) VALUES
 
 --- INGREDIENT_REFERENCE ---
 -- FR --
-INSERT INTO INGREDIENT_TYPE (id, lang, name, type) VALUES
+INSERT INTO INGREDIENT_REFERENCE (id, lang, name, type) VALUES
 	(1, 'FR', 'Poivron Vert', 1),
 	(2, 'FR', 'Pomme', 2),
 	(3, 'FR', 'Boeuf haché', 3),
@@ -187,7 +187,7 @@ INSERT INTO INGREDIENT_TYPE (id, lang, name, type) VALUES
 	(15, 'FR', 'Worcestershire', 15),
 	(16, 'FR', 'Vin blanc', 16),
 	(17, 'FR', 'Vinaigre balsamique', 17),
-	(18, 'FR', "Huile d'olive", 18),
+	(18, 'FR', 'Huile d olive', 18),
 	(19, 'FR', 'Beurre', 19),
 	(20, 'FR', 'Crème fraiche', 20),
 	(21, 'FR', 'Maroilles', 21),
@@ -199,7 +199,7 @@ INSERT INTO INGREDIENT_TYPE (id, lang, name, type) VALUES
 	(79, 'FR', 'Pain de mie', 79);
 
 -- EN --
-INSERT INTO INGREDIENT_TYPE (id, lang, name, type) VALUES
+INSERT INTO INGREDIENT_REFERENCE (id, lang, name, type) VALUES
 	(27, 'EN', 'Green Pepper', 27),
 	(28, 'EN', 'Apple', 28),
 	(29, 'EN', 'Ground beef', 29),
@@ -230,7 +230,7 @@ INSERT INTO INGREDIENT_TYPE (id, lang, name, type) VALUES
 
 
 -- PT --
-INSERT INTO INGREDIENT_TYPE (id, lang, name, type) VALUES
+INSERT INTO INGREDIENT_REFERENCE (id, lang, name, type) VALUES
 	(53, 'PT', 'Pimentão verde', 53),
 	(54, 'PT', 'Maçã', 54),
 	(55, 'PT', 'Carne moída', 55),

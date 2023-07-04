@@ -30,13 +30,13 @@ public class ValidationServiceImpl implements ValidationService {
 
 		boolean isValid = false;
 
-		isValid = ValidationUtils.stringParamNotNullNotBlankNotEmpty(dto.getName(),
+		ValidationUtils.stringParamNotNullNotBlankNotEmpty(dto.getName(),
 				ExceptionMessageConstants.RECIPE_DTO + ExceptionMessageConstants.PARAM_NAME);
-		isValid = ValidationUtils.stringParamNotNullNotBlankNotEmpty(dto.getDescription(),
+		ValidationUtils.stringParamNotNullNotBlankNotEmpty(dto.getDescription(),
 				ExceptionMessageConstants.RECIPE_DTO + ExceptionMessageConstants.PARAM_DESCRIPTION);
-		isValid = ValidationUtils.stringParamNotNullNotBlankNotEmpty(dto.getLang(),
+		ValidationUtils.stringParamNotNullNotBlankNotEmpty(dto.getLang(),
 				ExceptionMessageConstants.RECIPE_DTO + ExceptionMessageConstants.PARAM_LANG);
-		isValid = ValidationUtils.validateLang(dto.getLang(), ExceptionMessageConstants.RECIPE_DTO);
+		ValidationUtils.validateLang(dto.getLang(), ExceptionMessageConstants.RECIPE_DTO);
 
 		if (dto.getTypeId() != null) {
 			isValid = true;
@@ -65,17 +65,15 @@ public class ValidationServiceImpl implements ValidationService {
 
 		boolean isValid = false;
 
-		isValid = ValidationUtils.stringParamNotNullNotBlankNotEmpty(dto.getLang(),
+		ValidationUtils.stringParamNotNullNotBlankNotEmpty(dto.getLang(),
 				ExceptionMessageConstants.INGREDIENT_DTO + ExceptionMessageConstants.PARAM_LANG);
-		isValid = ValidationUtils.validateLang(dto.getLang(), ExceptionMessageConstants.INGREDIENT_DTO);
+		ValidationUtils.validateLang(dto.getLang(), ExceptionMessageConstants.INGREDIENT_DTO);
 
 		if (dto.getQuantity() != null) {
 			if (dto.getQuantity() < 0.0) {
 				throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
 						ExceptionMessageConstants.INGREDIENT_DTO + ExceptionMessageConstants.PARAM_QUANTITY,
 						ExceptionMessageConstants.PARAMETER_NEGATIVE));
-			} else {
-				isValid = true;
 			}
 		} else {
 			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
@@ -115,11 +113,11 @@ public class ValidationServiceImpl implements ValidationService {
 
 		boolean isValid = false;
 
-		isValid = ValidationUtils.stringParamNotNullNotBlankNotEmpty(dto.getLang(),
+		ValidationUtils.stringParamNotNullNotBlankNotEmpty(dto.getLang(),
 				ExceptionMessageConstants.STEP_DTO + ExceptionMessageConstants.PARAM_LANG);
-		isValid = ValidationUtils.stringParamNotNullNotBlankNotEmpty(dto.getDescription(),
+		ValidationUtils.stringParamNotNullNotBlankNotEmpty(dto.getDescription(),
 				ExceptionMessageConstants.STEP_DTO + ExceptionMessageConstants.PARAM_DESCRIPTION);
-		isValid = ValidationUtils.validateLang(dto.getLang(), ExceptionMessageConstants.STEP_DTO);
+		ValidationUtils.validateLang(dto.getLang(), ExceptionMessageConstants.STEP_DTO);
 
 		if (dto.getRecipeId() != null) {
 			isValid = true;
@@ -134,8 +132,6 @@ public class ValidationServiceImpl implements ValidationService {
 				throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
 						ExceptionMessageConstants.STEP_DTO + ExceptionMessageConstants.PARAM_POSITION,
 						ExceptionMessageConstants.PARAMETER_NEGATIVE));
-			} else {
-				isValid = true;
 			}
 		} else {
 			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
@@ -151,11 +147,11 @@ public class ValidationServiceImpl implements ValidationService {
 
 		boolean isValid = false;
 
-		isValid = ValidationUtils.stringParamNotNullNotBlankNotEmpty(dto.getLang(),
+		ValidationUtils.stringParamNotNullNotBlankNotEmpty(dto.getLang(),
 				ExceptionMessageConstants.INGREDIENT_REF_DTO + ExceptionMessageConstants.PARAM_LANG);
-		isValid = ValidationUtils.stringParamNotNullNotBlankNotEmpty(dto.getName(),
+		ValidationUtils.stringParamNotNullNotBlankNotEmpty(dto.getName(),
 				ExceptionMessageConstants.INGREDIENT_REF_DTO + ExceptionMessageConstants.PARAM_NAME);
-		isValid = ValidationUtils.validateLang(dto.getLang(), ExceptionMessageConstants.INGREDIENT_REF_DTO);
+		ValidationUtils.validateLang(dto.getLang(), ExceptionMessageConstants.INGREDIENT_REF_DTO);
 
 		if (dto.getTypeId() != null) {
 			isValid = true;

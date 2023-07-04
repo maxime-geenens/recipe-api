@@ -1,9 +1,7 @@
 package com.pluralsight.recipe.services.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,14 +28,12 @@ public class RecipeServiceImpl implements RecipeService {
 	@Override
 	public List<RecipeDTO> listRecipesByLang(String lang) {
 
-		List<Recipe> recipeList = new ArrayList<>();
-
 		QRecipe qRecipe = QRecipe.recipe;
 		Predicate predicate = qRecipe.lang.eq(lang);
 
-		recipeList = (List<Recipe>) recipeRepository.findAll(predicate);
+		List<Recipe> recipeList = (List<Recipe>) recipeRepository.findAll(predicate);
 
-		return recipeList.stream().map((entity) -> mapper.mapToDTO(entity)).collect(Collectors.toList());
+		return recipeList.stream().map(entity -> mapper.mapToDTO(entity)).toList();
 	}
 
 	@Override

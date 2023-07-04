@@ -28,7 +28,7 @@ import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 import com.pluralsight.recipe.utils.TestUtils;
 
 @WebMvcTest(ReferenceController.class)
-public class ReferenceControllerTest {
+class ReferenceControllerTest {
 
 	private static final String BASE_API = "/api/references";
 
@@ -42,7 +42,7 @@ public class ReferenceControllerTest {
 	MockMvc mockMvc;
 	
 	@Test
-	public void testFetchIngredientRefListByTypeAndLang() throws Exception {
+	void testFetchIngredientRefListByTypeAndLang() throws Exception {
 		
 		List<IngredientReferenceDTO> list = new ArrayList<>();
 		IngredientReferenceDTO dto = TestUtils.buildIngredientReferenceDTO(true);
@@ -61,7 +61,7 @@ public class ReferenceControllerTest {
 	}
 	
 	@Test
-	public void testFetchIngredientListByTypeAndLang_withLangBlank_thenThrowsInvalidParamException() throws Exception {
+	void testFetchIngredientListByTypeAndLang_withLangBlank_thenThrowsInvalidParamException() throws Exception {
 		
 		mockMvc.perform(get(BASE_API + "/ingredients/type/Type/lang/  "))
 				.andExpect(status().is5xxServerError())
@@ -72,7 +72,7 @@ public class ReferenceControllerTest {
 	}
 	
 	@Test
-	public void testFetchIngredientListByTypeAndLang_withTypeBlank_thenThrowsInvalidParamException() throws Exception {
+	void testFetchIngredientListByTypeAndLang_withTypeBlank_thenThrowsInvalidParamException() throws Exception {
 		
 		mockMvc.perform(get(BASE_API + "/ingredients/type/  /lang/FR"))
 				.andExpect(status().is5xxServerError())
@@ -83,7 +83,7 @@ public class ReferenceControllerTest {
 	}
 	
 	@Test
-	public void testFetchUnitListByLang() throws Exception {
+	void testFetchUnitListByLang() throws Exception {
 		
 		List<UnitReferenceDTO> list = new ArrayList<>();
 		UnitReferenceDTO dto = new UnitReferenceDTO(1l,"FR","Name","Symbol","Description");
@@ -103,7 +103,7 @@ public class ReferenceControllerTest {
 	}
 	
 	@Test
-	public void testFetchUnitListByLang_withLangBlank_thenThrowsInvalidParamException() throws Exception {
+	void testFetchUnitListByLang_withLangBlank_thenThrowsInvalidParamException() throws Exception {
 		
 		mockMvc.perform(get(BASE_API + "/units/lang/  "))
 				.andExpect(status().is5xxServerError())
@@ -114,7 +114,7 @@ public class ReferenceControllerTest {
 	}
 
 	@Test
-	public void testAddIngredientRef() throws Exception {
+	void testAddIngredientRef() throws Exception {
 
 		IngredientReferenceDTO dto = new IngredientReferenceDTO(1l, "FR", "Name", 1l);
 

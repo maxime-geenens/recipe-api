@@ -28,7 +28,7 @@ import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 import com.pluralsight.recipe.utils.TestUtils;
 
 @WebMvcTest(StepController.class)
-public class StepControllerTest {
+class StepControllerTest {
 
 	private static final String BASE_API = "/api/steps";
 
@@ -42,7 +42,7 @@ public class StepControllerTest {
 	MockMvc mockMvc;
 
 	@Test
-	public void testCreateStepList() throws Exception {
+	void testCreateStepList() throws Exception {
 
 		List<StepDTO> list = TestUtils.buildStepDTOList(5, false);
 		StepDTO dto = list.get(0);
@@ -57,7 +57,7 @@ public class StepControllerTest {
 	}
 	
 	@Test
-	public void createStepList_withOneStepNull_thenThrowsInvalidParamException() throws Exception {
+	void createStepList_withOneStepNull_thenThrowsInvalidParamException() throws Exception {
 
 		List<StepDTO> list = TestUtils.buildStepDTOList(5, false);
 		StepDTO dto = list.get(0);
@@ -75,7 +75,7 @@ public class StepControllerTest {
 	}
 
 	@Test
-	public void testAddStep() throws Exception {
+	void testAddStep() throws Exception {
 
 		StepDTO dto = TestUtils.buildStepDTO(false);
 
@@ -88,7 +88,7 @@ public class StepControllerTest {
 	}
 
 	@Test
-	public void testUpdateStepList() throws Exception {
+	void testUpdateStepList() throws Exception {
 
 		List<StepDTO> list = TestUtils.buildStepDTOList(5, true);
 		StepDTO dto = list.get(0);
@@ -104,7 +104,7 @@ public class StepControllerTest {
 	}
 	
 	@Test
-	public void updateStepList_withOneStepNull_thenThrowsInvalidParamException() throws Exception {
+	void updateStepList_withOneStepNull_thenThrowsInvalidParamException() throws Exception {
 
 		List<StepDTO> list = TestUtils.buildStepDTOList(5, true);
 		StepDTO dto = list.get(0);
@@ -122,7 +122,7 @@ public class StepControllerTest {
 	}
 	
 	@Test
-	public void updateStepList_withOneStepIdNull_thenThrowsInvalidParamException() throws Exception {
+	void updateStepList_withOneStepIdNull_thenThrowsInvalidParamException() throws Exception {
 
 		List<StepDTO> list = TestUtils.buildStepDTOList(5, false);
 		StepDTO dto = list.get(0);
@@ -139,7 +139,7 @@ public class StepControllerTest {
 	}
 	
 	@Test
-	public void testUpdateStep() throws Exception {
+	void testUpdateStep() throws Exception {
 		
 		StepDTO dto = TestUtils.buildStepDTO(true);
 
@@ -153,7 +153,7 @@ public class StepControllerTest {
 	}
 	
 	@Test
-	public void testUpdateStep_withStepIdNull_thenThrowsInvalidParamException() throws Exception {
+	void testUpdateStep_withStepIdNull_thenThrowsInvalidParamException() throws Exception {
 		
 		StepDTO dto = TestUtils.buildStepDTO(false);
 
@@ -169,7 +169,7 @@ public class StepControllerTest {
 	}
 	
 	@Test
-	public void testDeleteStep() throws Exception {
+	void testDeleteStep() throws Exception {
 		
 		doNothing().when(service).deleteStep(1l);
 

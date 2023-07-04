@@ -23,7 +23,7 @@ import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 import com.pluralsight.recipe.utils.TestUtils;
 
 @ExtendWith(MockitoExtension.class)
-public class ValidationServiceTest {
+class ValidationServiceTest {
 
 	@InjectMocks
 	private ValidationServiceImpl service;
@@ -37,7 +37,7 @@ public class ValidationServiceTest {
 	// Validate RecipeDTO
 
 	@Test
-	public void validateRecipeDTO_withGoodDTO_thenAllSucceed() {
+	void validateRecipeDTO_withGoodDTO_thenAllSucceed() {
 
 		RecipeDTO dto = TestUtils.buildRecipeDTO(true, true);
 
@@ -47,7 +47,7 @@ public class ValidationServiceTest {
 	}
 
 	@Test
-	public void validateRecipeDTO_withGoodDTOAndCheckCode_thenAllSucceed() {
+	void validateRecipeDTO_withGoodDTOAndCheckCode_thenAllSucceed() {
 
 		RecipeDTO dto = TestUtils.buildRecipeDTO(true, true);
 		String code = dto.getLang() + dto.getName();
@@ -60,7 +60,7 @@ public class ValidationServiceTest {
 	}
 
 	@Test
-	public void validateRecipeDTO_withGoodDTO_thenThrowException() {
+	void validateRecipeDTO_withGoodDTO_thenThrowException() {
 
 		RecipeDTO dto = TestUtils.buildRecipeDTO(true, true);
 		Recipe recipe = TestUtils.buildRecipe(true);
@@ -73,7 +73,7 @@ public class ValidationServiceTest {
 	}
 
 	@Test
-	public void validateRecipeDTO_withNullBlankEmptyName_thenThrowsException() {
+	void validateRecipeDTO_withNullBlankEmptyName_thenThrowsException() {
 
 		RecipeDTO nullName = TestUtils.buildRecipeDTO(false, true);
 		nullName.setName(null);
@@ -99,7 +99,7 @@ public class ValidationServiceTest {
 	}
 
 	@Test
-	public void validateRecipeDTO_withNullBlankEmptyDescription_thenThrowsException() {
+	void validateRecipeDTO_withNullBlankEmptyDescription_thenThrowsException() {
 
 		RecipeDTO nullDescription = TestUtils.buildRecipeDTO(false, true);
 		nullDescription.setDescription(null);
@@ -126,7 +126,7 @@ public class ValidationServiceTest {
 	}
 
 	@Test
-	public void validateRecipeDTO_withNullTypeId_thenThrowsException() {
+	void validateRecipeDTO_withNullTypeId_thenThrowsException() {
 
 		RecipeDTO nullType = TestUtils.buildRecipeDTO(false, false);
 
@@ -137,7 +137,7 @@ public class ValidationServiceTest {
 	}
 
 	@Test
-	public void validateRecipeDTO_withNullBlankEmptyLang_thenThrowsException() {
+	void validateRecipeDTO_withNullBlankEmptyLang_thenThrowsException() {
 
 		RecipeDTO nullLang = TestUtils.buildRecipeDTO(false, true);
 		nullLang.setLang(null);
@@ -163,7 +163,7 @@ public class ValidationServiceTest {
 	}
 
 	@Test
-	public void validateRecipeDTO_withWrongLang_thenThrowsException() {
+	void validateRecipeDTO_withWrongLang_thenThrowsException() {
 
 		RecipeDTO wrongLang = TestUtils.buildRecipeDTO(false, true);
 		wrongLang.setLang("BREKZ");
@@ -177,7 +177,7 @@ public class ValidationServiceTest {
 	// Validate IngredientDTO
 
 	@Test
-	public void validateIngredientDTO_withGoodDTO_thenAllSucceed() {
+	void validateIngredientDTO_withGoodDTO_thenAllSucceed() {
 
 		IngredientDTO dto = TestUtils.buildIngredientDTO(false);
 
@@ -187,7 +187,7 @@ public class ValidationServiceTest {
 	}
 
 	@Test
-	public void validateIngredientDTO_withNullBlankEmptyLang_thenThrowsException() {
+	void validateIngredientDTO_withNullBlankEmptyLang_thenThrowsException() {
 
 		IngredientDTO nullLang = TestUtils.buildIngredientDTO(false);
 		nullLang.setLang(null);
@@ -213,7 +213,7 @@ public class ValidationServiceTest {
 	}
 
 	@Test
-	public void validateIngredientDTO_withWrongLang_thenThrowsException() {
+	void validateIngredientDTO_withWrongLang_thenThrowsException() {
 
 		IngredientDTO wrongLang = TestUtils.buildIngredientDTO(false);
 		wrongLang.setLang("BREKZ");
@@ -223,7 +223,7 @@ public class ValidationServiceTest {
 	}
 
 	@Test
-	public void validateIngredientDTO_withNullQuantity_thenThrowsException() {
+	void validateIngredientDTO_withNullQuantity_thenThrowsException() {
 
 		IngredientDTO dto = TestUtils.buildIngredientDTO(false);
 		dto.setQuantity(null);
@@ -233,7 +233,7 @@ public class ValidationServiceTest {
 	}
 
 	@Test
-	public void validateIngredientDTO_withNegativeQuantity_thenThrowsException() {
+	void validateIngredientDTO_withNegativeQuantity_thenThrowsException() {
 
 		IngredientDTO dto = TestUtils.buildIngredientDTO(false);
 		dto.setQuantity(-1.0);
@@ -244,7 +244,7 @@ public class ValidationServiceTest {
 	}
 
 	@Test
-	public void validateIngredientDTO_withNullUnitRefId_thenThrowsException() {
+	void validateIngredientDTO_withNullUnitRefId_thenThrowsException() {
 
 		IngredientDTO dto = TestUtils.buildIngredientDTO(false);
 		dto.setUnitRefId(null);
@@ -254,7 +254,7 @@ public class ValidationServiceTest {
 	}
 
 	@Test
-	public void validateIngredientDTO_withNullIngredientRefId_thenThrowsException() {
+	void validateIngredientDTO_withNullIngredientRefId_thenThrowsException() {
 
 		IngredientDTO dto = TestUtils.buildIngredientDTO(false);
 		dto.setIngredientRefId(null);
@@ -265,7 +265,7 @@ public class ValidationServiceTest {
 	}
 
 	@Test
-	public void validateIngredientDTO_withNullRecipeId_thenThrowsException() {
+	void validateIngredientDTO_withNullRecipeId_thenThrowsException() {
 
 		IngredientDTO dto = TestUtils.buildIngredientDTO(false);
 		dto.setRecipeId(null);
@@ -277,7 +277,7 @@ public class ValidationServiceTest {
 	// Validate StepDTO
 
 	@Test
-	public void validateStepDTO_withGoodDTO_thenAllSucceed() {
+	void validateStepDTO_withGoodDTO_thenAllSucceed() {
 
 		StepDTO dto = TestUtils.buildStepDTO(false);
 
@@ -287,7 +287,7 @@ public class ValidationServiceTest {
 	}
 
 	@Test
-	public void validateStepDTO_withNullBlankEmptyLang_thenThrowsException() {
+	void validateStepDTO_withNullBlankEmptyLang_thenThrowsException() {
 
 		StepDTO nullLang = TestUtils.buildStepDTO(false);
 		nullLang.setLang(null);
@@ -309,7 +309,7 @@ public class ValidationServiceTest {
 	}
 
 	@Test
-	public void validateStepDTO_withWrongLang_thenThrowsException() {
+	void validateStepDTO_withWrongLang_thenThrowsException() {
 
 		StepDTO wrongLang = TestUtils.buildStepDTO(false);
 		wrongLang.setLang("BREKZ");
@@ -319,7 +319,7 @@ public class ValidationServiceTest {
 	}
 
 	@Test
-	public void validateStepDTO_withNullBlankEmptyDescription_thenThrowsException() {
+	void validateStepDTO_withNullBlankEmptyDescription_thenThrowsException() {
 
 		StepDTO nullDescription = TestUtils.buildStepDTO(false);
 		nullDescription.setDescription(null);
@@ -344,7 +344,7 @@ public class ValidationServiceTest {
 	}
 
 	@Test
-	public void validateStepDTO_withNullRecipeId_thenThrowsException() {
+	void validateStepDTO_withNullRecipeId_thenThrowsException() {
 
 		StepDTO dto = TestUtils.buildStepDTO(false);
 		dto.setRecipeId(null);
@@ -354,7 +354,7 @@ public class ValidationServiceTest {
 	}
 
 	@Test
-	public void validateStepDTO_withNullPosition_thenThrowsException() {
+	void validateStepDTO_withNullPosition_thenThrowsException() {
 
 		StepDTO dto = TestUtils.buildStepDTO(false);
 		dto.setPosition(null);
@@ -364,7 +364,7 @@ public class ValidationServiceTest {
 	}
 
 	@Test
-	public void validateStepDTO_withNegativePosition_thenThrowsException() {
+	void validateStepDTO_withNegativePosition_thenThrowsException() {
 
 		StepDTO dto = TestUtils.buildStepDTO(false);
 		dto.setPosition(-1);
@@ -376,7 +376,7 @@ public class ValidationServiceTest {
 	// Validate IngredientReferenceDTO
 
 	@Test
-	public void validateIngredientReferenceDTO_withGoodDTO_thenAllSucceed() {
+	void validateIngredientReferenceDTO_withGoodDTO_thenAllSucceed() {
 
 		IngredientReferenceDTO dto = TestUtils.buildIngredientReferenceDTO(false);
 
@@ -386,7 +386,7 @@ public class ValidationServiceTest {
 	}
 
 	@Test
-	public void validateIngredientReferenceDTO_withGoodDTOAndCheckCode_thenAllSucceed() {
+	void validateIngredientReferenceDTO_withGoodDTOAndCheckCode_thenAllSucceed() {
 
 		IngredientReferenceDTO dto = TestUtils.buildIngredientReferenceDTO(false);
 		String code = dto.getLang() + dto.getName();
@@ -399,7 +399,7 @@ public class ValidationServiceTest {
 	}
 
 	@Test
-	public void validateIngredientReferenceDTO_withGoodDTO_thenThrowException() {
+	void validateIngredientReferenceDTO_withGoodDTO_thenThrowException() {
 
 		IngredientReferenceDTO dto = TestUtils.buildIngredientReferenceDTO(false);
 		IngredientReference ref = TestUtils.buildIngredientReference(true, null);
@@ -413,7 +413,7 @@ public class ValidationServiceTest {
 	}
 
 	@Test
-	public void validateIngredientReferenceDTO_withNullBlankEmptyLang_thenThrowsException() {
+	void validateIngredientReferenceDTO_withNullBlankEmptyLang_thenThrowsException() {
 
 		IngredientReferenceDTO nullLang = TestUtils.buildIngredientReferenceDTO(false);
 		nullLang.setLang(null);
@@ -439,7 +439,7 @@ public class ValidationServiceTest {
 	}
 
 	@Test
-	public void validateIngredientReferenceDTO_withWrongLang_thenThrowsException() {
+	void validateIngredientReferenceDTO_withWrongLang_thenThrowsException() {
 
 		IngredientReferenceDTO wrongLang = TestUtils.buildIngredientReferenceDTO(false);
 		wrongLang.setLang("BREKZ");
@@ -451,7 +451,7 @@ public class ValidationServiceTest {
 	}
 
 	@Test
-	public void validateIngredientReferenceDTO_withNullBlankEmptyName_thenThrowsException() {
+	void validateIngredientReferenceDTO_withNullBlankEmptyName_thenThrowsException() {
 
 		IngredientReferenceDTO nullName = TestUtils.buildIngredientReferenceDTO(false);
 		nullName.setName(null);
@@ -478,7 +478,7 @@ public class ValidationServiceTest {
 	}
 
 	@Test
-	public void validateIngredientReferenceDTO_withNullTypeId_thenThrowsException() {
+	void validateIngredientReferenceDTO_withNullTypeId_thenThrowsException() {
 
 		IngredientReferenceDTO dto = TestUtils.buildIngredientReferenceDTO(false);
 		dto.setTypeId(null);

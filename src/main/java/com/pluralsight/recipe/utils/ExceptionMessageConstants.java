@@ -2,6 +2,9 @@ package com.pluralsight.recipe.utils;
 
 public class ExceptionMessageConstants {
 
+	private ExceptionMessageConstants() {
+	}
+
 	// ENTITY NOT FOUND
 	public static final String RECIPE_NOT_FOUND = "Recipe not found.";
 	public static final String INGREDIENT_LIST_NOT_FOUND = "Ingredient list not found for this recipe.";

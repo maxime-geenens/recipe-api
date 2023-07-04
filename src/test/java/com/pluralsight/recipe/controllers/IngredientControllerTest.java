@@ -28,7 +28,7 @@ import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 import com.pluralsight.recipe.utils.TestUtils;
 
 @WebMvcTest(IngredientController.class)
-public class IngredientControllerTest {
+class IngredientControllerTest {
 
 	private static final String BASE_API = "/api/ingredients";
 
@@ -42,7 +42,7 @@ public class IngredientControllerTest {
 	MockMvc mockMvc;
 
 	@Test
-	public void testCreateIngredientList() throws Exception {
+	void testCreateIngredientList() throws Exception {
 
 		List<IngredientDTO> list = TestUtils.buildIngredientDTOList(5, false);
 		IngredientDTO dto = list.get(0);
@@ -58,7 +58,7 @@ public class IngredientControllerTest {
 	}
 	
 	@Test
-	public void testCreateIngredientList_withOneIngredientNull_thenThrowsInvalidParamException() throws Exception {
+	void testCreateIngredientList_withOneIngredientNull_thenThrowsInvalidParamException() throws Exception {
 
 		List<IngredientDTO> list = TestUtils.buildIngredientDTOList(5, false);
 		IngredientDTO dto = list.get(0);
@@ -76,7 +76,7 @@ public class IngredientControllerTest {
 	}
 
 	@Test
-	public void testAddIngredient() throws Exception {
+	void testAddIngredient() throws Exception {
 
 		IngredientDTO dto = TestUtils.buildIngredientDTO(false);
 
@@ -90,7 +90,7 @@ public class IngredientControllerTest {
 	}
 
 	@Test
-	public void testUpdateIngredientList() throws Exception {
+	void testUpdateIngredientList() throws Exception {
 
 		List<IngredientDTO> list = TestUtils.buildIngredientDTOList(5, true);
 		IngredientDTO dto = list.get(0);
@@ -105,7 +105,7 @@ public class IngredientControllerTest {
 	}
 
 	@Test
-	public void testUpdateIngredientList_withOneIngredientNull_thenThrowsInvalidParamException() throws Exception {
+	void testUpdateIngredientList_withOneIngredientNull_thenThrowsInvalidParamException() throws Exception {
 
 		List<IngredientDTO> list = TestUtils.buildIngredientDTOList(5, true);
 		IngredientDTO dto = list.get(0);
@@ -123,7 +123,7 @@ public class IngredientControllerTest {
 	}
 
 	@Test
-	public void testUpdateIngredientList_withOneIngredientIdNull_thenThrowsInvalidParamException() throws Exception {
+	void testUpdateIngredientList_withOneIngredientIdNull_thenThrowsInvalidParamException() throws Exception {
 
 		List<IngredientDTO> list = TestUtils.buildIngredientDTOList(5, false);
 		IngredientDTO dto = list.get(0);
@@ -140,7 +140,7 @@ public class IngredientControllerTest {
 	}
 
 	@Test
-	public void testUpdateIngredient() throws Exception {
+	void testUpdateIngredient() throws Exception {
 
 		IngredientDTO dto = TestUtils.buildIngredientDTO(true);
 
@@ -155,7 +155,7 @@ public class IngredientControllerTest {
 	}
 
 	@Test
-	public void testUpdateIngredient_withIngredientIdNull_thenThrowsInvalidParamException() throws Exception {
+	void testUpdateIngredient_withIngredientIdNull_thenThrowsInvalidParamException() throws Exception {
 
 		IngredientDTO dto = TestUtils.buildIngredientDTO(false);
 
@@ -172,7 +172,7 @@ public class IngredientControllerTest {
 	}
 
 	@Test
-	public void testDeleteIngredient() throws Exception {
+	void testDeleteIngredient() throws Exception {
 
 		doNothing().when(service).deleteIngredient(1l);
 

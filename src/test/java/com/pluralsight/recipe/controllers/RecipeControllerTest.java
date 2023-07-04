@@ -34,7 +34,7 @@ import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 import com.pluralsight.recipe.utils.TestUtils;
 
 @WebMvcTest(RecipeController.class)
-public class RecipeControllerTest {
+class RecipeControllerTest {
 
 	private static final String BASE_API = "/api/recipes";
 
@@ -57,9 +57,9 @@ public class RecipeControllerTest {
 	MockMvc mockMvc;
 
 	@Test
-	public void testListRecipesByLang() throws Exception {
+	void testListRecipesByLang() throws Exception {
 
-		List<RecipeDTO> list = TestUtils.buildRecipeDTOList(5, true, true);
+		List<RecipeDTO> list = TestUtils.buildRecipeDTOList(5, true);
 
 		when(recipeService.listRecipesByLang("FR")).thenReturn(list);
 
@@ -69,7 +69,7 @@ public class RecipeControllerTest {
 	}
 
 	@Test
-	public void testListRecipesByLang_withLangBlank_thenThrowInvalidParamException() throws Exception {
+	void testListRecipesByLang_withLangBlank_thenThrowInvalidParamException() throws Exception {
 
 		mockMvc.perform(get(BASE_API + "/lang/  "))
 				.andExpect(status().is5xxServerError())
@@ -79,7 +79,7 @@ public class RecipeControllerTest {
 	}
 
 	@Test
-	public void testGetRecipeDetail() throws Exception {
+	void testGetRecipeDetail() throws Exception {
 
 		RecipeDTO rDTO = TestUtils.buildRecipeDTO(true, true);
 		List<IngredientDTO> iList = TestUtils.buildIngredientDTOList(5, true);
@@ -101,7 +101,7 @@ public class RecipeControllerTest {
 	}
 
 	@Test
-	public void testCreateRecipe() throws Exception {
+	void testCreateRecipe() throws Exception {
 
 		RecipeDTO dto = TestUtils.buildRecipeDTO(true, true);
 		
@@ -119,7 +119,7 @@ public class RecipeControllerTest {
 	}
 
 	@Test
-	public void testUpdateRecipe() throws Exception {
+	void testUpdateRecipe() throws Exception {
 
 		RecipeDTO dto = TestUtils.buildRecipeDTO(true, true);
 		RecipeDTO dto1 = new RecipeDTO(1l, "FR", "Name", "Updated", 1l);
@@ -138,7 +138,7 @@ public class RecipeControllerTest {
 	}
 
 	@Test
-	public void testUpdateRecipe_withIdNull_thenThrowInvalidParamException() throws Exception {
+	void testUpdateRecipe_withIdNull_thenThrowInvalidParamException() throws Exception {
 
 		RecipeDTO dto = TestUtils.buildRecipeDTO(false, true);
 
@@ -154,7 +154,7 @@ public class RecipeControllerTest {
 	}
 	
 	@Test
-	public void testDeleteRecipe() throws Exception {
+	void testDeleteRecipe() throws Exception {
 
 		doNothing().when(recipeService).deleteRecipe(1l);
 

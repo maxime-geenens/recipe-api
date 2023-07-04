@@ -25,7 +25,7 @@ import com.pluralsight.recipe.utils.TestUtils;
 import com.querydsl.core.types.Predicate;
 
 @ExtendWith(MockitoExtension.class)
-public class StepServiceTest {
+class StepServiceTest {
 
 	@InjectMocks
 	private StepServiceImpl service;
@@ -38,7 +38,7 @@ public class StepServiceTest {
 
 	@DisplayName("JUnit Test for listStepsByRecipe method")
 	@Test
-	public void givenRecipeId_whenListStepsByRecipe_thenReturnStepDTOList() {
+	void givenRecipeId_whenListStepsByRecipe_thenReturnStepDTOList() {
 
 		List<Step> list = TestUtils.buildStepList(5);
 		List<StepDTO> dtoList = TestUtils.buildStepDTOList(5, true);
@@ -54,14 +54,15 @@ public class StepServiceTest {
 
 		List<StepDTO> result = service.listStepsByRecipe(recipeId);
 
-		assertThat(result).isNotNull();
-		assertThat(result).isNotEmpty();
-		assertThat(result.size()).isEqualTo(5);
+		assertThat(result)
+			.isNotNull()
+			.isNotEmpty()
+			.hasSize(5);
 	}
 
 	@DisplayName("JUnit Test for addStep method")
 	@Test
-	public void givenStepDTO_whenAddStep_thenReturnStepDTO() {
+	void givenStepDTO_whenAddStep_thenReturnStepDTO() {
 
 		int quantity = 5;
 
@@ -88,7 +89,7 @@ public class StepServiceTest {
 
 	@DisplayName("JUnit Test for saveStepList method")
 	@Test
-	public void givenStepDTOList_whenSaveStepList_thenReturnStepDTOList() {
+	void givenStepDTOList_whenSaveStepList_thenReturnStepDTOList() {
 
 		int quantity = 5;
 
@@ -106,14 +107,15 @@ public class StepServiceTest {
 
 		List<StepDTO> result = service.saveStepList(dtoList);
 
-		assertThat(result).isNotNull();
-		assertThat(result).isNotEmpty();
-		assertThat(result.size()).isEqualTo(quantity);
+		assertThat(result)
+			.isNotNull()
+			.isNotEmpty()
+			.hasSize(quantity);
 	}
 
 	@DisplayName("JUnit Test for saveStepList method (with duplicate position)")
 	@Test
-	public void givenStepDTOList_whenSaveStepList_withDuplicatePosition_thenThrowException() {
+	void givenStepDTOList_whenSaveStepList_withDuplicatePosition_thenThrowException() {
 
 		int quantity = 4;
 
@@ -127,7 +129,7 @@ public class StepServiceTest {
 
 	@DisplayName("JUnit Test for updateStep method")
 	@Test
-	public void givenStepDTO_whenUpdateStep_thenReturnStepDTO() {
+	void givenStepDTO_whenUpdateStep_thenReturnStepDTO() {
 
 		int quantity = 5;
 

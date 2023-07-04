@@ -22,6 +22,9 @@ import com.pluralsight.recipe.entities.Step;
 
 public class TestUtils {
 	
+	private TestUtils() {
+	}
+	
 	private static final Long ID = 1l;
 	private static final String LANG = "FR";
 	private static final int POSITION = 1;
@@ -121,7 +124,7 @@ public class TestUtils {
 		return dto;
 	}
 
-	public static List<RecipeDTO> buildRecipeDTOList(int quantity, boolean withId, boolean withTypeId) {
+	public static List<RecipeDTO> buildRecipeDTOList(int quantity, boolean withId) {
 
 		List<RecipeDTO> list = new ArrayList<>();
 

@@ -29,7 +29,7 @@ import com.pluralsight.recipe.utils.TestUtils;
 import com.querydsl.core.types.Predicate;
 
 @ExtendWith(MockitoExtension.class)
-public class IngredientServiceTest {
+class IngredientServiceTest {
 
 	@InjectMocks
 	private IngredientServiceImpl service;
@@ -51,7 +51,7 @@ public class IngredientServiceTest {
 
 	@DisplayName("JUnit Test for listIngredientsByRecipe method")
 	@Test
-	public void givenRecipeId_whenListIngredientsByRecipe_thenReturnIngredientDTOList() {
+	void givenRecipeId_whenListIngredientsByRecipe_thenReturnIngredientDTOList() {
 
 		List<Ingredient> list = TestUtils.buildIngredientList(5);
 		Long recipeId = 1l;
@@ -63,14 +63,15 @@ public class IngredientServiceTest {
 
 		List<IngredientDTO> result = service.listIngredientsByRecipe(recipeId);
 
-		assertThat(result).isNotNull();
-		assertThat(result).isNotEmpty();
-		assertThat(result.size()).isEqualTo(5);
+		assertThat(result)
+			.isNotNull()
+			.isNotEmpty()
+			.hasSize(5);
 	}
 
 	@DisplayName("JUnit Test for listIngredientsByRecipe method (negative scenario)")
 	@Test
-	public void givenRecipeId_whenListIngredientsByRecipe_thenReturnEmptyIngredientDTOList() {
+	void givenRecipeId_whenListIngredientsByRecipe_thenReturnEmptyIngredientDTOList() {
 
 		List<Ingredient> list = new ArrayList<>();
 		Long recipeId = 1l;
@@ -82,14 +83,14 @@ public class IngredientServiceTest {
 
 		List<IngredientDTO> result = service.listIngredientsByRecipe(recipeId);
 
-		assertThat(result).isNotNull();
-		assertThat(result).isEmpty();
-		assertThat(result.size()).isEqualTo(0);
+		assertThat(result)
+			.isNotNull()
+			.isEmpty();
 	}
 
 	@DisplayName("JUnit Test for addIngredient method")
 	@Test
-	public void givenIngredientDTO_whenAddIngredient_thenReturnIngredientDTO() {
+	void givenIngredientDTO_whenAddIngredient_thenReturnIngredientDTO() {
 
 		IngredientDTO dto = TestUtils.buildIngredientDTO(true);
 		Ingredient entity = TestUtils.buildIngredient();
@@ -112,7 +113,7 @@ public class IngredientServiceTest {
 
 	@DisplayName("JUnit Test for saveIngredientList method")
 	@Test
-	public void givenIngredientDTOList_whenSaveIngredientList_thenReturnIngredientDTOList() {
+	void givenIngredientDTOList_whenSaveIngredientList_thenReturnIngredientDTOList() {
 
 		List<IngredientDTO> dtoList = TestUtils.buildIngredientDTOList(5, true);
 		List<Ingredient> entityList = TestUtils.buildIngredientList(5);
@@ -124,14 +125,15 @@ public class IngredientServiceTest {
 
 		List<IngredientDTO> result = service.saveIngredientList(dtoList);
 
-		assertThat(result).isNotNull();
-		assertThat(result).isNotEmpty();
-		assertThat(result.size()).isEqualTo(5);
+		assertThat(result)
+			.isNotNull()
+			.isNotEmpty()
+			.hasSize(5);
 	}
 
 	@DisplayName("JUnit Test for deleteIngredient method")
 	@Test
-	public void givenRecipeId_whenDeleteRecipe_thenNothing() {
+	void givenRecipeId_whenDeleteRecipe_thenNothing() {
 
 		Long id = 1l;
 

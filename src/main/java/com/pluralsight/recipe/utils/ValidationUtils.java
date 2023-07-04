@@ -4,6 +4,9 @@ import com.pluralsight.recipe.enums.Lang;
 import com.pluralsight.recipe.exceptions.InvalidParamException;
 
 public class ValidationUtils {
+	
+	private ValidationUtils() {
+	}
 
 	public static final boolean stringParamNotNullNotBlankNotEmpty(String param, String paramName) {
 

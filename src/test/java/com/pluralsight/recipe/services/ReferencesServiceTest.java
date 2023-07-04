@@ -33,7 +33,7 @@ import com.pluralsight.recipe.utils.TestUtils;
 import com.querydsl.core.types.Predicate;
 
 @ExtendWith(MockitoExtension.class)
-public class ReferencesServiceTest {
+class ReferencesServiceTest {
 
 	@InjectMocks
 	private ReferencesServiceImpl service;
@@ -58,7 +58,7 @@ public class ReferencesServiceTest {
 
 	@DisplayName("JUnit Test for getRecipeTypeByCode method")
 	@Test
-	public void givenTypeCode_whenGetRecipeTypeByCode_thenReturnRecipeType() {
+	void givenTypeCode_whenGetRecipeTypeByCode_thenReturnRecipeType() {
 
 		RecipeType entity = TestUtils.buildRecipeType();
 
@@ -78,7 +78,7 @@ public class ReferencesServiceTest {
 
 	@DisplayName("JUnit Test for getUnitReferenceById method")
 	@Test
-	public void givenId_whenGetUnitReferenceById_thenReturnUnitReference() {
+	void givenId_whenGetUnitReferenceById_thenReturnUnitReference() {
 
 		UnitReference entity = TestUtils.buildUnitReference();
 
@@ -97,7 +97,7 @@ public class ReferencesServiceTest {
 
 	@DisplayName("JUnit Test for getIngredientReferenceById method")
 	@Test
-	public void givenId_whenGetIngredientReferenceById_thenReturnIngredientReference() {
+	void givenId_whenGetIngredientReferenceById_thenReturnIngredientReference() {
 
 		IngredientType type = TestUtils.buildIngredientType();
 		IngredientReference entity = TestUtils.buildIngredientReference(true, type);
@@ -115,7 +115,7 @@ public class ReferencesServiceTest {
 
 	@DisplayName("JUnit Test for listIngredientsByTypeAndLang method")
 	@Test
-	public void givenTypeAndLang_whenListIngredientsByTypeAndLang_thenReturnIngredientReferenceDTOList() {
+	void givenTypeAndLang_whenListIngredientsByTypeAndLang_thenReturnIngredientReferenceDTOList() {
 		
 		List<IngredientReference> ingredientList = TestUtils.buildIngredientReferenceList(5);
 
@@ -126,14 +126,15 @@ public class ReferencesServiceTest {
 
 		List<IngredientReferenceDTO> result = service.listIngredientsRefByTypeAndLang("Name", "FR");
 
-		assertThat(result).isNotNull();
-		assertThat(result).isNotEmpty();
-		assertThat(result.size()).isEqualTo(5);
+		assertThat(result)
+			.isNotNull()
+			.isNotEmpty()
+			.hasSize(5);
 	}
 
 	@DisplayName("JUnit Test for listUnitsByLang method")
 	@Test
-	public void givenLang_whenListUnitsByLang_thenReturnUnitReferenceDTOList() {
+	void givenLang_whenListUnitsByLang_thenReturnUnitReferenceDTOList() {
 
 		List<UnitReference> list = TestUtils.buildUnitReferenceList(5);
 
@@ -144,14 +145,15 @@ public class ReferencesServiceTest {
 
 		List<UnitReferenceDTO> result = service.listUnitsByLang("FR");
 
-		assertThat(result).isNotNull();
-		assertThat(result).isNotEmpty();
-		assertThat(result.size()).isEqualTo(5);
+		assertThat(result)
+			.isNotNull()
+			.isNotEmpty()
+			.hasSize(5);
 	}
 
 	@DisplayName("JUnit Test for addIngredientRef method")
 	@Test
-	public void givenIngredientReferenceDTO_whenAddIngredientRef_thenReturnIngredientReferenceDTO() {
+	void givenIngredientReferenceDTO_whenAddIngredientRef_thenReturnIngredientReferenceDTO() {
 
 		IngredientType type = TestUtils.buildIngredientType();
 		IngredientReferenceDTO dto = TestUtils.buildIngredientReferenceDTO(true);

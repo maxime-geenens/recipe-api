@@ -75,7 +75,7 @@ public class RecipeController {
 			log.info(" Returning from api/recipes/{} :: {}", lang, list.toString());
 		}
 
-		return new ResponseEntity<List<RecipeDTO>>(list, HttpStatus.OK);
+		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
 	@GetMapping(path = "/detail/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -3,7 +3,6 @@ package com.pluralsight.recipe.services.impl;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,37 +22,33 @@ public class StepServiceImpl implements StepService {
 
 	@Autowired
 	private StepRepository stepRepository;
-	
+
 	@Autowired
 	private StepMapper mapper;
 
 	@Override
 	public List<StepDTO> listStepsByRecipe(Long id) {
 
-		List<Step> stepList = new ArrayList<>();
-
 		QStep qStep = QStep.step;
 		Predicate predicate = qStep.recipe.id.eq(id);
 
-		stepList = (List<Step>) stepRepository.findAll(predicate);
+		List<Step> stepList = (List<Step>) stepRepository.findAll(predicate);
 
-		return stepList.stream().map((entity) -> mapper.mapToDTO(entity))
-				.sorted(Comparator.comparingInt(StepDTO::getPosition)).collect(Collectors.toList());
+		return stepList.stream().map(entity -> mapper.mapToDTO(entity))
+				.sorted(Comparator.comparingInt(StepDTO::getPosition)).toList();
 	}
 
 	@Override
 	public StepDTO addStep(StepDTO dto) {
 
-		List<Step> stepList = new ArrayList<>();
-
 		QStep qStep = QStep.step;
 		Predicate predicate = qStep.recipe.id.eq(dto.getRecipeId());
 
-		stepList = (List<Step>) stepRepository.findAll(predicate);
+		List<Step> stepList = (List<Step>) stepRepository.findAll(predicate);
 
-		List<Integer> positionList = stepList.stream().map(Step::getPosition).sorted().collect(Collectors.toList());
+		List<Integer> positionList = stepList.stream().map(Step::getPosition).sorted().toList();
 		Integer lastPosition = positionList.get(positionList.size() - 1);
-		
+
 		if (!dto.getPosition().equals(lastPosition + 1)) {
 			dto.setPosition(lastPosition + 1);
 		}
@@ -78,8 +73,8 @@ public class StepServiceImpl implements StepService {
 
 		List<Step> stepListResult = stepRepository.saveAll(stepList);
 
-		return stepListResult.stream().map((entity) -> mapper.mapToDTO(entity))
-				.sorted(Comparator.comparingInt(StepDTO::getPosition)).collect(Collectors.toList());
+		return stepListResult.stream().map(entity -> mapper.mapToDTO(entity))
+				.sorted(Comparator.comparingInt(StepDTO::getPosition)).toList();
 	}
 
 	@Override
@@ -105,8 +100,7 @@ public class StepServiceImpl implements StepService {
 
 	private boolean isPositionUnique(List<StepDTO> stepDTOList) {
 
-		List<Integer> distinctPositionList = stepDTOList.stream().map(StepDTO::getPosition).distinct()
-				.collect(Collectors.toList());
+		List<Integer> distinctPositionList = stepDTOList.stream().map(StepDTO::getPosition).distinct().toList();
 
 		return distinctPositionList.size() == stepDTOList.size();
 	}

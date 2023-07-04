@@ -2,7 +2,6 @@ package com.pluralsight.recipe.services.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,15 +26,12 @@ public class IngredientServiceImpl implements IngredientService {
 	@Override
 	public List<IngredientDTO> listIngredientsByRecipe(Long id) {
 
-		List<Ingredient> ingredientList = new ArrayList<>();
-
 		QIngredient qIngredient = QIngredient.ingredient;
 		Predicate predicate = qIngredient.recipe.id.eq(id);
 
-		ingredientList = (List<Ingredient>) ingredientRepository.findAll(predicate);
+		List<Ingredient> ingredientList = (List<Ingredient>) ingredientRepository.findAll(predicate);
 
-		return ingredientList.stream().map((entity) -> mapper.mapToDTO(entity))
-				.collect(Collectors.toList());
+		return ingredientList.stream().map(entity -> mapper.mapToDTO(entity)).toList();
 	}
 
 	@Override
@@ -56,9 +52,8 @@ public class IngredientServiceImpl implements IngredientService {
 		}
 
 		List<Ingredient> ingredientListResult = ingredientRepository.saveAll(ingredientList);
-		
-		return ingredientListResult.stream().map((entity) -> mapper.mapToDTO(entity))
-				.collect(Collectors.toList());
+
+		return ingredientListResult.stream().map(entity -> mapper.mapToDTO(entity)).toList();
 	}
 
 	@Override

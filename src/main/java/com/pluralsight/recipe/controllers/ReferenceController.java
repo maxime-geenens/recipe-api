@@ -70,7 +70,7 @@ public class ReferenceController {
 			log.info(" Returning from api/references/ingredients/type/{}/lang/{} :: {}", type, lang, list.toString());
 		}
 
-		return new ResponseEntity<List<IngredientReferenceDTO>>(list, HttpStatus.OK);
+		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
 	@GetMapping(path = "/units/lang/{lang}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -101,7 +101,7 @@ public class ReferenceController {
 			log.info(" Returning from api/references/units/lang/{} :: {}", lang, list.toString());
 		}
 
-		return new ResponseEntity<List<UnitReferenceDTO>>(list, HttpStatus.OK);
+		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
 	@PostMapping(path = "/ingredient", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

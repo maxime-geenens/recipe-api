@@ -2,7 +2,6 @@ package com.pluralsight.recipe.services.impl;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,52 +51,40 @@ public class ReferencesServiceImpl implements ReferencesService {
 	@Override
 	public RecipeType getRecipeTypeByCode(String typeCode) {
 
-		RecipeType response = new RecipeType();
-
 		QRecipeType qRecipeType = QRecipeType.recipeType;
 		Predicate predicate = qRecipeType.code.eq(typeCode);
 
 		Optional<RecipeType> oRecipeType = recipeTypeRepository.findOne(predicate);
 
 		if (oRecipeType.isPresent()) {
-			response = oRecipeType.get();
+			return oRecipeType.get();
 		} else {
 			throw new EntityWasNotFoundException(ExceptionMessageConstants.RECIPE_TYPE_CODE_NOT_FOUND);
 		}
-
-		return response;
 	}
 
 	@Override
 	public UnitReference getUnitReferenceById(Long unitRefId) {
 
-		UnitReference response = new UnitReference();
-
 		Optional<UnitReference> oUnitRef = unitReferenceRepository.findById(unitRefId);
 
 		if (oUnitRef.isPresent()) {
-			response = oUnitRef.get();
+			return oUnitRef.get();
 		} else {
 			throw new EntityWasNotFoundException(ExceptionMessageConstants.UNIT_REFERENCE_NOT_FOUND);
 		}
-
-		return response;
 	}
 
 	@Override
 	public IngredientReference getIngredientReferenceById(Long ingredientRefId) {
 
-		IngredientReference response = new IngredientReference();
-
 		Optional<IngredientReference> oIngredientRef = ingredientReferenceRepository.findById(ingredientRefId);
 
 		if (oIngredientRef.isPresent()) {
-			response = oIngredientRef.get();
+			return oIngredientRef.get();
 		} else {
 			throw new EntityWasNotFoundException(ExceptionMessageConstants.INGREDIENT_REFERENCE_NOT_FOUND);
 		}
-
-		return response;
 	}
 
 	@Override
@@ -109,8 +96,7 @@ public class ReferencesServiceImpl implements ReferencesService {
 		List<IngredientReference> ingredientList = (List<IngredientReference>) ingredientReferenceRepository
 				.findAll(predicate);
 
-		return ingredientList.stream().map((entity) -> ingredientRefMapper.mapToDTO(entity))
-				.collect(Collectors.toList());
+		return ingredientList.stream().map(entity -> ingredientRefMapper.mapToDTO(entity)).toList();
 	}
 
 	@Override
@@ -121,8 +107,7 @@ public class ReferencesServiceImpl implements ReferencesService {
 
 		List<UnitReference> unitList = (List<UnitReference>) unitReferenceRepository.findAll(predicate);
 
-		return unitList.stream().map((entity) -> unitRefMapper.mapToDTO(entity))
-				.collect(Collectors.toList());
+		return unitList.stream().map(entity -> unitRefMapper.mapToDTO(entity)).toList();
 	}
 
 	@Override

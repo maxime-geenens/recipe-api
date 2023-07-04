@@ -30,7 +30,7 @@ import com.pluralsight.recipe.utils.TestUtils;
 import com.querydsl.core.types.Predicate;
 
 @ExtendWith(MockitoExtension.class)
-public class RecipeServiceTest {
+class RecipeServiceTest {
 
 	@InjectMocks
 	private RecipeServiceImpl service;
@@ -43,7 +43,7 @@ public class RecipeServiceTest {
 
 	@DisplayName("JUnit Test for listRecipesByLang method")
 	@Test
-	public void givenLang_whenListRecipesByLang_thenReturnRecipeDTOList() {
+	void givenLang_whenListRecipesByLang_thenReturnRecipeDTOList() {
 
 		List<Recipe> list = TestUtils.buildRecipeList(5);
 
@@ -54,14 +54,15 @@ public class RecipeServiceTest {
 
 		List<RecipeDTO> result = service.listRecipesByLang("FR");
 
-		assertThat(result).isNotNull();
-		assertThat(result).isNotEmpty();
-		assertThat(result.size()).isEqualTo(5);
+		assertThat(result)
+			.isNotNull()
+			.isNotEmpty()
+			.hasSize(5);
 	}
 
 	@DisplayName("JUnit Test for listRecipesByLang method (negative scenario)")
 	@Test
-	public void givenLang_whenListRecipesByLang_thenReturnEmptyRecipeDTOList() {
+	void givenLang_whenListRecipesByLang_thenReturnEmptyRecipeDTOList() {
 
 		List<Recipe> list = new ArrayList<>();
 
@@ -72,14 +73,14 @@ public class RecipeServiceTest {
 
 		List<RecipeDTO> result = service.listRecipesByLang("FR");
 
-		assertThat(result).isNotNull();
-		assertThat(result).isEmpty();
-		assertThat(result.size()).isEqualTo(0);
+		assertThat(result)
+			.isNotNull()
+			.isEmpty();
 	}
 
 	@DisplayName("JUnit Test for getRecipeDTOById method")
 	@Test
-	public void givenRecipeId_whenGetRecipeDTOById_thenReturnRecipe() {
+	void givenRecipeId_whenGetRecipeDTOById_thenReturnRecipe() {
 
 		Recipe entity = TestUtils.buildRecipe(true);
 		RecipeDTO dto = TestUtils.buildRecipeDTO(true, true);
@@ -99,7 +100,7 @@ public class RecipeServiceTest {
 
 	@DisplayName("JUnit Test for getRecipeDTOById method which throws exception")
 	@Test
-	public void givenRecipeId_whenGetRecipeDTOById_thenThrowException() {
+	void givenRecipeId_whenGetRecipeDTOById_thenThrowException() {
 
 		Throwable exception = assertThrows(EntityWasNotFoundException.class, () -> service.getRecipeDTOById(1l));
 		assertThat(exception.getMessage()).isEqualTo(ExceptionMessageConstants.RECIPE_NOT_FOUND);
@@ -107,7 +108,7 @@ public class RecipeServiceTest {
 
 	@DisplayName("JUnit Test for getRecipeById method")
 	@Test
-	public void givenRecipeId_whenGetRecipeById_thenReturnRecipe() {
+	void givenRecipeId_whenGetRecipeById_thenReturnRecipe() {
 
 		Recipe entity = TestUtils.buildRecipe(true);
 
@@ -125,7 +126,7 @@ public class RecipeServiceTest {
 
 	@DisplayName("JUnit Test for getRecipeById method which throws exception")
 	@Test
-	public void givenRecipeId_whenGetRecipeById_thenThrowException() {
+	void givenRecipeId_whenGetRecipeById_thenThrowException() {
 
 		Throwable exception = assertThrows(EntityWasNotFoundException.class, () -> service.getRecipeById(1l));
 		assertThat(exception.getMessage()).isEqualTo(ExceptionMessageConstants.RECIPE_NOT_FOUND);
@@ -133,7 +134,7 @@ public class RecipeServiceTest {
 
 	@DisplayName("JUnit Test for saveRecipe method")
 	@Test
-	public void givenRecipeDTO_whenSaveRecipe_theReturnRecipeDTO() {
+	void givenRecipeDTO_whenSaveRecipe_theReturnRecipeDTO() {
 
 		Recipe entity = TestUtils.buildRecipe(false);
 		Recipe savedEntity = TestUtils.buildRecipe(true);
@@ -155,7 +156,7 @@ public class RecipeServiceTest {
 
 	@DisplayName("JUnit Test for deleteRecipe method")
 	@Test
-	public void givenRecipeId_whenDeleteRecipe_thenNothing() {
+	void givenRecipeId_whenDeleteRecipe_thenNothing() {
 
 		Long recipeId = 1l;
 

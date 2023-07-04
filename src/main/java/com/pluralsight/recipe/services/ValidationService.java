@@ -80,6 +80,6 @@ public interface ValidationService {
 	 * 
 	 * @return boolean
 	 */
-	boolean validateIngredientReferenceDTO(IngredientReferenceDTO ingredientRefDTO, boolean b);
+	boolean validateIngredientReferenceDTO(IngredientReferenceDTO ingredientRefDTO);
 
 }

@@ -9,7 +9,6 @@ import com.pluralsight.recipe.dto.RecipeDTO;
 import com.pluralsight.recipe.dto.StepDTO;
 import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.services.RecipeService;
-import com.pluralsight.recipe.services.ReferencesService;
 import com.pluralsight.recipe.services.ValidationService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 import com.pluralsight.recipe.utils.ValidationUtils;
@@ -19,9 +18,6 @@ public class ValidationServiceImpl implements ValidationService {
 
 	@Autowired
 	private RecipeService recipeService;
-
-	@Autowired
-	private ReferencesService referenceService;
 
 	// DTO Validations
 
@@ -143,7 +139,7 @@ public class ValidationServiceImpl implements ValidationService {
 	}
 
 	@Override
-	public boolean validateIngredientReferenceDTO(IngredientReferenceDTO dto, boolean checkCode) {
+	public boolean validateIngredientReferenceDTO(IngredientReferenceDTO dto) {
 
 		boolean isValid = false;
 
@@ -159,17 +155,6 @@ public class ValidationServiceImpl implements ValidationService {
 			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
 					ExceptionMessageConstants.INGREDIENT_REF_DTO + ExceptionMessageConstants.PARAM_TYPE_ID,
 					ExceptionMessageConstants.PARAMETER_NULL));
-		}
-
-		if (checkCode) {
-			String code = dto.getLang() + dto.getName();
-
-			if (referenceService.findIngredientRefByCode(code) != null) {
-				throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
-						ExceptionMessageConstants.INGREDIENT_REF, ExceptionMessageConstants.CODE_ALREADY_EXISTS_IN_DB));
-			} else {
-				isValid = true;
-			}
 		}
 
 		return isValid;

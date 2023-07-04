@@ -8,12 +8,17 @@ import org.springframework.stereotype.Service;
 
 import com.pluralsight.recipe.builders.IngredientReferenceBuilder;
 import com.pluralsight.recipe.dto.IngredientReferenceDTO;
+import com.pluralsight.recipe.dto.IngredientTypeDTO;
+import com.pluralsight.recipe.dto.RecipeTypeDTO;
 import com.pluralsight.recipe.dto.UnitReferenceDTO;
 import com.pluralsight.recipe.dto.mappers.IngredientReferenceMapper;
+import com.pluralsight.recipe.dto.mappers.IngredientTypeMapper;
+import com.pluralsight.recipe.dto.mappers.RecipeTypeMapper;
 import com.pluralsight.recipe.dto.mappers.UnitReferenceMapper;
 import com.pluralsight.recipe.entities.IngredientReference;
 import com.pluralsight.recipe.entities.IngredientType;
 import com.pluralsight.recipe.entities.QIngredientReference;
+import com.pluralsight.recipe.entities.QIngredientType;
 import com.pluralsight.recipe.entities.QRecipeType;
 import com.pluralsight.recipe.entities.QUnitReference;
 import com.pluralsight.recipe.entities.RecipeType;
@@ -47,14 +52,17 @@ public class ReferencesServiceImpl implements ReferencesService {
 	
 	@Autowired
 	private UnitReferenceMapper unitRefMapper;
+	
+	@Autowired
+	private RecipeTypeMapper recipeTypeMapper;
+	
+	@Autowired
+	private IngredientTypeMapper ingredientTypeMapper;
 
 	@Override
-	public RecipeType getRecipeTypeByCode(String typeCode) {
+	public RecipeType getRecipeTypeById(Long id) {
 
-		QRecipeType qRecipeType = QRecipeType.recipeType;
-		Predicate predicate = qRecipeType.code.eq(typeCode);
-
-		Optional<RecipeType> oRecipeType = recipeTypeRepository.findOne(predicate);
+		Optional<RecipeType> oRecipeType = recipeTypeRepository.findById(id);
 
 		if (oRecipeType.isPresent()) {
 			return oRecipeType.get();
@@ -141,20 +149,25 @@ public class ReferencesServiceImpl implements ReferencesService {
 	}
 
 	@Override
-	public IngredientReference findIngredientRefByCode(String code) {
+	public List<RecipeTypeDTO> listRecipeTypesByLang(String lang) {
 
-		IngredientReference result = null;
+		QRecipeType qRecipeType = QRecipeType.recipeType;
+		Predicate predicate = qRecipeType.lang.eq(lang);
 
-		QIngredientReference qIngredientReference = QIngredientReference.ingredientReference;
-		Predicate predicate = qIngredientReference.code.eq(code);
+		List<RecipeType> list = (List<RecipeType>) recipeTypeRepository.findAll(predicate);
 
-		Optional<IngredientReference> oIngredientRef = ingredientReferenceRepository.findOne(predicate);
+		return list.stream().map(entity -> recipeTypeMapper.mapToDTO(entity)).toList();
+	}
 
-		if (oIngredientRef.isPresent()) {
-			result = oIngredientRef.get();
-		}
+	@Override
+	public List<IngredientTypeDTO> listIngredientTypesByLang(String lang) {
 
-		return result;
+		QIngredientType qIngredientType = QIngredientType.ingredientType;
+		Predicate predicate = qIngredientType.lang.eq(lang);
+
+		List<IngredientType> list = (List<IngredientType>) ingredientTypeRepository.findAll(predicate);
+
+		return list.stream().map(entity -> ingredientTypeMapper.mapToDTO(entity)).toList();
 	}
 
 }

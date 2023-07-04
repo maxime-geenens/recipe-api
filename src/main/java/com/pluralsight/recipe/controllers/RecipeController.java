@@ -87,10 +87,9 @@ public class RecipeController {
 		}
 
 		RecipeDetailDTO response = new RecipeDetailDTO();
-		RecipeDTO dto = new RecipeDTO();
 
 		if (id != null) {
-			dto = recipeService.getRecipeDTOById(id);
+			RecipeDTO dto = recipeService.getRecipeDTOById(id);
 			response.setRecipe(dto);
 		} else {
 			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
@@ -153,8 +152,6 @@ public class RecipeController {
 			log.info(" PUT API Call api/recipes/update :: {} ", requestDTO);
 		}
 
-		RecipeDTO response = new RecipeDTO();
-
 		if (requestDTO != null) {
 			Long id = requestDTO.getId();
 			if (id != null) {
@@ -169,7 +166,7 @@ public class RecipeController {
 					ExceptionMessageConstants.PARAMETER_NULL));
 		}
 
-		response = recipeService.saveRecipe(requestDTO);
+		RecipeDTO response = recipeService.saveRecipe(requestDTO);
 
 		if (log.isInfoEnabled()) {
 			log.info(" Returning from api/recipes/update :: {} ", response);

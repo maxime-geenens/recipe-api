@@ -20,6 +20,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.pluralsight.recipe.dto.IngredientReferenceDTO;
+import com.pluralsight.recipe.dto.IngredientTypeDTO;
+import com.pluralsight.recipe.dto.RecipeTypeDTO;
 import com.pluralsight.recipe.dto.UnitReferenceDTO;
 import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.services.ReferencesService;
@@ -57,6 +59,24 @@ class ReferenceControllerTest {
 				.andExpect(jsonPath("$[0].lang", Matchers.is("FR")))
 				.andExpect(jsonPath("$[0].name", Matchers.is("Name")))
 				.andExpect(jsonPath("$[0].typeId", Matchers.is(1)));
+
+	}
+
+	@Test
+	void testFetchIngredientTypeListLang() throws Exception {
+
+		List<IngredientTypeDTO> list = new ArrayList<>();
+		IngredientTypeDTO dto = new IngredientTypeDTO(1l, "FR", "Name");
+		list.add(dto);
+
+		when(service.listIngredientTypesByLang("FR")).thenReturn(list);
+		
+		mockMvc.perform(get(BASE_API + "/ingredients/typeByLang/FR"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", Matchers.hasSize(1)))
+				.andExpect(jsonPath("$[0].id", Matchers.is(1)))
+				.andExpect(jsonPath("$[0].lang", Matchers.is("FR")))
+				.andExpect(jsonPath("$[0].name", Matchers.is("Name")));
 		
 	}
 	
@@ -118,7 +138,7 @@ class ReferenceControllerTest {
 
 		IngredientReferenceDTO dto = new IngredientReferenceDTO(1l, "FR", "Name", 1l);
 
-		when(dtoValidationService.validateIngredientReferenceDTO(dto, true)).thenReturn(true);
+		when(dtoValidationService.validateIngredientReferenceDTO(dto)).thenReturn(true);
 		when(service.addIngredientRef(dto)).thenReturn(dto);
 
 		mockMvc.perform(
@@ -129,6 +149,24 @@ class ReferenceControllerTest {
 				.andExpect(jsonPath("$.name", Matchers.is("Name")))
 				.andExpect(jsonPath("$.typeId", Matchers.is(1)));
 
+	}
+	
+	@Test
+	void testFetchRecipeTypeListByLang() throws Exception {
+		
+		List<RecipeTypeDTO> list = new ArrayList<>();
+		RecipeTypeDTO dto = new RecipeTypeDTO(1l,"FR","Name");
+		list.add(dto);
+		
+		when(service.listRecipeTypesByLang("FR")).thenReturn(list);
+		
+		mockMvc.perform(get(BASE_API + "/recipes/type/lang/FR"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", Matchers.hasSize(1)))
+				.andExpect(jsonPath("$[0].id", Matchers.is(1)))
+				.andExpect(jsonPath("$[0].lang", Matchers.is("FR")))
+				.andExpect(jsonPath("$[0].name", Matchers.is("Name")));
+		
 	}
 
 }

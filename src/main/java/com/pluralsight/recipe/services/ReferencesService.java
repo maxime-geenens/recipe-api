@@ -3,6 +3,8 @@ package com.pluralsight.recipe.services;
 import java.util.List;
 
 import com.pluralsight.recipe.dto.IngredientReferenceDTO;
+import com.pluralsight.recipe.dto.IngredientTypeDTO;
+import com.pluralsight.recipe.dto.RecipeTypeDTO;
 import com.pluralsight.recipe.dto.UnitReferenceDTO;
 import com.pluralsight.recipe.entities.IngredientReference;
 import com.pluralsight.recipe.entities.RecipeType;
@@ -11,12 +13,12 @@ import com.pluralsight.recipe.entities.UnitReference;
 public interface ReferencesService {
 
 	/**
-	 * Retrieves a recipe type for a given code
+	 * Retrieves a recipe type for a given id
 	 * 
-	 * @param typeCode
+	 * @param id
 	 * @return RecipeType
 	 */
-	RecipeType getRecipeTypeByCode(String typeCode);
+	RecipeType getRecipeTypeById(Long id);
 
 	/**
 	 * Retrieves a unit reference for a given id
@@ -64,10 +66,19 @@ public interface ReferencesService {
 
 	/**
 	 * 
-	 * Find IngredientReference for a given code
+	 * Lists all recipe types for a given lang
 	 * 
-	 * @param code
-	 * @return IngredientReference
+	 * @param lang
+	 * @return List<RecipeTypeDTO>
 	 */
-	IngredientReference findIngredientRefByCode(String code);
+	List<RecipeTypeDTO> listRecipeTypesByLang(String lang);
+
+	/**
+	 * 
+	 * Lists all ingredient types for a given lang
+	 * 
+	 * @param lang
+	 * @return List<IngredientTypeDTO>
+	 */
+	List<IngredientTypeDTO> listIngredientTypesByLang(String lang);
 }

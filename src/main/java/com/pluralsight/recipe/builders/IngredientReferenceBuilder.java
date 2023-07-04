@@ -26,18 +26,12 @@ public class IngredientReferenceBuilder {
 		return this;
 	}
 
-	public IngredientReferenceBuilder addCode() {
-		ingredientRef.setCode();
-		return this;
-	}
-
 	public IngredientReferenceBuilder addType(IngredientType type) {
 		ingredientRef.setType(type);
 		return this;
 	}
 
 	public IngredientReference build() {
-		addCode();
 		return ingredientRef;
 	}
 

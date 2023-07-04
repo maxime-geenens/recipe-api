@@ -10,7 +10,9 @@ import com.pluralsight.recipe.builders.RecipeBuilder;
 import com.pluralsight.recipe.builders.StepBuilder;
 import com.pluralsight.recipe.dto.IngredientDTO;
 import com.pluralsight.recipe.dto.IngredientReferenceDTO;
+import com.pluralsight.recipe.dto.IngredientTypeDTO;
 import com.pluralsight.recipe.dto.RecipeDTO;
+import com.pluralsight.recipe.dto.RecipeTypeDTO;
 import com.pluralsight.recipe.dto.StepDTO;
 import com.pluralsight.recipe.entities.Ingredient;
 import com.pluralsight.recipe.entities.IngredientReference;
@@ -187,7 +189,7 @@ public class TestUtils {
 
 			RecipeBuilder builder = new RecipeBuilder();
 
-			RecipeType type = new RecipeType(ID, LANG, NAME, LANG + NAME);
+			RecipeType type = new RecipeType(ID, LANG, NAME);
 
 			list.add(builder
 					.addId(ID + Long.valueOf(i))
@@ -206,7 +208,7 @@ public class TestUtils {
 
 		RecipeBuilder builder = new RecipeBuilder();
 
-		RecipeType type = new RecipeType(ID, LANG, NAME, LANG + NAME);
+		RecipeType type = new RecipeType(ID, LANG, NAME);
 
 		if (withId) {
 			builder.addId(ID);
@@ -228,9 +230,9 @@ public class TestUtils {
 
 			IngredientBuilder builder = new IngredientBuilder();
 
-			UnitReference unit = new UnitReference(ID + Long.valueOf(i), LANG, "g", "gramme", "USI", "FRg");
-			IngredientType type = new IngredientType(ID + Long.valueOf(i), LANG, "Type", "FRType");
-			IngredientReference ref = new IngredientReference(ID + Long.valueOf(i), LANG, "Ref", "FRRef", type);
+			UnitReference unit = new UnitReference(ID + Long.valueOf(i), LANG, "g", "gramme", "USI");
+			IngredientType type = new IngredientType(ID + Long.valueOf(i), LANG, "Type");
+			IngredientReference ref = new IngredientReference(ID + Long.valueOf(i), LANG, "Ref", type);
 			Recipe recipe = buildRecipe(true);
 
 			list.add(builder
@@ -251,9 +253,9 @@ public class TestUtils {
 
 		IngredientBuilder builder = new IngredientBuilder();
 
-		UnitReference unit = new UnitReference(ID, LANG, "g", "gramme", "USI", "FRg");
-		IngredientType type = new IngredientType(ID, LANG, "Type", "FRType");
-		IngredientReference ref = new IngredientReference(ID, LANG, NAME, "FRName", type);
+		UnitReference unit = new UnitReference(ID, LANG, "g", "gramme", "USI");
+		IngredientType type = new IngredientType(ID, LANG, "Type");
+		IngredientReference ref = new IngredientReference(ID, LANG, NAME, type);
 		Recipe recipe = buildRecipe(true);
 
 		return builder
@@ -273,9 +275,25 @@ public class TestUtils {
 		result.setId(ID);
 		result.setLang(LANG);
 		result.setName(NAME);
-		result.setCode(LANG + NAME);
 
 		return result;
+	}
+
+	public static List<RecipeType> buildRecipeTypeList(int quantity) {
+
+		List<RecipeType> list = new ArrayList<>();
+
+		for (int i = 0; i < quantity; i++) {
+			RecipeType result = new RecipeType();
+
+			result.setId(ID + Long.valueOf(i));
+			result.setLang(LANG);
+			result.setName(NAME);
+
+			list.add(result);
+		}
+
+		return list;
 	}
 
 	public static UnitReference buildUnitReference() {
@@ -287,7 +305,6 @@ public class TestUtils {
 		result.setName(NAME);
 		result.setSymbol(SYMBOL);
 		result.setDescription(DESCRIPTION);
-		result.setCode(LANG + NAME);
 		
 		return result;
 	}
@@ -305,7 +322,6 @@ public class TestUtils {
 			result.setName(NAME);
 			result.setSymbol(SYMBOL);
 			result.setDescription(DESCRIPTION);
-			result.setCode(LANG + NAME);
 
 			list.add(result);
 		}
@@ -322,7 +338,6 @@ public class TestUtils {
 		}
 		result.setLang(LANG);
 		result.setName(NAME);
-		result.setCode(LANG + NAME);
 		result.setType(type);
 
 		return result;
@@ -341,7 +356,6 @@ public class TestUtils {
 			result.setId(ID + Long.valueOf(i));
 			result.setLang(LANG);
 			result.setName(NAME);
-			result.setCode(LANG + NAME);
 			result.setType(type);
 
 			list.add(result);
@@ -357,9 +371,26 @@ public class TestUtils {
 		result.setId(ID);
 		result.setLang(LANG);
 		result.setName(NAME);
-		result.setCode(LANG + NAME);
 		
 		return result;
+	}
+
+	public static List<IngredientType> buildIngredientTypeList(int quantity) {
+
+		List<IngredientType> list = new ArrayList<>();
+
+		for (int i = 0; i < quantity; i++) {
+
+			IngredientType result = new IngredientType();
+
+			result.setId(ID + Long.valueOf(i));
+			result.setLang(LANG);
+			result.setName(NAME);
+
+			list.add(result);
+		}
+
+		return list;
 	}
 
 	public static List<Step> buildStepList(int quantity) {
@@ -392,6 +423,40 @@ public class TestUtils {
 				.addPosition(POSITION)
 				.addRecipe(recipe)
 				.build();
+	}
+
+	public static List<RecipeTypeDTO> buildRecipeTypeDTO(int quantity) {
+
+		List<RecipeTypeDTO> list = new ArrayList<>();
+		
+		for(int i = 0; i < quantity; i++) {
+			RecipeTypeDTO dto = new RecipeTypeDTO();
+			
+			dto.setId(ID + Long.valueOf(i));
+			dto.setLang(LANG);
+			dto.setName(NAME);
+			
+			list.add(dto);
+		}
+		
+		return list;
+	}
+
+	public static List<IngredientTypeDTO> buildIngredientTypeDTOList(int quantity) {
+
+		List<IngredientTypeDTO> list = new ArrayList<>();
+
+		for (int i = 0; i < quantity; i++) {
+			IngredientTypeDTO dto = new IngredientTypeDTO();
+
+			dto.setId(ID + Long.valueOf(i));
+			dto.setLang(LANG);
+			dto.setName(NAME);
+
+			list.add(dto);
+		}
+
+		return list;
 	}
 
 }

@@ -14,12 +14,17 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.pluralsight.recipe.dto.IngredientReferenceDTO;
+import com.pluralsight.recipe.dto.IngredientTypeDTO;
+import com.pluralsight.recipe.dto.RecipeTypeDTO;
 import com.pluralsight.recipe.dto.UnitReferenceDTO;
 import com.pluralsight.recipe.dto.mappers.IngredientReferenceMapper;
+import com.pluralsight.recipe.dto.mappers.IngredientTypeMapper;
+import com.pluralsight.recipe.dto.mappers.RecipeTypeMapper;
 import com.pluralsight.recipe.dto.mappers.UnitReferenceMapper;
 import com.pluralsight.recipe.entities.IngredientReference;
 import com.pluralsight.recipe.entities.IngredientType;
 import com.pluralsight.recipe.entities.QIngredientReference;
+import com.pluralsight.recipe.entities.QIngredientType;
 import com.pluralsight.recipe.entities.QRecipeType;
 import com.pluralsight.recipe.entities.QUnitReference;
 import com.pluralsight.recipe.entities.RecipeType;
@@ -56,24 +61,27 @@ class ReferencesServiceTest {
 	@Mock
 	private UnitReferenceMapper unitRefMapper;
 
+	@Mock
+	private RecipeTypeMapper recipeTypeMapper;
+
+	@Mock
+	private IngredientTypeMapper ingredientTypeMapper;
+
 	@DisplayName("JUnit Test for getRecipeTypeByCode method")
 	@Test
 	void givenTypeCode_whenGetRecipeTypeByCode_thenReturnRecipeType() {
 
 		RecipeType entity = TestUtils.buildRecipeType();
+		Long id = 1l;
 
-		QRecipeType qRecipeType = QRecipeType.recipeType;
-		Predicate predicate = qRecipeType.code.eq("FRName");
+		given(recipeTypeRepository.findById(id)).willReturn(Optional.of(entity));
 
-		given(recipeTypeRepository.findOne(predicate)).willReturn(Optional.of(entity));
-
-		RecipeType result = service.getRecipeTypeByCode("FRName");
+		RecipeType result = service.getRecipeTypeById(id);
 
 		assertThat(result).isNotNull();
-		assertThat(result.getId()).isEqualTo(entity.getId());
+		assertThat(result.getId()).isEqualTo(id);
 		assertThat(result.getName()).isEqualTo(entity.getName());
 		assertThat(result.getLang()).isEqualTo(entity.getLang());
-		assertThat(result.getCode()).isEqualTo(entity.getCode());
 	}
 
 	@DisplayName("JUnit Test for getUnitReferenceById method")
@@ -92,7 +100,6 @@ class ReferencesServiceTest {
 		assertThat(result.getLang()).isEqualTo(entity.getLang());
 		assertThat(result.getSymbol()).isEqualTo(entity.getSymbol());
 		assertThat(result.getDescription()).isEqualTo(entity.getDescription());
-		assertThat(result.getCode()).isEqualTo(entity.getCode());
 	}
 
 	@DisplayName("JUnit Test for getIngredientReferenceById method")
@@ -110,7 +117,6 @@ class ReferencesServiceTest {
 		assertThat(result.getId()).isEqualTo(entity.getId());
 		assertThat(result.getName()).isEqualTo(entity.getName());
 		assertThat(result.getLang()).isEqualTo(entity.getLang());
-		assertThat(result.getCode()).isEqualTo(entity.getCode());
 	}
 
 	@DisplayName("JUnit Test for listIngredientsByTypeAndLang method")
@@ -168,6 +174,55 @@ class ReferencesServiceTest {
 
 		assertThat(result).isNotNull();
 		assertThat(result.getId()).isEqualTo(1l);
+	}
+
+	@DisplayName("JUnit Test for listRecipeTypesByLang method")
+	@Test
+	void givenTypeAndLang_whenListRecipeTypesByLang_thenReturnRecipeTypeDTOList() {
+
+		List<RecipeType> list = TestUtils.buildRecipeTypeList(5);
+		List<RecipeTypeDTO> dtoList = TestUtils.buildRecipeTypeDTO(5); 
+
+		QRecipeType qRecipeType = QRecipeType.recipeType;
+		Predicate predicate = qRecipeType.lang.eq("FR");
+
+		given(recipeTypeRepository.findAll(predicate)).willReturn(list);
+		
+		for (int i = 0; i < list.size(); i++) {
+			given(recipeTypeMapper.mapToDTO(list.get(i))).willReturn(dtoList.get(i));
+		}
+		
+
+		List<RecipeTypeDTO> result = service.listRecipeTypesByLang("FR");
+
+		assertThat(result)
+			.isNotNull()
+			.isNotEmpty()
+			.hasSize(5);
+	}
+
+	@DisplayName("JUnit Test for listIngredientTypesByLang method")
+	@Test
+	void givenTypeAndLang_whenListIngredientTypesByLang_thenReturnIngredientTypeDTOList() {
+
+		List<IngredientType> list = TestUtils.buildIngredientTypeList(5);
+		List<IngredientTypeDTO> dtoList = TestUtils.buildIngredientTypeDTOList(5);
+
+		QIngredientType qIngredientType = QIngredientType.ingredientType;
+		Predicate predicate = qIngredientType.lang.eq("FR");
+
+		given(ingredientTypeRepository.findAll(predicate)).willReturn(list);
+		
+		for (int i = 0; i < list.size(); i++) {
+			given(ingredientTypeMapper.mapToDTO(list.get(i))).willReturn(dtoList.get(i));
+		}
+
+		List<IngredientTypeDTO> result = service.listIngredientTypesByLang("FR");
+
+		assertThat(result)
+			.isNotNull()
+			.isNotEmpty()
+			.hasSize(5);
 	}
 
 }

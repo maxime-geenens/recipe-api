@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pluralsight.recipe.dto.IngredientReferenceDTO;
+import com.pluralsight.recipe.dto.IngredientTypeDTO;
+import com.pluralsight.recipe.dto.RecipeTypeDTO;
 import com.pluralsight.recipe.dto.UnitReferenceDTO;
 import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.services.ReferencesService;
@@ -73,6 +75,37 @@ public class ReferenceController {
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
+	@GetMapping(path = "/ingredients/typeByLang/{lang}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<IngredientTypeDTO>> fetchIngredientTypeListByLang(
+			@PathVariable(name = "lang", required = true) String lang) {
+
+		if (log.isInfoEnabled()) {
+			log.info(" GET API Call api/references/ingredients/typeByLang/{} ", lang);
+		}
+
+		List<IngredientTypeDTO> list = new ArrayList<>();
+
+		if (lang != null) {
+
+			if (lang.isEmpty() || lang.isBlank()) {
+				throw new InvalidParamException(
+						ValidationUtils.buildExceptionMessage("lang", ExceptionMessageConstants.PARAMETER_BLANK_EMPTY));
+			}
+
+			list = referenceService.listIngredientTypesByLang(lang);
+
+		} else {
+			throw new InvalidParamException(
+					ValidationUtils.buildExceptionMessage("IngredientReferenceDTO.lang", ExceptionMessageConstants.PARAMETER_NULL));
+		}
+
+		if (log.isInfoEnabled()) {
+			log.info(" Returning from api/references/ingredients/typeByLang/{} :: {}", lang, list.toString());
+		}
+
+		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
+
 	@GetMapping(path = "/units/lang/{lang}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<UnitReferenceDTO>> fetchUnitListByLang(
 			@PathVariable(name = "lang", required = true) String lang) {
@@ -104,6 +137,37 @@ public class ReferenceController {
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
+	@GetMapping(path = "/recipes/type/lang/{lang}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<RecipeTypeDTO>> fetchRecipeTypeListByLang(
+			@PathVariable(name = "lang", required = true) String lang) {
+
+		if (log.isInfoEnabled()) {
+			log.info(" GET API Call api/references/recipes/type/lang/{} ", lang);
+		}
+
+		List<RecipeTypeDTO> list = new ArrayList<>();
+
+		if (lang != null) {
+
+			if (lang.isEmpty() || lang.isBlank()) {
+				throw new InvalidParamException(
+						ValidationUtils.buildExceptionMessage("lang", ExceptionMessageConstants.PARAMETER_BLANK_EMPTY));
+			}
+
+			list = referenceService.listRecipeTypesByLang(lang);
+
+		} else {
+			throw new InvalidParamException(
+					ValidationUtils.buildExceptionMessage("lang", ExceptionMessageConstants.PARAMETER_NULL));
+		}
+
+		if (log.isInfoEnabled()) {
+			log.info(" Returning from api/references/recipes/type/lang/{} :: {}", lang, list.toString());
+		}
+
+		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
+
 	@PostMapping(path = "/ingredient", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
 	public ResponseEntity<IngredientReferenceDTO> addIngredientReference(
@@ -114,7 +178,7 @@ public class ReferenceController {
 		}
 
 		if (requestDTO != null) {
-			validationService.validateIngredientReferenceDTO(requestDTO, true);
+			validationService.validateIngredientReferenceDTO(requestDTO);
 		} else {
 			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
 					ExceptionMessageConstants.INGREDIENT_REF_DTO, ExceptionMessageConstants.PARAMETER_NULL));

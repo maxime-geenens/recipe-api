@@ -40,16 +40,4 @@ public class UnitReference {
 	@Column(name = "description")
 	private String description;
 
-	/**
-	 * To ensure it stays a reference and no duplicates are created in the table
-	 * 
-	 * Has to be set as lang + name
-	 */
-	@Column(name = "code", unique = true)
-	private String code;
-	
-	public void setCode() {
-		code = getLang() + getName();
-	}
-
 }

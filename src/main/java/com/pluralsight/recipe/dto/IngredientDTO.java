@@ -11,7 +11,6 @@ public class IngredientDTO {
 
 	private Long id;
 	private String lang;
-	private String name;
 	private Double quantity;
 	private Long unitRefId;
 	private Long ingredientRefId;

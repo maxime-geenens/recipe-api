@@ -97,7 +97,6 @@ public class TestUtils {
 				dto.setId(ID + Long.valueOf(i));
 			}
 			dto.setLang(LANG);
-			dto.setName(NAME + String.valueOf(i + 1));
 			dto.setQuantity(QUANTITY);
 			dto.setIngredientRefId(ID + Long.valueOf(i));
 			dto.setRecipeId(ID);
@@ -117,7 +116,6 @@ public class TestUtils {
 			dto.setId(1l);
 		}
 		dto.setLang(LANG);
-		dto.setName(NAME);
 		dto.setQuantity(QUANTITY);
 		dto.setIngredientRefId(ID);
 		dto.setRecipeId(ID);

@@ -10,7 +10,6 @@ import com.pluralsight.recipe.entities.Ingredient;
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR, unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface IngredientMapper {
 
-	@Mapping(source = "ingredientReference.name", target = "name")
 	@Mapping(source = "unitReference.id", target = "unitRefId")
 	@Mapping(source = "ingredientReference.id", target = "ingredientRefId")
 	@Mapping(source = "recipe.id", target = "recipeId")

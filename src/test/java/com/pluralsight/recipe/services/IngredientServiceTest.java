@@ -104,7 +104,6 @@ class IngredientServiceTest {
 		assertThat(result).isNotNull();
 		assertThat(result.getId()).isEqualTo(entity.getId());
 		assertThat(result.getLang()).isEqualTo(entity.getLang());
-		assertThat(result.getName()).isEqualTo(entity.getIngredientReference().getName());
 		assertThat(result.getQuantity()).isEqualTo(entity.getQuantity());
 		assertThat(result.getUnitRefId()).isEqualTo(entity.getUnitReference().getId());
 		assertThat(result.getIngredientRefId()).isEqualTo(entity.getIngredientReference().getId());

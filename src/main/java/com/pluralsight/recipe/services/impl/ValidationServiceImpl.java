@@ -7,6 +7,8 @@ import com.pluralsight.recipe.dto.IngredientDTO;
 import com.pluralsight.recipe.dto.IngredientReferenceDTO;
 import com.pluralsight.recipe.dto.RecipeDTO;
 import com.pluralsight.recipe.dto.StepDTO;
+import com.pluralsight.recipe.dto.ToolDTO;
+import com.pluralsight.recipe.dto.ToolReferenceDTO;
 import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.services.RecipeService;
 import com.pluralsight.recipe.services.ValidationService;
@@ -154,6 +156,68 @@ public class ValidationServiceImpl implements ValidationService {
 		} else {
 			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
 					ExceptionMessageConstants.INGREDIENT_REF_DTO + ExceptionMessageConstants.PARAM_TYPE_ID,
+					ExceptionMessageConstants.PARAMETER_NULL));
+		}
+
+		return isValid;
+	}
+
+	@Override
+	public boolean validateToolDTO(ToolDTO dto) {
+
+		boolean isValid = false;
+
+		ValidationUtils.stringParamNotNullNotBlankNotEmpty(dto.getLang(),
+				ExceptionMessageConstants.TOOL_DTO + ExceptionMessageConstants.PARAM_LANG);
+		ValidationUtils.validateLang(dto.getLang(), ExceptionMessageConstants.TOOL_DTO);
+
+		if (dto.getQuantity() != null) {
+			if (dto.getQuantity() < 0.0) {
+				throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
+						ExceptionMessageConstants.TOOL_DTO + ExceptionMessageConstants.PARAM_QUANTITY,
+						ExceptionMessageConstants.PARAMETER_NEGATIVE));
+			}
+		} else {
+			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
+					ExceptionMessageConstants.TOOL_DTO + ExceptionMessageConstants.PARAM_QUANTITY,
+					ExceptionMessageConstants.PARAMETER_NULL));
+		}
+
+		if (dto.getToolRefId() != null) {
+			isValid = true;
+		} else {
+			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
+					ExceptionMessageConstants.TOOL_DTO + ExceptionMessageConstants.PARAM_TOOL_REF_ID,
+					ExceptionMessageConstants.PARAMETER_NULL));
+		}
+
+		if (dto.getRecipeId() != null) {
+			isValid = true;
+		} else {
+			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
+					ExceptionMessageConstants.TOOL_DTO + ExceptionMessageConstants.PARAM_RECIPE_ID,
+					ExceptionMessageConstants.PARAMETER_NULL));
+		}
+
+		return isValid;
+	}
+
+	@Override
+	public boolean validateToolReferenceDTO(ToolReferenceDTO dto) {
+
+		boolean isValid = false;
+
+		ValidationUtils.stringParamNotNullNotBlankNotEmpty(dto.getLang(),
+				ExceptionMessageConstants.TOOL_REF_DTO + ExceptionMessageConstants.PARAM_LANG);
+		ValidationUtils.stringParamNotNullNotBlankNotEmpty(dto.getName(),
+				ExceptionMessageConstants.TOOL_REF_DTO + ExceptionMessageConstants.PARAM_NAME);
+		ValidationUtils.validateLang(dto.getLang(), ExceptionMessageConstants.TOOL_REF_DTO);
+
+		if (dto.getTypeId() != null) {
+			isValid = true;
+		} else {
+			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
+					ExceptionMessageConstants.TOOL_REF_DTO + ExceptionMessageConstants.PARAM_TYPE_ID,
 					ExceptionMessageConstants.PARAMETER_NULL));
 		}
 

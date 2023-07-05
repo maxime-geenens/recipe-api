@@ -18,7 +18,7 @@ public interface IngredientService {
 	 * Creates and persists an ingredient list
 	 * 
 	 * @param requestDTO
-	 * @return List<Ingredient>
+	 * @return List<IngredientDTO>
 	 */
 	List<IngredientDTO> saveIngredientList(List<IngredientDTO> requestDTO);
 

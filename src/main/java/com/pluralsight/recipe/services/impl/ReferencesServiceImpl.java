@@ -10,23 +10,33 @@ import com.pluralsight.recipe.builders.IngredientReferenceBuilder;
 import com.pluralsight.recipe.dto.IngredientReferenceDTO;
 import com.pluralsight.recipe.dto.IngredientTypeDTO;
 import com.pluralsight.recipe.dto.RecipeTypeDTO;
+import com.pluralsight.recipe.dto.ToolReferenceDTO;
+import com.pluralsight.recipe.dto.ToolTypeDTO;
 import com.pluralsight.recipe.dto.UnitReferenceDTO;
 import com.pluralsight.recipe.dto.mappers.IngredientReferenceMapper;
 import com.pluralsight.recipe.dto.mappers.IngredientTypeMapper;
 import com.pluralsight.recipe.dto.mappers.RecipeTypeMapper;
+import com.pluralsight.recipe.dto.mappers.ToolReferenceMapper;
+import com.pluralsight.recipe.dto.mappers.ToolTypeMapper;
 import com.pluralsight.recipe.dto.mappers.UnitReferenceMapper;
 import com.pluralsight.recipe.entities.IngredientReference;
 import com.pluralsight.recipe.entities.IngredientType;
 import com.pluralsight.recipe.entities.QIngredientReference;
 import com.pluralsight.recipe.entities.QIngredientType;
 import com.pluralsight.recipe.entities.QRecipeType;
+import com.pluralsight.recipe.entities.QToolReference;
+import com.pluralsight.recipe.entities.QToolType;
 import com.pluralsight.recipe.entities.QUnitReference;
 import com.pluralsight.recipe.entities.RecipeType;
+import com.pluralsight.recipe.entities.ToolReference;
+import com.pluralsight.recipe.entities.ToolType;
 import com.pluralsight.recipe.entities.UnitReference;
 import com.pluralsight.recipe.exceptions.EntityWasNotFoundException;
 import com.pluralsight.recipe.repositories.IngredientReferenceRepository;
 import com.pluralsight.recipe.repositories.IngredientTypeRepository;
 import com.pluralsight.recipe.repositories.RecipeTypeRepository;
+import com.pluralsight.recipe.repositories.ToolReferenceRepository;
+import com.pluralsight.recipe.repositories.ToolTypeRepository;
 import com.pluralsight.recipe.repositories.UnitReferenceRepository;
 import com.pluralsight.recipe.services.ReferencesService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
@@ -46,6 +56,12 @@ public class ReferencesServiceImpl implements ReferencesService {
 
 	@Autowired
 	private IngredientTypeRepository ingredientTypeRepository;
+
+	@Autowired
+	private ToolTypeRepository toolTypeRepository;
+
+	@Autowired
+	private ToolReferenceRepository toolReferenceRepository;
 	
 	@Autowired
 	private IngredientReferenceMapper ingredientRefMapper;
@@ -58,6 +74,12 @@ public class ReferencesServiceImpl implements ReferencesService {
 	
 	@Autowired
 	private IngredientTypeMapper ingredientTypeMapper;
+	
+	@Autowired
+	private ToolTypeMapper toolTypeMapper;
+	
+	@Autowired
+	private ToolReferenceMapper toolReferenceMapper;
 
 	@Override
 	public RecipeType getRecipeTypeById(Long id) {
@@ -168,6 +190,36 @@ public class ReferencesServiceImpl implements ReferencesService {
 		List<IngredientType> list = (List<IngredientType>) ingredientTypeRepository.findAll(predicate);
 
 		return list.stream().map(entity -> ingredientTypeMapper.mapToDTO(entity)).toList();
+	}
+
+	@Override
+	public ToolReferenceDTO addToolRef(ToolReferenceDTO dto) {
+
+		ToolReference savedToolRef = toolReferenceRepository.save(toolReferenceMapper.mapToEntity(dto));
+
+		return toolReferenceMapper.mapToDTO(savedToolRef);
+	}
+
+	@Override
+	public List<ToolReferenceDTO> listToolsRefByTypeAndLang(String type, String lang) {
+
+		QToolReference qRef = QToolReference.toolReference;
+		Predicate predicate = qRef.type.name.eq(type).and(qRef.lang.eq(lang));
+
+		List<ToolReference> list = (List<ToolReference>) toolReferenceRepository.findAll(predicate);
+
+		return list.stream().map(entity -> toolReferenceMapper.mapToDTO(entity)).toList();
+	}
+
+	@Override
+	public List<ToolTypeDTO> listToolTypesByLang(String lang) {
+
+		QToolType qType = QToolType.toolType;
+		Predicate predicate = qType.lang.eq(lang);
+
+		List<ToolType> list = (List<ToolType>) toolTypeRepository.findAll(predicate);
+
+		return list.stream().map(entity -> toolTypeMapper.mapToDTO(entity)).toList();
 	}
 
 }

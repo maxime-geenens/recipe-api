@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pluralsight.recipe.dto.IngredientReferenceDTO;
 import com.pluralsight.recipe.dto.IngredientTypeDTO;
 import com.pluralsight.recipe.dto.RecipeTypeDTO;
+import com.pluralsight.recipe.dto.ToolReferenceDTO;
+import com.pluralsight.recipe.dto.ToolTypeDTO;
 import com.pluralsight.recipe.dto.UnitReferenceDTO;
 import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.services.ReferencesService;
@@ -106,6 +108,31 @@ public class ReferenceController {
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
+	@PostMapping(path = "/ingredient", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Transactional
+	public ResponseEntity<IngredientReferenceDTO> addIngredientReference(
+			@RequestBody(required = true) IngredientReferenceDTO requestDTO) {
+
+		if (log.isInfoEnabled()) {
+			log.info(" POST API Call api/references/ingredient :: {} ", requestDTO);
+		}
+
+		if (requestDTO != null) {
+			validationService.validateIngredientReferenceDTO(requestDTO);
+		} else {
+			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
+					ExceptionMessageConstants.INGREDIENT_REF_DTO, ExceptionMessageConstants.PARAMETER_NULL));
+		}
+
+		IngredientReferenceDTO response = referenceService.addIngredientRef(requestDTO);
+
+		if (log.isInfoEnabled()) {
+			log.info(" Returning from api/references/ingredient :: {} ", response);
+		}
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
 	@GetMapping(path = "/units/lang/{lang}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<UnitReferenceDTO>> fetchUnitListByLang(
 			@PathVariable(name = "lang", required = true) String lang) {
@@ -168,29 +195,97 @@ public class ReferenceController {
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
-	@PostMapping(path = "/ingredient", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "/tool", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
-	public ResponseEntity<IngredientReferenceDTO> addIngredientReference(
-			@RequestBody(required = true) IngredientReferenceDTO requestDTO) {
+	public ResponseEntity<ToolReferenceDTO> addToolReference(
+			@RequestBody(required = true) ToolReferenceDTO requestDTO) {
 
 		if (log.isInfoEnabled()) {
-			log.info(" POST API Call api/references/ingredient :: {} ", requestDTO);
+			log.info(" POST API Call api/references/tool :: {} ", requestDTO);
 		}
 
 		if (requestDTO != null) {
-			validationService.validateIngredientReferenceDTO(requestDTO);
+			validationService.validateToolReferenceDTO(requestDTO);
 		} else {
 			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
-					ExceptionMessageConstants.INGREDIENT_REF_DTO, ExceptionMessageConstants.PARAMETER_NULL));
+					ExceptionMessageConstants.TOOL_REF_DTO, ExceptionMessageConstants.PARAMETER_NULL));
 		}
 
-		IngredientReferenceDTO response = referenceService.addIngredientRef(requestDTO);
+		ToolReferenceDTO response = referenceService.addToolRef(requestDTO);
 
 		if (log.isInfoEnabled()) {
-			log.info(" Returning from api/references/ingredient :: {} ", response);
+			log.info(" Returning from api/references/tool :: {} ", response);
 		}
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@GetMapping(path = "/tools/type/{type}/lang/{lang}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<ToolReferenceDTO>> fetchToolListByTypeAndLang(
+			@PathVariable(name = "type", required = false) String type,
+			@PathVariable(name = "lang", required = false) String lang) {
+
+		if (log.isInfoEnabled()) {
+			log.info(" GET API Call api/references/tools/type/{}/lang/{} ", type, lang);
+		}
+
+		List<ToolReferenceDTO> list = new ArrayList<>();
+
+		if (type != null && lang != null) {
+
+			if (type.isEmpty() || type.isBlank()) {
+				throw new InvalidParamException(
+						ValidationUtils.buildExceptionMessage("type", ExceptionMessageConstants.PARAMETER_BLANK_EMPTY));
+			}
+
+			if (lang.isEmpty() || lang.isBlank()) {
+				throw new InvalidParamException(
+						ValidationUtils.buildExceptionMessage("lang", ExceptionMessageConstants.PARAMETER_BLANK_EMPTY));
+			}
+
+			list = referenceService.listToolsRefByTypeAndLang(type, lang);
+
+		} else {
+			throw new InvalidParamException(
+					ValidationUtils.buildExceptionMessage("type or lang", ExceptionMessageConstants.PARAMETER_NULL));
+		}
+
+		if (log.isInfoEnabled()) {
+			log.info(" Returning from api/references/tools/type/{}/lang/{} :: {}", type, lang, list.toString());
+		}
+
+		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
+
+	@GetMapping(path = "/tools/typeByLang/{lang}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<ToolTypeDTO>> fetchToolTypeListByLang(
+			@PathVariable(name = "lang", required = true) String lang) {
+
+		if (log.isInfoEnabled()) {
+			log.info(" GET API Call api/references/ingredients/typeByLang/{} ", lang);
+		}
+
+		List<ToolTypeDTO> list = new ArrayList<>();
+
+		if (lang != null) {
+
+			if (lang.isEmpty() || lang.isBlank()) {
+				throw new InvalidParamException(
+						ValidationUtils.buildExceptionMessage("lang", ExceptionMessageConstants.PARAMETER_BLANK_EMPTY));
+			}
+
+			list = referenceService.listToolTypesByLang(lang);
+
+		} else {
+			throw new InvalidParamException(
+					ValidationUtils.buildExceptionMessage("ToolTypeDTO.lang", ExceptionMessageConstants.PARAMETER_NULL));
+		}
+
+		if (log.isInfoEnabled()) {
+			log.info(" Returning from api/references/tools/typeByLang/{} :: {}", lang, list.toString());
+		}
+
+		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
 }

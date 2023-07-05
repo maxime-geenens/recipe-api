@@ -14,4 +14,5 @@ public class RecipeDetailDTO {
 	private RecipeDTO recipe;
 	private List<IngredientDTO> ingredientList;
 	private List<StepDTO> stepList;
+	private List<ToolDTO> toolList;
 }

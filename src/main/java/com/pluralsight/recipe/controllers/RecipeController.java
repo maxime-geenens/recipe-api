@@ -22,9 +22,11 @@ import com.pluralsight.recipe.dto.IngredientDTO;
 import com.pluralsight.recipe.dto.RecipeDTO;
 import com.pluralsight.recipe.dto.RecipeDetailDTO;
 import com.pluralsight.recipe.dto.StepDTO;
+import com.pluralsight.recipe.dto.ToolDTO;
 import com.pluralsight.recipe.services.IngredientService;
 import com.pluralsight.recipe.services.RecipeService;
 import com.pluralsight.recipe.services.StepService;
+import com.pluralsight.recipe.services.ToolService;
 import com.pluralsight.recipe.services.ValidationService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 import com.pluralsight.recipe.utils.ValidationUtils;
@@ -48,6 +50,9 @@ public class RecipeController {
 
 	@Autowired
 	private ValidationService validationService;
+
+	@Autowired
+	private ToolService toolService;
 
 	@GetMapping(path = "/lang/{lang}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<RecipeDTO>> listRecipesByLang(
@@ -112,9 +117,17 @@ public class RecipeController {
 		} else {
 			throw new EntityWasNotFoundException(ExceptionMessageConstants.STEPT_LIST_NOT_FOUND);
 		}
+		
+		List<ToolDTO> toolDTOList = toolService.listToolsByRecipe(id);
 
 		if (log.isInfoEnabled()) {
 			log.info(" Returning from api/recipes/detail/{} :: {}", id, response.toString());
+		}
+
+		if (!toolDTOList.isEmpty()) {
+			response.setToolList(toolDTOList);
+		} else {
+			throw new EntityWasNotFoundException(ExceptionMessageConstants.TOOL_LIST_NOT_FOUND);
 		}
 
 		return new ResponseEntity<>(response, HttpStatus.OK);

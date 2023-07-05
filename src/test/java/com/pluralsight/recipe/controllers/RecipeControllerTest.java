@@ -24,11 +24,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.pluralsight.recipe.dto.IngredientDTO;
 import com.pluralsight.recipe.dto.RecipeDTO;
 import com.pluralsight.recipe.dto.StepDTO;
+import com.pluralsight.recipe.dto.ToolDTO;
 import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.services.IngredientService;
 import com.pluralsight.recipe.services.RecipeService;
 import com.pluralsight.recipe.services.ReferencesService;
 import com.pluralsight.recipe.services.StepService;
+import com.pluralsight.recipe.services.ToolService;
 import com.pluralsight.recipe.services.ValidationService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 import com.pluralsight.recipe.utils.TestUtils;
@@ -52,6 +54,9 @@ class RecipeControllerTest {
 	
 	@MockBean
 	ValidationService dtoValidationService;
+	
+	@MockBean
+	ToolService toolService;
 
 	@Autowired
 	MockMvc mockMvc;
@@ -84,10 +89,12 @@ class RecipeControllerTest {
 		RecipeDTO rDTO = TestUtils.buildRecipeDTO(true, true);
 		List<IngredientDTO> iList = TestUtils.buildIngredientDTOList(5, true);
 		List<StepDTO> sList = TestUtils.buildStepDTOList(5, true);
+		List<ToolDTO> tList = TestUtils.buildToolDTOList(5);
 
 		when(recipeService.getRecipeDTOById(1l)).thenReturn(rDTO);
 		when(ingredientService.listIngredientsByRecipe(1l)).thenReturn(iList);
 		when(stepService.listStepsByRecipe(1l)).thenReturn(sList);
+		when(toolService.listToolsByRecipe(1l)).thenReturn(tList);
 
 		mockMvc.perform(get(BASE_API + "/detail/1"))
 				.andExpect(status().isOk())

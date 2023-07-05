@@ -14,6 +14,7 @@ import com.pluralsight.recipe.dto.IngredientTypeDTO;
 import com.pluralsight.recipe.dto.RecipeDTO;
 import com.pluralsight.recipe.dto.RecipeTypeDTO;
 import com.pluralsight.recipe.dto.StepDTO;
+import com.pluralsight.recipe.dto.ToolDTO;
 import com.pluralsight.recipe.entities.Ingredient;
 import com.pluralsight.recipe.entities.IngredientReference;
 import com.pluralsight.recipe.entities.IngredientType;
@@ -450,6 +451,25 @@ public class TestUtils {
 			dto.setId(ID + Long.valueOf(i));
 			dto.setLang(LANG);
 			dto.setName(NAME);
+
+			list.add(dto);
+		}
+
+		return list;
+	}
+
+	public static List<ToolDTO> buildToolDTOList(int quantity) {
+		
+		List<ToolDTO> list = new ArrayList<>();
+
+		for (int i = 0; i < quantity; i++) {
+			ToolDTO dto = new ToolDTO();
+
+			dto.setId(ID + Long.valueOf(i));
+			dto.setLang(LANG);
+			dto.setQuantity(quantity);
+			dto.setRecipeId(ID);
+			dto.setToolRefId(ID);
 
 			list.add(dto);
 		}

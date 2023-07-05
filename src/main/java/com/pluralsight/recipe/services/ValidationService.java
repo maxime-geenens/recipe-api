@@ -4,6 +4,8 @@ import com.pluralsight.recipe.dto.IngredientDTO;
 import com.pluralsight.recipe.dto.IngredientReferenceDTO;
 import com.pluralsight.recipe.dto.RecipeDTO;
 import com.pluralsight.recipe.dto.StepDTO;
+import com.pluralsight.recipe.dto.ToolDTO;
+import com.pluralsight.recipe.dto.ToolReferenceDTO;
 import com.pluralsight.recipe.exceptions.InvalidParamException;
 
 public interface ValidationService {
@@ -35,7 +37,6 @@ public interface ValidationService {
 	 * - quantity shall not be negative <br>
 	 * - lang shall not be null, blank or empty <br>
 	 * - lang shall be a valid value form Lang Enum <br>
-	 * - name shall not be null, blank or empty <br>
 	 * - unitRefId shall not be null <br>
 	 * - ingredientRefId shall not be null <br>
 	 * - recipeId shall not be null <br>
@@ -72,14 +73,46 @@ public interface ValidationService {
 	 * - lang shall be a valid value form Lang Enum <br>
 	 * - name shall not be null, blank or empty <br>
 	 * - typeId shall not be null <br>
-	 * (- code shall be unique in DB)
 	 * 
 	 * @param requestDTO
-	 * @param checkCode (if true, evaluate if code is unique in DB)
 	 * @throws InvalidParamException
 	 * 
 	 * @return boolean
 	 */
 	boolean validateIngredientReferenceDTO(IngredientReferenceDTO ingredientRefDTO);
+	
+	/**
+	 * 
+	 * Validates ToolDTO :<br>
+	 * 
+	 * - quantity shall not be null <br>
+	 * - quantity shall not be negative <br>
+	 * - lang shall not be null, blank or empty <br>
+	 * - lang shall be a valid value form Lang Enum <br>
+	 * - toolRefId shall not be null <br>
+	 * - recipeId shall not be null <br>
+	 * 
+	 * @param ingredientDTO
+	 * @throws InvalidParamException
+	 * 
+	 * @return boolean
+	 */
+	boolean validateToolDTO(ToolDTO toolDTO);
+
+	/**
+	 * 
+	 * Validates ToolReferenceDTO :<br>
+	 * 
+	 * - lang shall not be null, blank or empty <br>
+	 * - lang shall be a valid value form Lang Enum <br>
+	 * - name shall not be null, blank or empty <br>
+	 * - typeId shall not be null <br>
+	 * 
+	 * @param requestDTO
+	 * @throws InvalidParamException
+	 * 
+	 * @return boolean
+	 */
+	boolean validateToolReferenceDTO(ToolReferenceDTO requestDTO);
 
 }

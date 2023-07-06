@@ -15,6 +15,8 @@ import com.pluralsight.recipe.dto.IngredientDTO;
 import com.pluralsight.recipe.dto.IngredientReferenceDTO;
 import com.pluralsight.recipe.dto.RecipeDTO;
 import com.pluralsight.recipe.dto.StepDTO;
+import com.pluralsight.recipe.dto.ToolDTO;
+import com.pluralsight.recipe.dto.ToolReferenceDTO;
 import com.pluralsight.recipe.entities.Recipe;
 import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.services.impl.ValidationServiceImpl;
@@ -32,8 +34,6 @@ class ValidationServiceTest {
 
 	@Mock
 	private ReferencesService referenceService;
-
-	// Validate RecipeDTO
 
 	@Test
 	void validateRecipeDTO_withGoodDTO_thenAllSucceed() {
@@ -173,8 +173,6 @@ class ValidationServiceTest {
 
 	}
 
-	// Validate IngredientDTO
-
 	@Test
 	void validateIngredientDTO_withGoodDTO_thenAllSucceed() {
 
@@ -273,8 +271,6 @@ class ValidationServiceTest {
 		assertEquals("IngredientDTO.recipeId :: " + ExceptionMessageConstants.PARAMETER_NULL, exception.getMessage());
 	}
 
-	// Validate StepDTO
-
 	@Test
 	void validateStepDTO_withGoodDTO_thenAllSucceed() {
 
@@ -372,8 +368,6 @@ class ValidationServiceTest {
 		assertEquals("StepDTO.position :: " + ExceptionMessageConstants.PARAMETER_NEGATIVE, exception.getMessage());
 	}
 
-	// Validate IngredientReferenceDTO
-
 	@Test
 	void validateIngredientReferenceDTO_withGoodDTO_thenAllSucceed() {
 
@@ -459,5 +453,25 @@ class ValidationServiceTest {
 				() -> service.validateIngredientReferenceDTO(dto));
 		assertEquals("IngredientReferenceDTO.typeId :: " + ExceptionMessageConstants.PARAMETER_NULL,
 				exception.getMessage());
+	}
+
+	@Test
+	void validateToolDTO_withGoodDTO_thenAllSucceed() {
+
+		ToolDTO dto = TestUtils.buildToolDTO(false);
+
+		boolean result = service.validateToolDTO(dto);
+
+		assertTrue(result);
+	}
+
+	@Test
+	void validateToolReferenceDTO_withGoodDTO_thenAllSucceed() {
+
+		ToolReferenceDTO dto = TestUtils.buildToolReferenceDTO(false);
+
+		boolean result = service.validateToolReferenceDTO(dto);
+
+		assertTrue(result);
 	}
 }

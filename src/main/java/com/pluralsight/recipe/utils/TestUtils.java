@@ -15,6 +15,8 @@ import com.pluralsight.recipe.dto.RecipeDTO;
 import com.pluralsight.recipe.dto.RecipeTypeDTO;
 import com.pluralsight.recipe.dto.StepDTO;
 import com.pluralsight.recipe.dto.ToolDTO;
+import com.pluralsight.recipe.dto.ToolReferenceDTO;
+import com.pluralsight.recipe.dto.ToolTypeDTO;
 import com.pluralsight.recipe.entities.Ingredient;
 import com.pluralsight.recipe.entities.IngredientReference;
 import com.pluralsight.recipe.entities.IngredientType;
@@ -22,12 +24,15 @@ import com.pluralsight.recipe.entities.Recipe;
 import com.pluralsight.recipe.entities.RecipeType;
 import com.pluralsight.recipe.entities.UnitReference;
 import com.pluralsight.recipe.entities.Step;
+import com.pluralsight.recipe.entities.Tool;
+import com.pluralsight.recipe.entities.ToolReference;
+import com.pluralsight.recipe.entities.ToolType;
 
 public class TestUtils {
-	
+
 	private TestUtils() {
 	}
-	
+
 	private static final Long ID = 1l;
 	private static final String LANG = "FR";
 	private static final int POSITION = 1;
@@ -35,7 +40,6 @@ public class TestUtils {
 	private static final String NAME = "Name";
 	private static final String DESCRIPTION = "Description";
 	private static final String SYMBOL = "g";
-	
 
 	public static String objectToJson(Object obj) {
 
@@ -50,79 +54,37 @@ public class TestUtils {
 
 		return result;
 	}
-	
-	// DTO Build
 
-	public static List<StepDTO> buildStepDTOList(int quantity, boolean withId) {
+	// RECIPE
 
-		List<StepDTO> list = new ArrayList<>();
+	public static List<Recipe> buildRecipeList(int quantity) {
+
+		List<Recipe> list = new ArrayList<>();
 
 		for (int i = 0; i < quantity; i++) {
-			StepDTO dto = new StepDTO();
-			if (withId) {
-				dto.setId(ID + Long.valueOf(i));
-			}
-			dto.setLang(LANG);
-			dto.setPosition(POSITION + i);
-			dto.setDescription(DESCRIPTION + String.valueOf(dto.getPosition()));
-			dto.setRecipeId(ID);
 
-			list.add(dto);
+			RecipeBuilder builder = new RecipeBuilder();
+
+			RecipeType type = new RecipeType(ID, LANG, NAME);
+
+			list.add(builder.addId(ID + Long.valueOf(i)).addName(NAME).addLang(LANG).addDescription(DESCRIPTION)
+					.addType(type).build());
 		}
 
 		return list;
 	}
 
-	public static final StepDTO buildStepDTO(boolean withId) {
+	public static Recipe buildRecipe(boolean withId) {
 
-		StepDTO dto = new StepDTO();
-		if (withId) {
-			dto.setId(ID);
-		}
-		dto.setLang(LANG);
-		dto.setPosition(POSITION);
-		dto.setDescription(DESCRIPTION + String.valueOf(dto.getPosition()));
-		dto.setRecipeId(ID);
+		RecipeBuilder builder = new RecipeBuilder();
 
-		return dto;
-	}
-
-	public static List<IngredientDTO> buildIngredientDTOList(int quantity, boolean withId) {
-
-		List<IngredientDTO> list = new ArrayList<>();
-
-		for (int i = 0; i < quantity; i++) {
-			IngredientDTO dto = new IngredientDTO();
-
-			if (withId) {
-				dto.setId(ID + Long.valueOf(i));
-			}
-			dto.setLang(LANG);
-			dto.setQuantity(QUANTITY);
-			dto.setIngredientRefId(ID + Long.valueOf(i));
-			dto.setRecipeId(ID);
-			dto.setUnitRefId(ID);
-
-			list.add(dto);
-		}
-
-		return list;
-	}
-
-	public static final IngredientDTO buildIngredientDTO(boolean withId) {
-
-		IngredientDTO dto = new IngredientDTO();
+		RecipeType type = new RecipeType(ID, LANG, NAME);
 
 		if (withId) {
-			dto.setId(1l);
+			builder.addId(ID);
 		}
-		dto.setLang(LANG);
-		dto.setQuantity(QUANTITY);
-		dto.setIngredientRefId(ID);
-		dto.setRecipeId(ID);
-		dto.setUnitRefId(ID);
 
-		return dto;
+		return builder.addName(NAME).addLang(LANG).addDescription(DESCRIPTION).addType(type).build();
 	}
 
 	public static List<RecipeDTO> buildRecipeDTOList(int quantity, boolean withId) {
@@ -164,60 +126,77 @@ public class TestUtils {
 		return dto;
 	}
 
-	public static IngredientReferenceDTO buildIngredientReferenceDTO(boolean withId) {
+	// STEP
 
-		IngredientReferenceDTO dto = new IngredientReferenceDTO();
+	public static Step buildStep() {
 
+		StepBuilder builder = new StepBuilder();
+		Recipe recipe = buildRecipe(true);
+
+		return builder.addId(ID).addLang(LANG).addPosition(POSITION).addRecipe(recipe).build();
+	}
+
+	public static List<Step> buildStepList(int quantity) {
+
+		List<Step> list = new ArrayList<>();
+
+		for (int i = 0; i < quantity; i++) {
+
+			StepBuilder builder = new StepBuilder();
+			Recipe recipe = buildRecipe(true);
+
+			list.add(builder.addId(ID + Long.valueOf(i)).addLang(LANG).addPosition(i + POSITION).addRecipe(recipe)
+					.build());
+		}
+		return list;
+	}
+
+	public static final StepDTO buildStepDTO(boolean withId) {
+
+		StepDTO dto = new StepDTO();
 		if (withId) {
 			dto.setId(ID);
 		}
 		dto.setLang(LANG);
-		dto.setName(NAME);
-		dto.setTypeId(ID);
+		dto.setPosition(POSITION);
+		dto.setDescription(DESCRIPTION + String.valueOf(dto.getPosition()));
+		dto.setRecipeId(ID);
 
 		return dto;
 	}
-	
-	// Entity Build
 
-	public static List<Recipe> buildRecipeList(int quantity) {
+	public static List<StepDTO> buildStepDTOList(int quantity, boolean withId) {
 
-		List<Recipe> list = new ArrayList<>();
+		List<StepDTO> list = new ArrayList<>();
 
 		for (int i = 0; i < quantity; i++) {
+			StepDTO dto = new StepDTO();
+			if (withId) {
+				dto.setId(ID + Long.valueOf(i));
+			}
+			dto.setLang(LANG);
+			dto.setPosition(POSITION + i);
+			dto.setDescription(DESCRIPTION + String.valueOf(dto.getPosition()));
+			dto.setRecipeId(ID);
 
-			RecipeBuilder builder = new RecipeBuilder();
-
-			RecipeType type = new RecipeType(ID, LANG, NAME);
-
-			list.add(builder
-					.addId(ID + Long.valueOf(i))
-					.addName(NAME)
-					.addLang(LANG)
-					.addDescription(DESCRIPTION)
-					.addType(type)
-					.build()
-					);
+			list.add(dto);
 		}
 
 		return list;
 	}
 
-	public static Recipe buildRecipe(boolean withId) {
+	// INGREDIENT
 
-		RecipeBuilder builder = new RecipeBuilder();
+	public static Ingredient buildIngredient() {
 
-		RecipeType type = new RecipeType(ID, LANG, NAME);
+		IngredientBuilder builder = new IngredientBuilder();
 
-		if (withId) {
-			builder.addId(ID);
-		}
+		UnitReference unit = new UnitReference(ID, LANG, "g", "gramme", "USI");
+		IngredientType type = new IngredientType(ID, LANG, "Type");
+		IngredientReference ref = new IngredientReference(ID, LANG, NAME, type);
+		Recipe recipe = buildRecipe(true);
 
-		return builder
-				.addName(NAME)
-				.addLang(LANG)
-				.addDescription(DESCRIPTION)
-				.addType(type)
+		return builder.addId(ID).addLang(LANG).addQuantity(QUANTITY).addUnit(unit).addIngredient(ref).addRecipe(recipe)
 				.build();
 	}
 
@@ -234,99 +213,126 @@ public class TestUtils {
 			IngredientReference ref = new IngredientReference(ID + Long.valueOf(i), LANG, "Ref", type);
 			Recipe recipe = buildRecipe(true);
 
-			list.add(builder
-					.addId(ID + Long.valueOf(i))
-					.addLang(LANG)
-					.addQuantity(QUANTITY)
-					.addUnit(unit)
-					.addIngredient(ref)
-					.addRecipe(recipe)
-					.build()
-					);
+			list.add(builder.addId(ID + Long.valueOf(i)).addLang(LANG).addQuantity(QUANTITY).addUnit(unit)
+					.addIngredient(ref).addRecipe(recipe).build());
 		}
 
 		return list;
 	}
 
-	public static Ingredient buildIngredient() {
+	public static final IngredientDTO buildIngredientDTO(boolean withId) {
 
-		IngredientBuilder builder = new IngredientBuilder();
+		IngredientDTO dto = new IngredientDTO();
 
-		UnitReference unit = new UnitReference(ID, LANG, "g", "gramme", "USI");
-		IngredientType type = new IngredientType(ID, LANG, "Type");
-		IngredientReference ref = new IngredientReference(ID, LANG, NAME, type);
+		if (withId) {
+			dto.setId(1l);
+		}
+		dto.setLang(LANG);
+		dto.setQuantity(QUANTITY);
+		dto.setIngredientRefId(ID);
+		dto.setRecipeId(ID);
+		dto.setUnitRefId(ID);
+
+		return dto;
+	}
+
+	public static List<IngredientDTO> buildIngredientDTOList(int quantity, boolean withId) {
+
+		List<IngredientDTO> list = new ArrayList<>();
+
+		for (int i = 0; i < quantity; i++) {
+			IngredientDTO dto = new IngredientDTO();
+
+			if (withId) {
+				dto.setId(ID + Long.valueOf(i));
+			}
+			dto.setLang(LANG);
+			dto.setQuantity(QUANTITY);
+			dto.setIngredientRefId(ID + Long.valueOf(i));
+			dto.setRecipeId(ID);
+			dto.setUnitRefId(ID);
+
+			list.add(dto);
+		}
+
+		return list;
+	}
+
+	// TOOL
+
+	public static Tool buildTool() {
+
+		Tool tool = new Tool();
 		Recipe recipe = buildRecipe(true);
+		ToolType type = buildToolType();
+		ToolReference ref = buildToolReference(true, type);
 
-		return builder
-				.addId(ID)
-				.addLang(LANG)
-				.addQuantity(QUANTITY)
-				.addUnit(unit)
-				.addIngredient(ref)
-				.addRecipe(recipe)
-				.build();
+		tool.setId(ID);
+		tool.setLang(LANG);
+		tool.setQuantity(1);
+		tool.setRecipe(recipe);
+		tool.setToolReference(ref);
+
+		return tool;
 	}
 
-	public static RecipeType buildRecipeType() {
-
-		RecipeType result = new RecipeType();
-
-		result.setId(ID);
-		result.setLang(LANG);
-		result.setName(NAME);
-
-		return result;
-	}
-
-	public static List<RecipeType> buildRecipeTypeList(int quantity) {
-
-		List<RecipeType> list = new ArrayList<>();
+	public static List<Tool> buildToolList(int quantity) {
+		List<Tool> list = new ArrayList<>();
 
 		for (int i = 0; i < quantity; i++) {
-			RecipeType result = new RecipeType();
 
-			result.setId(ID + Long.valueOf(i));
-			result.setLang(LANG);
-			result.setName(NAME);
+			Tool tool = new Tool();
+			Recipe recipe = buildRecipe(true);
+			ToolType type = buildToolType();
+			ToolReference ref = buildToolReference(true, type);
 
-			list.add(result);
+			tool.setId(ID + Long.valueOf(i));
+			tool.setLang(LANG);
+			tool.setQuantity(1);
+			tool.setRecipe(recipe);
+			tool.setToolReference(ref);
+
+			list.add(tool);
 		}
 
 		return list;
 	}
 
-	public static UnitReference buildUnitReference() {
+	public static ToolDTO buildToolDTO(boolean withId) {
 
-		UnitReference result = new UnitReference();
-		
-		result.setId(ID);
-		result.setLang(LANG);
-		result.setName(NAME);
-		result.setSymbol(SYMBOL);
-		result.setDescription(DESCRIPTION);
-		
-		return result;
+		ToolDTO dto = new ToolDTO();
+
+		if (withId)
+			dto.setId(ID);
+		dto.setLang(LANG);
+		dto.setQuantity(1);
+		dto.setRecipeId(ID);
+		dto.setToolRefId(ID);
+
+		return dto;
 	}
 
-	public static List<UnitReference> buildUnitReferenceList(int quantity) {
+	public static List<ToolDTO> buildToolDTOList(int quantity, boolean withId) {
 
-		List<UnitReference> list = new ArrayList<>();
+		List<ToolDTO> list = new ArrayList<>();
 
 		for (int i = 0; i < quantity; i++) {
+			ToolDTO dto = new ToolDTO();
 
-			UnitReference result = new UnitReference();
+			if (withId)
+				dto.setId(ID + Long.valueOf(i));
+			dto.setLang(LANG);
+			dto.setQuantity(quantity);
+			dto.setRecipeId(ID);
+			dto.setToolRefId(ID);
 
-			result.setId(ID + Long.valueOf(i));
-			result.setLang(LANG);
-			result.setName(NAME);
-			result.setSymbol(SYMBOL);
-			result.setDescription(DESCRIPTION);
-
-			list.add(result);
+			list.add(dto);
 		}
 
 		return list;
 	}
+
+	// REFERENCES
 
 	public static IngredientReference buildIngredientReference(boolean withId, IngredientType type) {
 
@@ -359,7 +365,147 @@ public class TestUtils {
 
 			list.add(result);
 		}
-		
+
+		return list;
+	}
+
+	public static IngredientReferenceDTO buildIngredientReferenceDTO(boolean withId) {
+
+		IngredientReferenceDTO dto = new IngredientReferenceDTO();
+
+		if (withId) {
+			dto.setId(ID);
+		}
+		dto.setLang(LANG);
+		dto.setName(NAME);
+		dto.setTypeId(ID);
+
+		return dto;
+	}
+
+	public static UnitReference buildUnitReference() {
+
+		UnitReference result = new UnitReference();
+
+		result.setId(ID);
+		result.setLang(LANG);
+		result.setName(NAME);
+		result.setSymbol(SYMBOL);
+		result.setDescription(DESCRIPTION);
+
+		return result;
+	}
+
+	public static List<UnitReference> buildUnitReferenceList(int quantity) {
+
+		List<UnitReference> list = new ArrayList<>();
+
+		for (int i = 0; i < quantity; i++) {
+
+			UnitReference result = new UnitReference();
+
+			result.setId(ID + Long.valueOf(i));
+			result.setLang(LANG);
+			result.setName(NAME);
+			result.setSymbol(SYMBOL);
+			result.setDescription(DESCRIPTION);
+
+			list.add(result);
+		}
+
+		return list;
+	}
+
+	public static ToolReference buildToolReference(boolean withId, ToolType type) {
+
+		ToolReference ref = new ToolReference();
+
+		if (withId)
+			ref.setId(ID);
+		ref.setLang(LANG);
+		ref.setName(NAME);
+		ref.setType(type);
+
+		return ref;
+	}
+
+	public static List<ToolReference> buildToolReferenceList(int quantity) {
+
+		List<ToolReference> list = new ArrayList<>();
+
+		for (int i = 0; i < quantity; i++) {
+
+			ToolReference result = new ToolReference();
+			ToolType type = buildToolType();
+
+			result.setId(ID + Long.valueOf(i));
+			result.setLang(LANG);
+			result.setName(NAME);
+			result.setType(type);
+
+			list.add(result);
+		}
+
+		return list;
+	}
+
+	public static ToolReferenceDTO buildToolReferenceDTO(boolean withId) {
+
+		ToolReferenceDTO dto = new ToolReferenceDTO();
+
+		if (withId)
+			dto.setId(ID);
+		dto.setLang(LANG);
+		dto.setName(NAME);
+		dto.setTypeId(ID);
+
+		return dto;
+	}
+
+	// TYPES
+
+	public static RecipeType buildRecipeType() {
+
+		RecipeType result = new RecipeType();
+
+		result.setId(ID);
+		result.setLang(LANG);
+		result.setName(NAME);
+
+		return result;
+	}
+
+	public static List<RecipeType> buildRecipeTypeList(int quantity) {
+
+		List<RecipeType> list = new ArrayList<>();
+
+		for (int i = 0; i < quantity; i++) {
+			RecipeType result = new RecipeType();
+
+			result.setId(ID + Long.valueOf(i));
+			result.setLang(LANG);
+			result.setName(NAME);
+
+			list.add(result);
+		}
+
+		return list;
+	}
+
+	public static List<RecipeTypeDTO> buildRecipeTypeDTO(int quantity) {
+
+		List<RecipeTypeDTO> list = new ArrayList<>();
+
+		for (int i = 0; i < quantity; i++) {
+			RecipeTypeDTO dto = new RecipeTypeDTO();
+
+			dto.setId(ID + Long.valueOf(i));
+			dto.setLang(LANG);
+			dto.setName(NAME);
+
+			list.add(dto);
+		}
+
 		return list;
 	}
 
@@ -370,7 +516,7 @@ public class TestUtils {
 		result.setId(ID);
 		result.setLang(LANG);
 		result.setName(NAME);
-		
+
 		return result;
 	}
 
@@ -392,55 +538,6 @@ public class TestUtils {
 		return list;
 	}
 
-	public static List<Step> buildStepList(int quantity) {
-
-		List<Step> list = new ArrayList<>();
-
-		for (int i = 0; i < quantity; i++) {
-
-			StepBuilder builder = new StepBuilder();
-			Recipe recipe = buildRecipe(true);
-			
-			list.add(builder
-					.addId(ID + Long.valueOf(i))
-					.addLang(LANG)
-					.addPosition(i + POSITION)
-					.addRecipe(recipe)
-					.build());
-		}
-		return list;
-	}
-
-	public static Step buildStep() {
-
-		StepBuilder builder = new StepBuilder();
-		Recipe recipe = buildRecipe(true);
-		
-		return builder
-				.addId(ID)
-				.addLang(LANG)
-				.addPosition(POSITION)
-				.addRecipe(recipe)
-				.build();
-	}
-
-	public static List<RecipeTypeDTO> buildRecipeTypeDTO(int quantity) {
-
-		List<RecipeTypeDTO> list = new ArrayList<>();
-		
-		for(int i = 0; i < quantity; i++) {
-			RecipeTypeDTO dto = new RecipeTypeDTO();
-			
-			dto.setId(ID + Long.valueOf(i));
-			dto.setLang(LANG);
-			dto.setName(NAME);
-			
-			list.add(dto);
-		}
-		
-		return list;
-	}
-
 	public static List<IngredientTypeDTO> buildIngredientTypeDTOList(int quantity) {
 
 		List<IngredientTypeDTO> list = new ArrayList<>();
@@ -458,20 +555,48 @@ public class TestUtils {
 		return list;
 	}
 
-	public static List<ToolDTO> buildToolDTOList(int quantity) {
-		
-		List<ToolDTO> list = new ArrayList<>();
+	public static ToolType buildToolType() {
+
+		ToolType type = new ToolType();
+
+		type.setId(ID);
+		type.setLang(LANG);
+		type.setName(NAME);
+
+		return type;
+	}
+
+	public static List<ToolType> buildToolTypeList(int quantity) {
+
+		List<ToolType> list = new ArrayList<>();
 
 		for (int i = 0; i < quantity; i++) {
-			ToolDTO dto = new ToolDTO();
 
-			dto.setId(ID + Long.valueOf(i));
-			dto.setLang(LANG);
-			dto.setQuantity(quantity);
-			dto.setRecipeId(ID);
-			dto.setToolRefId(ID);
+			ToolType type = new ToolType();
 
-			list.add(dto);
+			type.setId(ID + Long.valueOf(i));
+			type.setLang(LANG);
+			type.setName(NAME);
+
+			list.add(type);
+		}
+
+		return list;
+	}
+
+	public static List<ToolTypeDTO> buildToolTypeDTOList(int quantity) {
+
+		List<ToolTypeDTO> list = new ArrayList<>();
+
+		for (int i = 0; i < quantity; i++) {
+
+			ToolTypeDTO type = new ToolTypeDTO();
+
+			type.setId(ID + Long.valueOf(i));
+			type.setLang(LANG);
+			type.setName(NAME);
+
+			list.add(type);
 		}
 
 		return list;

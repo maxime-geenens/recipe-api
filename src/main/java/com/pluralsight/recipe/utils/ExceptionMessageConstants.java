@@ -16,6 +16,7 @@ public class ExceptionMessageConstants {
 	public static final String INGREDIENT_NOT_FOUND = "Ingredient not found.";
 	public static final String INGREDIENT_TYPE_NOT_FOUND = "Ingredient type not found.";
 	public static final String TOOL_LIST_NOT_FOUND = "Tool list not found for this recipe.";
+	public static final String TOOL_TYPE_NOT_FOUND = "Tool type not found.";
 
 	// INVALID PARAMETER
 	public static final String PARAMETER_NULL = "Parameter shall not be null.";

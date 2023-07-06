@@ -89,7 +89,7 @@ class RecipeControllerTest {
 		RecipeDTO rDTO = TestUtils.buildRecipeDTO(true, true);
 		List<IngredientDTO> iList = TestUtils.buildIngredientDTOList(5, true);
 		List<StepDTO> sList = TestUtils.buildStepDTOList(5, true);
-		List<ToolDTO> tList = TestUtils.buildToolDTOList(5);
+		List<ToolDTO> tList = TestUtils.buildToolDTOList(5, true);
 
 		when(recipeService.getRecipeDTOById(1l)).thenReturn(rDTO);
 		when(ingredientService.listIngredientsByRecipe(1l)).thenReturn(iList);

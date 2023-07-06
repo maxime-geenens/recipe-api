@@ -22,6 +22,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.pluralsight.recipe.dto.IngredientReferenceDTO;
 import com.pluralsight.recipe.dto.IngredientTypeDTO;
 import com.pluralsight.recipe.dto.RecipeTypeDTO;
+import com.pluralsight.recipe.dto.ToolReferenceDTO;
+import com.pluralsight.recipe.dto.ToolTypeDTO;
 import com.pluralsight.recipe.dto.UnitReferenceDTO;
 import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.services.ReferencesService;
@@ -161,6 +163,61 @@ class ReferenceControllerTest {
 		when(service.listRecipeTypesByLang("FR")).thenReturn(list);
 		
 		mockMvc.perform(get(BASE_API + "/recipes/type/lang/FR"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", Matchers.hasSize(1)))
+				.andExpect(jsonPath("$[0].id", Matchers.is(1)))
+				.andExpect(jsonPath("$[0].lang", Matchers.is("FR")))
+				.andExpect(jsonPath("$[0].name", Matchers.is("Name")));
+		
+	}
+
+	@Test
+	void testAddToolRef() throws Exception {
+
+		ToolReferenceDTO dto = new ToolReferenceDTO(1l, "FR", "Name", 1l);
+
+		when(dtoValidationService.validateToolReferenceDTO(dto)).thenReturn(true);
+		when(service.addToolRef(dto)).thenReturn(dto);
+
+		mockMvc.perform(
+				post(BASE_API + "/tool").content(TestUtils.objectToJson(dto)).contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.id", Matchers.is(1)))
+				.andExpect(jsonPath("$.lang", Matchers.is("FR")))
+				.andExpect(jsonPath("$.name", Matchers.is("Name")))
+				.andExpect(jsonPath("$.typeId", Matchers.is(1)));
+
+	}
+	
+	@Test
+	void testFetchToolRefListByTypeAndLang() throws Exception {
+		
+		List<ToolReferenceDTO> list = new ArrayList<>();
+		ToolReferenceDTO dto = TestUtils.buildToolReferenceDTO(true);
+		list.add(dto);
+		
+		when(service.listToolsRefByTypeAndLang("Type", "FR")).thenReturn(list);
+		
+		mockMvc.perform(get(BASE_API + "/tools/type/Type/lang/FR"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", Matchers.hasSize(1)))
+				.andExpect(jsonPath("$[0].id", Matchers.is(1)))
+				.andExpect(jsonPath("$[0].lang", Matchers.is("FR")))
+				.andExpect(jsonPath("$[0].name", Matchers.is("Name")))
+				.andExpect(jsonPath("$[0].typeId", Matchers.is(1)));
+
+	}
+
+	@Test
+	void testFetchToolTypeListLang() throws Exception {
+
+		List<ToolTypeDTO> list = new ArrayList<>();
+		ToolTypeDTO dto = new ToolTypeDTO(1l, "FR", "Name");
+		list.add(dto);
+
+		when(service.listToolTypesByLang("FR")).thenReturn(list);
+		
+		mockMvc.perform(get(BASE_API + "/tools/typeByLang/FR"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$", Matchers.hasSize(1)))
 				.andExpect(jsonPath("$[0].id", Matchers.is(1)))

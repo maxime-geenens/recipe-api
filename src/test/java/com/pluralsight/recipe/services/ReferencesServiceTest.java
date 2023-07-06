@@ -16,22 +16,32 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.pluralsight.recipe.dto.IngredientReferenceDTO;
 import com.pluralsight.recipe.dto.IngredientTypeDTO;
 import com.pluralsight.recipe.dto.RecipeTypeDTO;
+import com.pluralsight.recipe.dto.ToolReferenceDTO;
+import com.pluralsight.recipe.dto.ToolTypeDTO;
 import com.pluralsight.recipe.dto.UnitReferenceDTO;
 import com.pluralsight.recipe.dto.mappers.IngredientReferenceMapper;
 import com.pluralsight.recipe.dto.mappers.IngredientTypeMapper;
 import com.pluralsight.recipe.dto.mappers.RecipeTypeMapper;
+import com.pluralsight.recipe.dto.mappers.ToolReferenceMapper;
+import com.pluralsight.recipe.dto.mappers.ToolTypeMapper;
 import com.pluralsight.recipe.dto.mappers.UnitReferenceMapper;
 import com.pluralsight.recipe.entities.IngredientReference;
 import com.pluralsight.recipe.entities.IngredientType;
 import com.pluralsight.recipe.entities.QIngredientReference;
 import com.pluralsight.recipe.entities.QIngredientType;
 import com.pluralsight.recipe.entities.QRecipeType;
+import com.pluralsight.recipe.entities.QToolReference;
+import com.pluralsight.recipe.entities.QToolType;
 import com.pluralsight.recipe.entities.QUnitReference;
 import com.pluralsight.recipe.entities.RecipeType;
+import com.pluralsight.recipe.entities.ToolReference;
+import com.pluralsight.recipe.entities.ToolType;
 import com.pluralsight.recipe.entities.UnitReference;
 import com.pluralsight.recipe.repositories.IngredientReferenceRepository;
 import com.pluralsight.recipe.repositories.IngredientTypeRepository;
 import com.pluralsight.recipe.repositories.RecipeTypeRepository;
+import com.pluralsight.recipe.repositories.ToolReferenceRepository;
+import com.pluralsight.recipe.repositories.ToolTypeRepository;
 import com.pluralsight.recipe.repositories.UnitReferenceRepository;
 import com.pluralsight.recipe.services.impl.ReferencesServiceImpl;
 import com.pluralsight.recipe.utils.TestUtils;
@@ -67,9 +77,21 @@ class ReferencesServiceTest {
 	@Mock
 	private IngredientTypeMapper ingredientTypeMapper;
 
-	@DisplayName("JUnit Test for getRecipeTypeByCode method")
+	@Mock
+	private ToolReferenceRepository toolRefRepository;
+
+	@Mock
+	private ToolTypeRepository toolTypeRepository;
+
+	@Mock
+	private ToolReferenceMapper toolRefMapper;
+
+	@Mock
+	private ToolTypeMapper toolTypeMapper;
+
+	@DisplayName("JUnit Test for getRecipeTypeById method")
 	@Test
-	void givenTypeCode_whenGetRecipeTypeByCode_thenReturnRecipeType() {
+	void givenTypeCode_whenGetRecipeTypeById_thenReturnRecipeType() {
 
 		RecipeType entity = TestUtils.buildRecipeType();
 		Long id = 1l;
@@ -223,6 +245,68 @@ class ReferencesServiceTest {
 			.isNotNull()
 			.isNotEmpty()
 			.hasSize(5);
+	}
+
+	@DisplayName("JUnit Test for listToolsByTypeAndLang method")
+	@Test
+	void givenTypeAndLang_whenListToolsByTypeAndLang_thenReturnToolReferenceDTOList() {
+		
+		List<ToolReference> list = TestUtils.buildToolReferenceList(5);
+
+		QToolReference qToolRef = QToolReference.toolReference;
+		Predicate predicate = qToolRef.type.name.eq("Name").and(qToolRef.lang.eq("FR"));
+
+		given(toolRefRepository.findAll(predicate)).willReturn(list);
+
+		List<ToolReferenceDTO> result = service.listToolsRefByTypeAndLang("Name", "FR");
+
+		assertThat(result)
+			.isNotNull()
+			.isNotEmpty()
+			.hasSize(5);
+	}
+
+	@DisplayName("JUnit Test for listToolTypesByLang method")
+	@Test
+	void givenTypeAndLang_whenListToolTypesByLang_thenReturnToolTypeDTOList() {
+
+		List<ToolType> list = TestUtils.buildToolTypeList(5);
+		List<ToolTypeDTO> dtoList = TestUtils.buildToolTypeDTOList(5);
+
+		QToolType qToolType = QToolType.toolType;
+		Predicate predicate = qToolType.lang.eq("FR");
+
+		given(toolTypeRepository.findAll(predicate)).willReturn(list);
+		
+		for (int i = 0; i < list.size(); i++) {
+			given(toolTypeMapper.mapToDTO(list.get(i))).willReturn(dtoList.get(i));
+		}
+
+		List<ToolTypeDTO> result = service.listToolTypesByLang("FR");
+
+		assertThat(result)
+			.isNotNull()
+			.isNotEmpty()
+			.hasSize(5);
+	}
+
+	@DisplayName("JUnit Test for addToolRef method")
+	@Test
+	void givenToolReferenceDTO_whenAddToolRef_thenReturnToolReferenceDTO() {
+
+		ToolType type = TestUtils.buildToolType();
+		ToolReferenceDTO dto = TestUtils.buildToolReferenceDTO(true);
+		ToolReference entity1 = TestUtils.buildToolReference(true, type);
+		ToolReference entity2 = TestUtils.buildToolReference(true, type);
+
+		given(toolRefMapper.mapToEntity(dto)).willReturn(entity1);
+		given(toolRefRepository.save(entity1)).willReturn(entity2);
+		given(toolRefMapper.mapToDTO(entity2)).willReturn(dto);
+
+		ToolReferenceDTO result = service.addToolRef(dto);
+
+		assertThat(result).isNotNull();
+		assertThat(result.getId()).isEqualTo(1l);
 	}
 
 }

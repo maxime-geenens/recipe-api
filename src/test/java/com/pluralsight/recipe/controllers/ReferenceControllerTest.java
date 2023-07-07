@@ -144,7 +144,7 @@ class ReferenceControllerTest {
 		when(service.addIngredientRef(dto)).thenReturn(dto);
 
 		mockMvc.perform(
-				post(BASE_API + "/ingredient").content(TestUtils.objectToJson(dto)).contentType(MediaType.APPLICATION_JSON))
+				post(BASE_API + "/ingredient/add").content(TestUtils.objectToJson(dto)).contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.id", Matchers.is(1)))
 				.andExpect(jsonPath("$.lang", Matchers.is("FR")))
@@ -180,7 +180,7 @@ class ReferenceControllerTest {
 		when(service.addToolRef(dto)).thenReturn(dto);
 
 		mockMvc.perform(
-				post(BASE_API + "/tool").content(TestUtils.objectToJson(dto)).contentType(MediaType.APPLICATION_JSON))
+				post(BASE_API + "/tool/add").content(TestUtils.objectToJson(dto)).contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.id", Matchers.is(1)))
 				.andExpect(jsonPath("$.lang", Matchers.is("FR")))

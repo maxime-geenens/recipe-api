@@ -108,13 +108,13 @@ public class ReferenceController {
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
-	@PostMapping(path = "/ingredient", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "/ingredient/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
 	public ResponseEntity<IngredientReferenceDTO> addIngredientReference(
 			@RequestBody(required = true) IngredientReferenceDTO requestDTO) {
 
 		if (log.isInfoEnabled()) {
-			log.info(" POST API Call api/references/ingredient :: {} ", requestDTO);
+			log.info(" POST API Call api/references/ingredient/add :: {} ", requestDTO);
 		}
 
 		if (requestDTO != null) {
@@ -127,7 +127,7 @@ public class ReferenceController {
 		IngredientReferenceDTO response = referenceService.addIngredientRef(requestDTO);
 
 		if (log.isInfoEnabled()) {
-			log.info(" Returning from api/references/ingredient :: {} ", response);
+			log.info(" Returning from api/references/ingredient/add :: {} ", response);
 		}
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
@@ -195,13 +195,13 @@ public class ReferenceController {
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
-	@PostMapping(path = "/tool", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "/tool/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
 	public ResponseEntity<ToolReferenceDTO> addToolReference(
 			@RequestBody(required = true) ToolReferenceDTO requestDTO) {
 
 		if (log.isInfoEnabled()) {
-			log.info(" POST API Call api/references/tool :: {} ", requestDTO);
+			log.info(" POST API Call api/references/tool/add :: {} ", requestDTO);
 		}
 
 		if (requestDTO != null) {
@@ -214,7 +214,7 @@ public class ReferenceController {
 		ToolReferenceDTO response = referenceService.addToolRef(requestDTO);
 
 		if (log.isInfoEnabled()) {
-			log.info(" Returning from api/references/tool :: {} ", response);
+			log.info(" Returning from api/references/tool/add :: {} ", response);
 		}
 
 		return new ResponseEntity<>(response, HttpStatus.OK);

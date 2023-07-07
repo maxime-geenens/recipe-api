@@ -28,14 +28,14 @@ public class Recipe {
 	@Column(name = "id")
 	private Long id;
 
+	@Column(name = "lang")
+	private String lang;
+
 	@Column(name = "name")
 	private String name;
 
 	@Column(name = "description")
 	private String description;
-
-	@Column(name = "lang")
-	private String lang;
 
 	/**
 	 * To ensure that no duplicates are created in the table

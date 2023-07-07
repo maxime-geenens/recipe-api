@@ -16,6 +16,9 @@ INSERT INTO UNIT_REFERENCE (lang, symbol, name, description) VALUES
 	(@fr, 'mL', 'Millitre', 'USI'),
 	(@fr, 'cL', 'Centilitre', 'USI'),
 	(@fr, 'L', 'Litre', 'USI'),
+	(@fr, 'tr.', 'Tranche', 'Sans unité de mesure'),
+	(@fr, 'gous.', 'Gousse', 'Sans unité de mesure'),
+	(@fr, 'morc.', 'Morceau', 'Sans unité de mesure'),
 	(@fr, '-', '-', 'Sans unité de mesure');
 	
 -- EN --
@@ -31,6 +34,9 @@ INSERT INTO UNIT_REFERENCE (lang, symbol, name, description) VALUES
 	(@en, 'mL', 'Milliter', 'USI'),
 	(@en, 'cL', 'Centiliter', 'USI'),
 	(@en, 'L', 'Liter', 'USI'),
+	(@en, 'sl.', 'Slice', 'Without measure unit'),
+	(@en, 'pi.', 'Piece', 'Without measure unit'),
+	(@en, 'clov.', 'Clove', 'Without measure unit'),
 	(@en, '-', '-', 'Without measure unit');
 	
 -- PT --
@@ -46,6 +52,9 @@ INSERT INTO UNIT_REFERENCE (lang, symbol, name, description) VALUES
 	(@pt, 'mL', 'Millitro', 'USI'),
 	(@pt, 'cL', 'Centilitro', 'USI'),
 	(@pt, 'L', 'Litro', 'USI'),
+	(@pt, 'fa.', 'Fatia', 'Sem unidade de medida'),
+	(@pt, 'den.', 'Dente', 'Sem unidade de medida'),
+	(@pt, 'ped.', 'Pedaço', 'Sem unidade de medida'),
 	(@pt, '-', '-', 'Sem unidade de medida');
 	
 
@@ -140,18 +149,6 @@ INSERT INTO INGREDIENT_TYPE (lang, name) VALUES
 	(@en, 'Pastry'),
 	(@en, 'Bread'),
 	(@en, 'Other');
-
---- TOOL ---
--- FR --
-
-
--- EN --
-
-
--- PT --
-
-
-
 
 -- PT --
 INSERT INTO INGREDIENT_TYPE (lang, name) VALUES
@@ -278,35 +275,311 @@ INSERT INTO INGREDIENT_REFERENCE (lang, name, type) VALUES
 	(@pt, 'Pão de forma', SELECT it.id FROM INGREDIENT_TYPE it WHERE it.lang = @pt AND it.name = 'Pão');
 
 
---- RECIPE | INGREDIENT | STEP (Complete recipe) ---
+--- TOOL_TYPE ---
 -- FR --
-
-
+INSERT INTO TOOL_TYPE (lang, name) VALUES
+	(@fr, 'Cuisson'),
+	(@fr, 'Contenant'),
+	(@fr, 'Découpe'),
+	(@fr, 'Mélange'),
+	(@fr, 'Couverts'),
+	(@fr, 'Autre');
 
 -- EN --
-
-
+INSERT INTO TOOL_TYPE (lang, name) VALUES
+	(@en, 'Cooking'),
+	(@en, 'Container'),
+	(@en, 'Cutting'),
+	(@en, 'Mixing'),
+	(@en, 'Tableware'),
+	(@en, 'Other');
 
 -- PT --
+INSERT INTO TOOL_TYPE (lang, name) VALUES
+	(@pt, 'Cozedura'),
+	(@pt, 'Recipiente'),
+	(@pt, 'Corte'),
+	(@pt, 'Mistura'),
+	(@pt, 'Talheres'),
+	(@pt, 'Outro');
+	
+
+--- TOOL_REFERENCE ---
+-- FR --
+INSERT INTO TOOL_REFERENCE (lang, name, type) VALUES
+	(@fr, 'Plaques de cuisson', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Cuisson'),
+	(@fr, 'Four', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Cuisson'),
+	(@fr, 'Cuiseur vapeur', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Cuisson'),
+	(@fr, 'Grille-pain', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Cuisson'),
+	(@fr, 'Appareil à croques', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Cuisson'),
+	(@fr, 'Appareil à gauffres', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Cuisson'),
+	(@fr, 'Plancha', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Cuisson'),
+	(@fr, 'Pierrade', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Cuisson'),
+	(@fr, 'Appareil à raclette', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Cuisson'),
+	(@fr, 'Barbecue', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Cuisson'),
+	(@fr, 'Chalumeau', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Cuisson'),
+	(@fr, 'Four Micro-ondes', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Cuisson'),
+	(@fr, 'Frtteuse', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Cuisson'),
+	(@fr, 'Tournebroche', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Cuisson'),
+	(@fr, 'Bouilloire', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Cuisson'),
+	(@fr, 'Moule à gateaux', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Contenant'),
+	(@fr, 'Moules à tartes', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Contenant'),
+	(@fr, 'Marmtte', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Contenant'),
+	(@fr, 'Terrine en fonte', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Contenant'),
+	(@fr, 'Cocotte', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Contenant'),
+	(@fr, 'Casserole', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Contenant'),
+	(@fr, 'Poêle', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Contenant'),
+	(@fr, 'Poêle à crêpes', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Contenant'),
+	(@fr, 'Tajine', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Contenant'),
+	(@fr, 'Wok', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Contenant'),
+	(@fr, 'Bocal', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Contenant'),
+	(@fr, 'Bol', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Contenant'),
+	(@fr, 'Tasse', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Contenant'),
+	(@fr, 'Mug', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Contenant'),
+	(@fr, 'Saladier', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Contenant'),
+	(@fr, 'Cassolette', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Contenant'),
+	(@fr, 'Verre doseur', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Contenant'),
+	(@fr, 'Plat (four)', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Contenant'),
+	(@fr, 'Verre à vin', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Contenant'),
+	(@fr, 'Verre à bière', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Contenant'),
+	(@fr, 'Verre à shot', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Contenant'),
+	(@fr, 'Ciseaux', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Découpe'),
+	(@fr, 'Râpe', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Découpe'),
+	(@fr, 'Couteau à viande', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Découpe'),
+	(@fr, 'Couteau à légume', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Découpe'),
+	(@fr, 'Couteau à pain', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Découpe'),
+	(@fr, 'Épluche-légumes', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Découpe'),
+	(@fr, 'Planche à découper', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Découpe'),
+	(@fr, 'Hachoir', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Découpe'),
+	(@fr, 'Passeuse à soupe', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Découpe'),
+	(@fr, 'Cuillère en bois', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Mélange'),
+	(@fr, 'Spatule en bois', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Mélange'),
+	(@fr, 'Spatule en silicone', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Mélange'),
+	(@fr, 'Batteur/Mixeur', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Mélange'),
+	(@fr, 'Fouet', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Mélange'),
+	(@fr, 'Louche', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Mélange'),
+	(@fr, 'Shaker', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Mélange'),
+	(@fr, 'Couteau', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Couverts'),
+	(@fr, 'Fourchette', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Couverts'),
+	(@fr, 'Cuillère à café', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Couverts'),
+	(@fr, 'Cuillère à soupe', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Couverts'),
+	(@fr, 'Assiette', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Couverts'),
+	(@fr, 'Assiette à dessert', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Couverts'),
+	(@fr, 'Baguettes', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Couverts'),
+	(@fr, 'Cure-dent', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Couverts'),
+	(@fr, 'Paille', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Couverts'),
+	(@fr, 'Papier aluminium', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Autre'),
+	(@fr, 'Papier cuisson', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Autre'),
+	(@fr, 'Film plastique', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Autre'),
+	(@fr, 'Couvercle', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Autre'),
+	(@fr, 'Thermomètre de cuisson', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Autre'),
+	(@fr, 'Chinois', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Autre'),
+	(@fr, 'Passoire', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Autre'),
+	(@fr, 'Décapsuleur', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Autre'),
+	(@fr, 'Tire-bouchon', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Autre'),
+	(@fr, 'Entonnoir', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Autre'),
+	(@fr, 'Mortier et pilon', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Autre'),
+	(@fr, 'Manique', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Autre'),
+	(@fr, 'Serviette', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Autre'),
+	(@fr, 'Minuteur', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Autre'),
+	(@fr, 'Ouvre-boîte', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Autre'),
+	(@fr, 'Pelle à tarte', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Autre'),
+	(@fr, 'Presse-purée', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Autre');
+
+-- EN --
+INSERT INTO TOOL_REFERENCE (lang, name, type) VALUES
+	(@en, 'Cooking hob', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Cooking'),
+	(@en, 'Oven', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Cooking'),
+	(@en, 'Steamer', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Cooking'),
+	(@en, 'Toaster', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Cooking'),
+	(@en, 'Sandwich toaster', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Cooking'),
+	(@en, 'Waffle toaster', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Cooking'),
+	(@en, 'Plancha', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Cooking'),
+	(@fr, 'Stone-grill', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Cuisson'),
+	(@en, 'Raclette grill', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Cooking'),
+	(@en, 'Barbecue', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Cooking'),
+	(@en, 'Torch', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Cooking'),
+	(@en, 'Micro-wave oven', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Cooking'),
+	(@en, 'Fryer', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Cooking'),
+	(@en, 'Roasting sptt', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Cooking'),
+	(@en, 'Kettle', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Cooking'),
+	(@en, 'Cake mould', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Container'),
+	(@en, 'Pie mould', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Container'),
+	(@en, 'Pot', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Container'),
+	(@en, 'Cast-iron terrine', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Container'),
+	(@en, 'Cooker', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Container'),
+	(@en, 'Pan', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Container'),
+	(@en, 'Frying pan', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Container'),
+	(@en, 'Crepe pan', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Container'),
+	(@en, 'Tajine', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Container'),
+	(@en, 'Wok', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Container'),
+	(@en, 'Jar', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Container'),
+	(@en, 'Bowl', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Container'),
+	(@en, 'Cup', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Container'),
+	(@en, 'Mug', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Container'),
+	(@en, 'Salad bowl', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Container'),
+	(@en, 'Cassolette', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Container'),
+	(@en, 'Measuring glass', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Container'),
+	(@en, 'Oven platter', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Container'),
+	(@en, 'Wine glass', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Container'),
+	(@en, 'Beer glass', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Container'),
+	(@en, 'Shot glass', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Container'),
+	(@en, 'Scissors', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Cutting'),
+	(@en, 'Rasp', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Cutting'),
+	(@en, 'Meat knife', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Cutting'),
+	(@en, 'Vegetable knife', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Cutting'),
+	(@en, 'Bread knife', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Cutting'),
+	(@en, 'Vegetable peeler', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Cutting'),
+	(@en, 'Cutting board', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Cutting'),
+	(@en, 'Grinder', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Cutting'),
+	(@en, 'Soupe strainer', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Cutting'),
+	(@en, 'Wooden spoon', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Mixing'),
+	(@en, 'Wooden spatula', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Mixing'),
+	(@en, 'Silicon spatula', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Mixing'),
+	(@en, 'Beater/Mixer', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Mixing'),
+	(@en, 'Whisk', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Mixing'),
+	(@en, 'Laddle', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Mixing'),
+	(@en, 'Shaker', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Mixing'),
+	(@en, 'Knife', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Tableware'),
+	(@en, 'Fork', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Tableware'),
+	(@en, 'Tea spoon', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Tableware'),
+	(@en, 'Table spoon', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Tableware'),
+	(@en, 'Plate', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Tableware'),
+	(@en, 'Dessert plate', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Tableware'),
+	(@en, 'Chopsticks', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Tableware'),
+	(@en, 'Toothpick', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Tableware'),
+	(@en, 'Straw', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Tableware'),
+	(@en, 'Aluminium foil', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Other'),
+	(@en, 'Baking paper', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Other'),
+	(@en, 'Plastic film', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Other'),
+	(@en, 'Cover', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Other'),
+	(@en, 'Cooking thermometer', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Other'),
+	(@en, 'Strainer', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Other'),
+	(@en, 'Colander', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Other'),
+	(@en, 'Bottle opener', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Other'),
+	(@en, 'Corkscrew', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Other'),
+	(@en, 'Funnel', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Other'),
+	(@en, 'Mortar and pestle', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Other'),
+	(@en, 'Potholder', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Other'),
+	(@en, 'Towel', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Other'),
+	(@en, 'Timer', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Other'),
+	(@en, 'Can-opener', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Other'),
+	(@en, 'Pie server', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Other'),
+	(@en, 'Potato masher', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @en AND tt.name = 'Other');
+
+-- PT --
+INSERT INTO TOOL_REFERENCE (lang, name, type) VALUES
+	(@pt, 'Fogão', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Cozedura'),
+	(@pt, 'Forno', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Cozedura'),
+	(@pt, 'Vaporeira', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Cozedura'),
+	(@pt, 'Torradeira', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Cozedura'),
+	(@pt, 'Tostadeira', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Cozedura'),
+	(@pt, 'Plancha', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Cozedura'),
+	(@fr, 'Pierrada', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @fr AND tt.name = 'Cuisson'),
+	(@pt, 'Raclette', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Cozedura'),
+	(@pt, 'Churrasqueira', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Cozedura'),
+	(@pt, 'Maçarico', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Cozedura'),
+	(@pt, 'Micro-ondas', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Cozedura'),
+	(@pt, 'Frttadeira', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Cozedura'),
+	(@pt, 'Espeto', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Cozedura'),
+	(@pt, 'Chaleira elétrica', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Cozedura'),
+	(@pt, 'Forma para bolo', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Recipiente'),
+	(@pt, 'Forma para torta', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Recipiente'),
+	(@pt, 'Panela', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Recipiente'),
+	(@pt, 'Terrina de ferro fundido', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Recipiente'),
+	(@pt, 'Panela de pressão', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Recipiente'),
+	(@pt, 'Caçarola', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Recipiente'),
+	(@pt, 'Frigideira', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Recipiente'),
+	(@pt, 'Frigideira para crepes', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Recipiente'),
+	(@pt, 'Tajine', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Recipiente'),
+	(@pt, 'Wok', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Recipiente'),
+	(@pt, 'Jarra', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Recipiente'),
+	(@pt, 'Tigela', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Recipiente'),
+	(@pt, 'Xícara', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Recipiente'),
+	(@pt, 'Caneca', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Recipiente'),
+	(@pt, 'Saladeira', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Recipiente'),
+	(@pt, 'Travessa', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Recipiente'),
+	(@pt, 'Copo medidor', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Recipiente'),
+	(@pt, 'Prato (para forno)', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Recipiente'),
+	(@pt, 'Copo para vinho', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Recipiente'),
+	(@pt, 'Copo para cerveja', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Recipiente'),
+	(@pt, 'Copo de shot', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Recipiente'),
+	(@pt, 'Tesouras', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Corte'),
+	(@pt, 'Ralador', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Corte'),
+	(@pt, 'Faca para carne', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Corte'),
+	(@pt, 'Faca para legume', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Corte'),
+	(@pt, 'Faca para pão', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Corte'),
+	(@pt, 'Descascador de legumes', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Corte'),
+	(@pt, 'Tábua de corte', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Corte'),
+	(@pt, 'Picador', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Corte'),
+	(@pt, 'Mixer de sopa', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Corte'),
+	(@pt, 'Colher de madeira', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Mistura'),
+	(@pt, 'Espátula de madeira', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Mistura'),
+	(@pt, 'Espátula de silicone', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Mistura'),
+	(@pt, 'Misturador', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Mistura'),
+	(@pt, 'Batedor', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Mistura'),
+	(@pt, 'Concha', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Mistura'),
+	(@pt, 'Shaker', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Mistura'),
+	(@pt, 'Faca', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Talheres'),
+	(@pt, 'Garfo', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Talheres'),
+	(@pt, 'Colher de chá', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Talheres'),
+	(@pt, 'Colher de sopa', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Talheres'),
+	(@pt, 'Prato', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Talheres'),
+	(@pt, 'Prato para sobremesa', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Talheres'),
+	(@pt, 'Hashi', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Talheres'),
+	(@pt, 'Paltto de dente', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Talheres'),
+	(@pt, 'Canudinho', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Talheres'),
+	(@pt, 'Papel alumino', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Outro'),
+	(@pt, 'Papel manteiga', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Outro'),
+	(@pt, 'Papel filme', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Outro'),
+	(@pt, 'Tampa', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Outro'),
+	(@pt, 'Termômetro de cozinha', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Outro'),
+	(@pt, 'Peneira', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Outro'),
+	(@pt, 'Passador', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Outro'),
+	(@pt, 'Abridor de garrafa', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Outro'),
+	(@pt, 'Saca-rolha', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Outro'),
+	(@pt, 'Funil', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Outro'),
+	(@pt, 'Almofariz e pilão', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Outro'),
+	(@pt, 'Porta-panelas', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Outro'),
+	(@pt, 'Toalha', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Outro'),
+	(@pt, 'Temporizador', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Outro'),
+	(@pt, 'Abridor de lata', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Outro'),
+	(@pt, 'Servidor de tortas', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Outro'),
+	(@pt, 'Espremedor de batatas', SELECT tt.id FROM TOOL_TYPE tt WHERE tt.lang = @pt AND tt.name = 'Outro');
 
 
+--- RECIPE | INGREDIENT | STEP | TOOL (Complete recipe) ---
+-- FR --
+INSERT INTO RECIPE (lang, name, description, code, type) VALUES
+	(@fr, 'Tartinade de champignons', 'Recette de tartinade de champignons pour 4 personnes','FRTartinade de champignons', SELECT rt.id FROM RECIPE_TYPE rt WHERE rt.lang = @fr AND rt.name = 'Entrée');
 
+INSERT INTO INGREDIENT (lang, quantity, unit, ingredient, recipe_id) VALUES
+	(@fr, 500.0, SELECT ur.id FROM UNIT_REFERENCE ur WHERE ur.lang = @fr AND ur.symbol = 'g', SELECT ir.id FROM INGREDIENT_REFERENCE ir WHERE ir.lang = @fr AND ir.name = 'Champignon de Paris', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
+	(@fr, 5.0, SELECT ur.id FROM UNIT_REFERENCE ur WHERE ur.lang = @fr AND ur.symbol = 'tr.', SELECT ir.id FROM INGREDIENT_REFERENCE ir WHERE ir.lang = @fr AND ir.name = 'Pain de mie', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
+	(@fr, 100.0, SELECT ur.id FROM UNIT_REFERENCE ur WHERE ur.lang = @fr AND ur.symbol = 'g', SELECT ir.id FROM INGREDIENT_REFERENCE ir WHERE ir.lang = @fr AND ir.name = 'Beurre', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
+	(@fr, 4.0, SELECT ur.id FROM UNIT_REFERENCE ur WHERE ur.lang = @fr AND ur.symbol = 'gous.', SELECT ir.id FROM INGREDIENT_REFERENCE ir WHERE ir.lang = @fr AND ir.name = 'Ail', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
+	(@fr, 3.0, SELECT ur.id FROM UNIT_REFERENCE ur WHERE ur.lang = @fr AND ur.symbol = 'cs', SELECT ir.id FROM INGREDIENT_REFERENCE ir WHERE ir.lang = @fr AND ir.name = 'Origan', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
+	(@fr, 5.0, SELECT ur.id FROM UNIT_REFERENCE ur WHERE ur.lang = @fr AND ur.symbol = 'cL', SELECT ir.id FROM INGREDIENT_REFERENCE ir WHERE ir.lang = @fr AND ir.name = 'Vin blanc', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons');
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+INSERT INTO TOOL (lang, quantity, tool, recipe_id) VALUES
+	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Plaques de cuisson', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
+	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Poêle', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
+	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Verre à vin', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
+	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Couteau à légume', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
+	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Couteau', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
+	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Planche à découper', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
+	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Spatule en bois', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
+	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Cuillère à soupe', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
+	(@fr, 4, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Assiette', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
+	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Grille-pain', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
+	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Tire-bouchon', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons');
+	
+INSERT INTO STEP (lang, position, description, recipe_id) VALUES
+	(@fr, 1, 'Laver les champignons et les couper en tranches fines. Éplucher les gousses d ail et les couper en petits morceaux.', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
+	(@fr, 2, 'Faire fondre le beurre dans la poêle et y faire revenir les champignons. Au bout de quelques minutes, incorporer l ail dans la poêle.', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
+	(@fr, 3, 'Lorsque les champignons et l ail obtiennent une belle couleur, ouvrir la bouteille de vin blanc et verser environ 3/4 du verre dans la poêle.', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
+	(@fr, 4, 'Quand le vin a réduit de moitié, ajouter l origan, saler et poivrer selon le goût. Mélanger à l aide de la spatule en bois.', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
+	(@fr, 5, 'Faire griller les tranches de pain de mie et les couper en 4 pour en faire des toasts. Penser à remuer régulièrement la préparation dans la poêle.', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
+	(@fr, 6, 'Lorsqu il ne reste pratiquement plus de jus de cuisson, enlever la poêle du feu et garnir les toasts.', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
+	(@fr, 7, 'Servir les toasts de champignon avec le reste du vin et deguster !', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons');
 

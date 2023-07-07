@@ -15,7 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Table(name = "TOOL_TYPE")
+@Table(name = "TOOL_REFERENCE")
 @Entity
 @Data
 @NoArgsConstructor

@@ -37,20 +37,8 @@ public class Recipe {
 	@Column(name = "description")
 	private String description;
 
-	/**
-	 * To ensure that no duplicates are created in the table
-	 * 
-	 * Has to be set as lang + name (See @RecipeBuilder)
-	 */
-	@Column(name = "code", unique = true)
-	private String code;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "type", referencedColumnName = "id")
 	private RecipeType type;
-	
-	public void setCode() {
-		code = getLang() + getName();
-	}
 
 }

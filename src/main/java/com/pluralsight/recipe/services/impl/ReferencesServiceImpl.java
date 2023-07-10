@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.pluralsight.recipe.builders.IngredientReferenceBuilder;
 import com.pluralsight.recipe.dto.IngredientReferenceDTO;
 import com.pluralsight.recipe.dto.IngredientTypeDTO;
 import com.pluralsight.recipe.dto.RecipeTypeDTO;
@@ -143,31 +142,10 @@ public class ReferencesServiceImpl implements ReferencesService {
 	@Override
 	public IngredientReferenceDTO addIngredientRef(IngredientReferenceDTO dto) {
 
-		IngredientReferenceBuilder builder = new IngredientReferenceBuilder();
-
-		IngredientType type = findIngredientTypeById(dto.getTypeId());
-
-		IngredientReference ingredientRef = builder
-				.addLang(dto.getLang())
-				.addName(dto.getName())
-				.addType(type)
-				.build();
-
-		IngredientReference savedIngredientRef = ingredientReferenceRepository.save(ingredientRef);
+		IngredientReference savedIngredientRef = ingredientReferenceRepository
+				.save(ingredientRefMapper.mapToEntity(dto));
 
 		return ingredientRefMapper.mapToDTO(savedIngredientRef);
-	}
-
-	private IngredientType findIngredientTypeById(Long id) {
-
-		Optional<IngredientType> oType = ingredientTypeRepository.findById(id);
-
-		if (oType.isPresent()) {
-			return oType.get();
-		} else {
-			throw new EntityWasNotFoundException(ExceptionMessageConstants.INGREDIENT_TYPE_NOT_FOUND);
-		}
-
 	}
 
 	@Override

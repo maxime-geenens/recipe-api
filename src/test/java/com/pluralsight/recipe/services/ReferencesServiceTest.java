@@ -128,8 +128,7 @@ class ReferencesServiceTest {
 	@Test
 	void givenId_whenGetIngredientReferenceById_thenReturnIngredientReference() {
 
-		IngredientType type = TestUtils.buildIngredientType();
-		IngredientReference entity = TestUtils.buildIngredientReference(true, type);
+		IngredientReference entity = TestUtils.buildIngredientReference();
 
 		given(ingredientRefRepository.findById(1l)).willReturn(Optional.of(entity));
 
@@ -183,14 +182,12 @@ class ReferencesServiceTest {
 	@Test
 	void givenIngredientReferenceDTO_whenAddIngredientRef_thenReturnIngredientReferenceDTO() {
 
-		IngredientType type = TestUtils.buildIngredientType();
 		IngredientReferenceDTO dto = TestUtils.buildIngredientReferenceDTO(true);
-		IngredientReference entity1 = TestUtils.buildIngredientReference(false, type);
-		IngredientReference entity2 = TestUtils.buildIngredientReference(true, type);
+		IngredientReference entity1 = TestUtils.buildIngredientReference();
 
-		given(ingredientTypeRepository.findById(1l)).willReturn(Optional.of(type));
-		given(ingredientRefRepository.save(entity1)).willReturn(entity2);
-		given(ingredientRefMapper.mapToDTO(entity2)).willReturn(dto);
+		given(ingredientRefMapper.mapToEntity(dto)).willReturn(entity1);
+		given(ingredientRefRepository.save(entity1)).willReturn(entity1);
+		given(ingredientRefMapper.mapToDTO(entity1)).willReturn(dto);
 
 		IngredientReferenceDTO result = service.addIngredientRef(dto);
 
@@ -203,7 +200,7 @@ class ReferencesServiceTest {
 	void givenTypeAndLang_whenListRecipeTypesByLang_thenReturnRecipeTypeDTOList() {
 
 		List<RecipeType> list = TestUtils.buildRecipeTypeList(5);
-		List<RecipeTypeDTO> dtoList = TestUtils.buildRecipeTypeDTO(5); 
+		List<RecipeTypeDTO> dtoList = TestUtils.buildRecipeTypeDTOList(5); 
 
 		QRecipeType qRecipeType = QRecipeType.recipeType;
 		Predicate predicate = qRecipeType.lang.eq("FR");
@@ -294,10 +291,9 @@ class ReferencesServiceTest {
 	@Test
 	void givenToolReferenceDTO_whenAddToolRef_thenReturnToolReferenceDTO() {
 
-		ToolType type = TestUtils.buildToolType();
 		ToolReferenceDTO dto = TestUtils.buildToolReferenceDTO(true);
-		ToolReference entity1 = TestUtils.buildToolReference(true, type);
-		ToolReference entity2 = TestUtils.buildToolReference(true, type);
+		ToolReference entity1 = TestUtils.buildToolReference();
+		ToolReference entity2 = TestUtils.buildToolReference();
 
 		given(toolRefMapper.mapToEntity(dto)).willReturn(entity1);
 		given(toolRefRepository.save(entity1)).willReturn(entity2);

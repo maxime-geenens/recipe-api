@@ -13,6 +13,6 @@ public class RecipeDTO {
 	private String lang;
 	private String name;
 	private String description;
-	private Long typeId;
+	private RecipeTypeDTO type;
 	
 }

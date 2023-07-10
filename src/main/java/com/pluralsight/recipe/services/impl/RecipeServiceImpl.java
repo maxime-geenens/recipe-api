@@ -21,8 +21,8 @@ public class RecipeServiceImpl implements RecipeService {
 
 	@Autowired
 	private RecipeRepository recipeRepository;
-	
-	@Autowired 
+
+	@Autowired
 	private RecipeMapper mapper;
 
 	@Override
@@ -62,9 +62,8 @@ public class RecipeServiceImpl implements RecipeService {
 
 	@Override
 	public RecipeDTO saveRecipe(RecipeDTO dto) {
-		
+
 		Recipe recipe = mapper.mapToEntity(dto);
-		recipe.setCode();
 
 		Recipe savedRecipe = recipeRepository.save(recipe);
 
@@ -74,23 +73,6 @@ public class RecipeServiceImpl implements RecipeService {
 	@Override
 	public void deleteRecipe(Long id) {
 		recipeRepository.deleteById(id);
-	}
-
-	@Override
-	public Recipe findByCode(String code) {
-
-		Recipe recipe = null;
-
-		QRecipe qRecipe = QRecipe.recipe;
-		Predicate predicate = qRecipe.code.eq(code);
-
-		Optional<Recipe> oRecipe = recipeRepository.findOne(predicate);
-
-		if (oRecipe.isPresent()) {
-			recipe = oRecipe.get();
-		}
-
-		return recipe;
 	}
 
 }

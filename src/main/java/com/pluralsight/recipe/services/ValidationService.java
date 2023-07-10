@@ -19,15 +19,13 @@ public interface ValidationService {
 	 * - lang shall be a valid value form Lang Enum <br>
 	 * - description shall not be null, blank or empty <br>
 	 * - typeCode shall not be null, blank or empty <br>
-	 * (- code shall be unique in DB)
 	 * 
 	 * @param recipeDTO
-	 * @param checkCode (if true, evaluate if code is unique in DB)
 	 * @throws InvalidParamException
 	 * 
 	 * @return boolean
 	 */
-	boolean validateRecipeDTO(RecipeDTO recipeDTO, boolean checkCode);
+	boolean validateRecipeDTO(RecipeDTO recipeDTO);
 
 	/**
 	 * 

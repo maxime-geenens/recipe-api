@@ -44,9 +44,10 @@ public class ExceptionMessageConstants {
 	public static final String PARAM_LANG = ".lang";
 	public static final String PARAM_QUANTITY = ".quantity";
 	public static final String PARAM_POSITION = ".position";
-	public static final String PARAM_UNIT_REF_ID = ".unitRefId";
-	public static final String PARAM_INGREDIENT_REF_ID = ".ingredientRefId";
+	public static final String PARAM_UNIT_REF = ".unitRef";
+	public static final String PARAM_INGREDIENT_REF = ".ingredientRef";
 	public static final String PARAM_RECIPE_ID = ".recipeId";
 	public static final String PARAM_TYPE_ID = ".typeId";
-	public static final String PARAM_TOOL_REF_ID = ".toolRefId";
+	public static final String PARAM_TYPE = ".type";
+	public static final String PARAM_TOOL_REF = ".toolRef";
 }

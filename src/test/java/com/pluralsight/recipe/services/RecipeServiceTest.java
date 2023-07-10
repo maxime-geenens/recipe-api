@@ -82,8 +82,8 @@ class RecipeServiceTest {
 	@Test
 	void givenRecipeId_whenGetRecipeDTOById_thenReturnRecipe() {
 
-		Recipe entity = TestUtils.buildRecipe(true);
-		RecipeDTO dto = TestUtils.buildRecipeDTO(true, true);
+		Recipe entity = TestUtils.buildRecipe();
+		RecipeDTO dto = TestUtils.buildRecipeDTO(true);
 
 		given(dao.findById(entity.getId())).willReturn(Optional.of(entity));
 		given(mapper.mapToDTO(entity)).willReturn(dto);
@@ -92,10 +92,10 @@ class RecipeServiceTest {
 
 		assertThat(result).isNotNull();
 		assertThat(result.getId()).isEqualTo(entity.getId());
-		assertThat(result.getDescription()).isEqualTo(entity.getDescription());
+		assertThat(result.getDescription()).isEqualTo("Description1");
 		assertThat(result.getLang()).isEqualTo(entity.getLang());
-		assertThat(result.getName()).isEqualTo(entity.getName());
-		assertThat(result.getTypeId()).isEqualTo(entity.getType().getId());
+		assertThat(result.getName()).isEqualTo("Name1");
+		assertThat(result.getType().getId()).isEqualTo(entity.getType().getId());
 	}
 
 	@DisplayName("JUnit Test for getRecipeDTOById method which throws exception")
@@ -110,7 +110,7 @@ class RecipeServiceTest {
 	@Test
 	void givenRecipeId_whenGetRecipeById_thenReturnRecipe() {
 
-		Recipe entity = TestUtils.buildRecipe(true);
+		Recipe entity = TestUtils.buildRecipe();
 
 		given(dao.findById(entity.getId())).willReturn(Optional.of(entity));
 
@@ -136,9 +136,9 @@ class RecipeServiceTest {
 	@Test
 	void givenRecipeDTO_whenSaveRecipe_theReturnRecipeDTO() {
 
-		Recipe entity = TestUtils.buildRecipe(false);
-		Recipe savedEntity = TestUtils.buildRecipe(true);
-		RecipeDTO dto = TestUtils.buildRecipeDTO(true, true);
+		Recipe entity = TestUtils.buildRecipe();
+		Recipe savedEntity = TestUtils.buildRecipe();
+		RecipeDTO dto = TestUtils.buildRecipeDTO(true);
 
 		given(mapper.mapToEntity(dto)).willReturn(entity);
 		given(dao.save(entity)).willReturn(savedEntity);
@@ -148,10 +148,10 @@ class RecipeServiceTest {
 
 		assertThat(result).isNotNull();
 		assertThat(result.getId()).isEqualTo(savedEntity.getId());
-		assertThat(result.getDescription()).isEqualTo(savedEntity.getDescription());
+		assertThat(result.getDescription()).isEqualTo("Description1");
 		assertThat(result.getLang()).isEqualTo(savedEntity.getLang());
-		assertThat(result.getName()).isEqualTo(savedEntity.getName());
-		assertThat(result.getTypeId()).isEqualTo(savedEntity.getType().getId());
+		assertThat(result.getName()).isEqualTo("Name1");
+		assertThat(result.getType().getId()).isEqualTo(savedEntity.getType().getId());
 	}
 
 	@DisplayName("JUnit Test for deleteRecipe method")

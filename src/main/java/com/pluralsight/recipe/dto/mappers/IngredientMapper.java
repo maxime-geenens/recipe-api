@@ -7,17 +7,18 @@ import org.mapstruct.ReportingPolicy;
 import com.pluralsight.recipe.dto.IngredientDTO;
 import com.pluralsight.recipe.entities.Ingredient;
 
-@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR, unmappedTargetPolicy = ReportingPolicy.ERROR)
+@Mapper(componentModel = "spring", uses = { UnitReferenceMapper.class,
+		IngredientReferenceMapper.class }, injectionStrategy = InjectionStrategy.CONSTRUCTOR, unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface IngredientMapper {
 
-	@Mapping(source = "unitReference.id", target = "unitRefId")
-	@Mapping(source = "ingredientReference.id", target = "ingredientRefId")
 	@Mapping(source = "recipe.id", target = "recipeId")
+	@Mapping(source = "unitReference", target = "unitRef")
+	@Mapping(source = "ingredientReference", target = "ingredientRef")
 	IngredientDTO mapToDTO(Ingredient entity);
 
-	@Mapping(target = "unitReference.id", source = "unitRefId")
-	@Mapping(target = "ingredientReference.id", source = "ingredientRefId")
 	@Mapping(target = "recipe.id", source = "recipeId")
+	@Mapping(target = "unitReference", source = "unitRef")
+	@Mapping(target = "ingredientReference", source = "ingredientRef")
 	Ingredient mapToEntity(IngredientDTO dto);
 
 }

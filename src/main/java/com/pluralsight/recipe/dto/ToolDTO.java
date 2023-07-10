@@ -12,6 +12,6 @@ public class ToolDTO {
 	private Long id;
 	private String lang;
 	private Integer quantity;
-	private Long toolRefId;
+	private ToolReferenceDTO toolRef;
 	private Long recipeId;
 }

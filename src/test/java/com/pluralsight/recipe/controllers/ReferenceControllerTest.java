@@ -60,7 +60,7 @@ class ReferenceControllerTest {
 				.andExpect(jsonPath("$[0].id", Matchers.is(1)))
 				.andExpect(jsonPath("$[0].lang", Matchers.is("FR")))
 				.andExpect(jsonPath("$[0].name", Matchers.is("Name")))
-				.andExpect(jsonPath("$[0].typeId", Matchers.is(1)));
+				.andExpect(jsonPath("$[0].type.id", Matchers.is(1)));
 
 	}
 
@@ -138,7 +138,7 @@ class ReferenceControllerTest {
 	@Test
 	void testAddIngredientRef() throws Exception {
 
-		IngredientReferenceDTO dto = new IngredientReferenceDTO(1l, "FR", "Name", 1l);
+		IngredientReferenceDTO dto = TestUtils.buildIngredientReferenceDTO(true);
 
 		when(dtoValidationService.validateIngredientReferenceDTO(dto)).thenReturn(true);
 		when(service.addIngredientRef(dto)).thenReturn(dto);
@@ -149,7 +149,7 @@ class ReferenceControllerTest {
 				.andExpect(jsonPath("$.id", Matchers.is(1)))
 				.andExpect(jsonPath("$.lang", Matchers.is("FR")))
 				.andExpect(jsonPath("$.name", Matchers.is("Name")))
-				.andExpect(jsonPath("$.typeId", Matchers.is(1)));
+				.andExpect(jsonPath("$.type.id", Matchers.is(1)));
 
 	}
 	
@@ -174,7 +174,7 @@ class ReferenceControllerTest {
 	@Test
 	void testAddToolRef() throws Exception {
 
-		ToolReferenceDTO dto = new ToolReferenceDTO(1l, "FR", "Name", 1l);
+		ToolReferenceDTO dto = TestUtils.buildToolReferenceDTO(true);
 
 		when(dtoValidationService.validateToolReferenceDTO(dto)).thenReturn(true);
 		when(service.addToolRef(dto)).thenReturn(dto);
@@ -185,7 +185,7 @@ class ReferenceControllerTest {
 				.andExpect(jsonPath("$.id", Matchers.is(1)))
 				.andExpect(jsonPath("$.lang", Matchers.is("FR")))
 				.andExpect(jsonPath("$.name", Matchers.is("Name")))
-				.andExpect(jsonPath("$.typeId", Matchers.is(1)));
+				.andExpect(jsonPath("$.type.id", Matchers.is(1)));
 
 	}
 	
@@ -204,7 +204,7 @@ class ReferenceControllerTest {
 				.andExpect(jsonPath("$[0].id", Matchers.is(1)))
 				.andExpect(jsonPath("$[0].lang", Matchers.is("FR")))
 				.andExpect(jsonPath("$[0].name", Matchers.is("Name")))
-				.andExpect(jsonPath("$[0].typeId", Matchers.is(1)));
+				.andExpect(jsonPath("$[0].type.id", Matchers.is(1)));
 
 	}
 

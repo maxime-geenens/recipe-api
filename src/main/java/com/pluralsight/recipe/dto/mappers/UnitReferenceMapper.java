@@ -11,4 +11,6 @@ import com.pluralsight.recipe.entities.UnitReference;
 public interface UnitReferenceMapper {
 
 	UnitReferenceDTO mapToDTO(UnitReference entity);
+	
+	UnitReference mapToEntity(UnitReferenceDTO dto);
 }

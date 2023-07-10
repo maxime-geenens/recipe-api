@@ -12,6 +12,6 @@ public class IngredientReferenceDTO {
 	private Long id;
 	private String lang;
 	private String name;
-	private Long typeId;
+	private IngredientTypeDTO type;
 
 }

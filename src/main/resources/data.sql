@@ -550,36 +550,36 @@ INSERT INTO TOOL_REFERENCE (lang, name, type) VALUES
 
 --- RECIPE | INGREDIENT | STEP | TOOL (Complete recipe) ---
 -- FR --
-INSERT INTO RECIPE (lang, name, description, code, type) VALUES
-	(@fr, 'Tartinade de champignons', 'Recette de tartinade de champignons pour 4 personnes','FRTartinade de champignons', SELECT rt.id FROM RECIPE_TYPE rt WHERE rt.lang = @fr AND rt.name = 'Entrée');
+INSERT INTO RECIPE (lang, name, description, type) VALUES
+	(@fr, 'Tartinade de champignons', 'Recette de tartinade de champignons pour 4 personnes', SELECT rt.id FROM RECIPE_TYPE rt WHERE rt.lang = @fr AND rt.name = 'Entrée');
 
 INSERT INTO INGREDIENT (lang, quantity, unit, ingredient, recipe_id) VALUES
-	(@fr, 500.0, SELECT ur.id FROM UNIT_REFERENCE ur WHERE ur.lang = @fr AND ur.symbol = 'g', SELECT ir.id FROM INGREDIENT_REFERENCE ir WHERE ir.lang = @fr AND ir.name = 'Champignon de Paris', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
-	(@fr, 5.0, SELECT ur.id FROM UNIT_REFERENCE ur WHERE ur.lang = @fr AND ur.symbol = 'tr.', SELECT ir.id FROM INGREDIENT_REFERENCE ir WHERE ir.lang = @fr AND ir.name = 'Pain de mie', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
-	(@fr, 100.0, SELECT ur.id FROM UNIT_REFERENCE ur WHERE ur.lang = @fr AND ur.symbol = 'g', SELECT ir.id FROM INGREDIENT_REFERENCE ir WHERE ir.lang = @fr AND ir.name = 'Beurre', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
-	(@fr, 4.0, SELECT ur.id FROM UNIT_REFERENCE ur WHERE ur.lang = @fr AND ur.symbol = 'gous.', SELECT ir.id FROM INGREDIENT_REFERENCE ir WHERE ir.lang = @fr AND ir.name = 'Ail', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
-	(@fr, 3.0, SELECT ur.id FROM UNIT_REFERENCE ur WHERE ur.lang = @fr AND ur.symbol = 'cs', SELECT ir.id FROM INGREDIENT_REFERENCE ir WHERE ir.lang = @fr AND ir.name = 'Origan', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
-	(@fr, 5.0, SELECT ur.id FROM UNIT_REFERENCE ur WHERE ur.lang = @fr AND ur.symbol = 'cL', SELECT ir.id FROM INGREDIENT_REFERENCE ir WHERE ir.lang = @fr AND ir.name = 'Vin blanc', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons');
+	(@fr, 500.0, SELECT ur.id FROM UNIT_REFERENCE ur WHERE ur.lang = @fr AND ur.symbol = 'g', SELECT ir.id FROM INGREDIENT_REFERENCE ir WHERE ir.lang = @fr AND ir.name = 'Champignon de Paris', SELECT r.id FROM RECIPE r WHERE r.lang = 'FR' AND r.name='Tartinade de champignons'),
+	(@fr, 5.0, SELECT ur.id FROM UNIT_REFERENCE ur WHERE ur.lang = @fr AND ur.symbol = 'tr.', SELECT ir.id FROM INGREDIENT_REFERENCE ir WHERE ir.lang = @fr AND ir.name = 'Pain de mie', SELECT r.id FROM RECIPE r WHERE r.lang = 'FR' AND r.name='Tartinade de champignons'),
+	(@fr, 100.0, SELECT ur.id FROM UNIT_REFERENCE ur WHERE ur.lang = @fr AND ur.symbol = 'g', SELECT ir.id FROM INGREDIENT_REFERENCE ir WHERE ir.lang = @fr AND ir.name = 'Beurre', SELECT r.id FROM RECIPE r WHERE r.lang = 'FR' AND r.name='Tartinade de champignons'),
+	(@fr, 4.0, SELECT ur.id FROM UNIT_REFERENCE ur WHERE ur.lang = @fr AND ur.symbol = 'gous.', SELECT ir.id FROM INGREDIENT_REFERENCE ir WHERE ir.lang = @fr AND ir.name = 'Ail', SELECT r.id FROM RECIPE r WHERE r.lang = 'FR' AND r.name='Tartinade de champignons'),
+	(@fr, 3.0, SELECT ur.id FROM UNIT_REFERENCE ur WHERE ur.lang = @fr AND ur.symbol = 'cs', SELECT ir.id FROM INGREDIENT_REFERENCE ir WHERE ir.lang = @fr AND ir.name = 'Origan', SELECT r.id FROM RECIPE r WHERE r.lang = 'FR' AND r.name='Tartinade de champignons'),
+	(@fr, 5.0, SELECT ur.id FROM UNIT_REFERENCE ur WHERE ur.lang = @fr AND ur.symbol = 'cL', SELECT ir.id FROM INGREDIENT_REFERENCE ir WHERE ir.lang = @fr AND ir.name = 'Vin blanc', SELECT r.id FROM RECIPE r WHERE r.lang = 'FR' AND r.name='Tartinade de champignons');
 
 INSERT INTO TOOL (lang, quantity, tool, recipe_id) VALUES
-	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Plaques de cuisson', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
-	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Poêle', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
-	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Verre à vin', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
-	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Couteau à légume', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
-	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Couteau', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
-	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Planche à découper', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
-	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Spatule en bois', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
-	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Cuillère à soupe', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
-	(@fr, 4, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Assiette', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
-	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Grille-pain', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
-	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Tire-bouchon', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons');
+	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Plaques de cuisson', SELECT r.id FROM RECIPE r WHERE r.lang = 'FR' AND r.name='Tartinade de champignons'),
+	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Poêle', SELECT r.id FROM RECIPE r WHERE r.lang = 'FR' AND r.name='Tartinade de champignons'),
+	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Verre à vin', SELECT r.id FROM RECIPE r WHERE r.lang = 'FR' AND r.name='Tartinade de champignons'),
+	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Couteau à légume', SELECT r.id FROM RECIPE r WHERE r.lang = 'FR' AND r.name='Tartinade de champignons'),
+	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Couteau', SELECT r.id FROM RECIPE r WHERE r.lang = 'FR' AND r.name='Tartinade de champignons'),
+	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Planche à découper', SELECT r.id FROM RECIPE r WHERE r.lang = 'FR' AND r.name='Tartinade de champignons'),
+	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Spatule en bois', SELECT r.id FROM RECIPE r WHERE r.lang = 'FR' AND r.name='Tartinade de champignons'),
+	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Cuillère à soupe', SELECT r.id FROM RECIPE r WHERE r.lang = 'FR' AND r.name='Tartinade de champignons'),
+	(@fr, 4, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Assiette', SELECT r.id FROM RECIPE r WHERE r.lang = 'FR' AND r.name='Tartinade de champignons'),
+	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Grille-pain', SELECT r.id FROM RECIPE r WHERE r.lang = 'FR' AND r.name='Tartinade de champignons'),
+	(@fr, 1, SELECT t.id FROM TOOL_REFERENCE t WHERE t.lang = @fr AND t.name = 'Tire-bouchon', SELECT r.id FROM RECIPE r WHERE r.lang = 'FR' AND r.name='Tartinade de champignons');
 	
 INSERT INTO STEP (lang, position, description, recipe_id) VALUES
-	(@fr, 1, 'Laver les champignons et les couper en tranches fines. Éplucher les gousses d ail et les couper en petits morceaux.', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
-	(@fr, 2, 'Faire fondre le beurre dans la poêle et y faire revenir les champignons. Au bout de quelques minutes, incorporer l ail dans la poêle.', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
-	(@fr, 3, 'Lorsque les champignons et l ail obtiennent une belle couleur, ouvrir la bouteille de vin blanc et verser environ 3/4 du verre dans la poêle.', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
-	(@fr, 4, 'Quand le vin a réduit de moitié, ajouter l origan, saler et poivrer selon le goût. Mélanger à l aide de la spatule en bois.', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
-	(@fr, 5, 'Faire griller les tranches de pain de mie et les couper en 4 pour en faire des toasts. Penser à remuer régulièrement la préparation dans la poêle.', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
-	(@fr, 6, 'Lorsqu il ne reste pratiquement plus de jus de cuisson, enlever la poêle du feu et garnir les toasts.', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons'),
-	(@fr, 7, 'Servir les toasts de champignon avec le reste du vin et deguster !', SELECT r.id FROM RECIPE r WHERE r.code = 'FRTartinade de champignons');
+	(@fr, 1, 'Laver les champignons et les couper en tranches fines. Éplucher les gousses d ail et les couper en petits morceaux.', SELECT r.id FROM RECIPE r WHERE r.lang = 'FR' AND r.name='Tartinade de champignons'),
+	(@fr, 2, 'Faire fondre le beurre dans la poêle et y faire revenir les champignons. Au bout de quelques minutes, incorporer l ail dans la poêle.', SELECT r.id FROM RECIPE r WHERE r.lang = 'FR' AND r.name='Tartinade de champignons'),
+	(@fr, 3, 'Lorsque les champignons et l ail obtiennent une belle couleur, ouvrir la bouteille de vin blanc et verser environ 3/4 du verre dans la poêle.', SELECT r.id FROM RECIPE r WHERE r.lang = 'FR' AND r.name='Tartinade de champignons'),
+	(@fr, 4, 'Quand le vin a réduit de moitié, ajouter l origan, saler et poivrer selon le goût. Mélanger à l aide de la spatule en bois.', SELECT r.id FROM RECIPE r WHERE r.lang = 'FR' AND r.name='Tartinade de champignons'),
+	(@fr, 5, 'Faire griller les tranches de pain de mie et les couper en 4 pour en faire des toasts. Penser à remuer régulièrement la préparation dans la poêle.', SELECT r.id FROM RECIPE r WHERE r.lang = 'FR' AND r.name='Tartinade de champignons'),
+	(@fr, 6, 'Lorsqu il ne reste pratiquement plus de jus de cuisson, enlever la poêle du feu et garnir les toasts.', SELECT r.id FROM RECIPE r WHERE r.lang = 'FR' AND r.name='Tartinade de champignons'),
+	(@fr, 7, 'Servir les toasts de champignon avec le reste du vin et deguster !', SELECT r.id FROM RECIPE r WHERE r.lang = 'FR' AND r.name='Tartinade de champignons');
 

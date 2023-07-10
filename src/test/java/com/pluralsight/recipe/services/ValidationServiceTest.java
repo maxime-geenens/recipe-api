@@ -3,7 +3,6 @@ package com.pluralsight.recipe.services;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.BDDMockito.given;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +16,6 @@ import com.pluralsight.recipe.dto.RecipeDTO;
 import com.pluralsight.recipe.dto.StepDTO;
 import com.pluralsight.recipe.dto.ToolDTO;
 import com.pluralsight.recipe.dto.ToolReferenceDTO;
-import com.pluralsight.recipe.entities.Recipe;
 import com.pluralsight.recipe.exceptions.InvalidParamException;
 import com.pluralsight.recipe.services.impl.ValidationServiceImpl;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
@@ -38,60 +36,34 @@ class ValidationServiceTest {
 	@Test
 	void validateRecipeDTO_withGoodDTO_thenAllSucceed() {
 
-		RecipeDTO dto = TestUtils.buildRecipeDTO(true, true);
+		RecipeDTO dto = TestUtils.buildRecipeDTO(true);
 
-		boolean result = service.validateRecipeDTO(dto, false);
-
-		assertTrue(result);
-	}
-
-	@Test
-	void validateRecipeDTO_withGoodDTOAndCheckCode_thenAllSucceed() {
-
-		RecipeDTO dto = TestUtils.buildRecipeDTO(true, true);
-		String code = dto.getLang() + dto.getName();
-
-		given(recipeService.findByCode(code)).willReturn(null);
-
-		boolean result = service.validateRecipeDTO(dto, true);
+		boolean result = service.validateRecipeDTO(dto);
 
 		assertTrue(result);
-	}
-
-	@Test
-	void validateRecipeDTO_withGoodDTO_thenThrowException() {
-
-		RecipeDTO dto = TestUtils.buildRecipeDTO(true, true);
-		Recipe recipe = TestUtils.buildRecipe(true);
-		String code = dto.getLang() + dto.getName();
-
-		given(recipeService.findByCode(code)).willReturn(recipe);
-
-		Throwable exception = assertThrows(InvalidParamException.class, () -> service.validateRecipeDTO(dto, true));
-		assertEquals("Recipe" + " :: " + ExceptionMessageConstants.CODE_ALREADY_EXISTS_IN_DB, exception.getMessage());
 	}
 
 	@Test
 	void validateRecipeDTO_withNullBlankEmptyName_thenThrowsException() {
 
-		RecipeDTO nullName = TestUtils.buildRecipeDTO(false, true);
+		RecipeDTO nullName = TestUtils.buildRecipeDTO(false);
 		nullName.setName(null);
-		RecipeDTO empty = TestUtils.buildRecipeDTO(false, true);
+		RecipeDTO empty = TestUtils.buildRecipeDTO(false);
 		empty.setName("");
-		RecipeDTO blank = TestUtils.buildRecipeDTO(false, true);
+		RecipeDTO blank = TestUtils.buildRecipeDTO(false);
 		blank.setName("  ");
 
 		Throwable nullException = assertThrows(InvalidParamException.class,
-				() -> service.validateRecipeDTO(nullName, false));
+				() -> service.validateRecipeDTO(nullName));
 		assertEquals("RecipeDTO.name" + " :: " + ExceptionMessageConstants.PARAMETER_NULL, nullException.getMessage());
 
 		Throwable emptyException = assertThrows(InvalidParamException.class,
-				() -> service.validateRecipeDTO(empty, false));
+				() -> service.validateRecipeDTO(empty));
 		assertEquals("RecipeDTO.name" + " :: " + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY,
 				emptyException.getMessage());
 
 		Throwable blankException = assertThrows(InvalidParamException.class,
-				() -> service.validateRecipeDTO(blank, false));
+				() -> service.validateRecipeDTO(blank));
 		assertEquals("RecipeDTO.name" + " :: " + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY,
 				blankException.getMessage());
 
@@ -100,25 +72,25 @@ class ValidationServiceTest {
 	@Test
 	void validateRecipeDTO_withNullBlankEmptyDescription_thenThrowsException() {
 
-		RecipeDTO nullDescription = TestUtils.buildRecipeDTO(false, true);
+		RecipeDTO nullDescription = TestUtils.buildRecipeDTO(false);
 		nullDescription.setDescription(null);
-		RecipeDTO empty = TestUtils.buildRecipeDTO(false, true);
+		RecipeDTO empty = TestUtils.buildRecipeDTO(false);
 		empty.setDescription("");
-		RecipeDTO blank = TestUtils.buildRecipeDTO(false, true);
+		RecipeDTO blank = TestUtils.buildRecipeDTO(false);
 		blank.setDescription("  ");
 
 		Throwable nullException = assertThrows(InvalidParamException.class,
-				() -> service.validateRecipeDTO(nullDescription, false));
+				() -> service.validateRecipeDTO(nullDescription));
 		assertEquals("RecipeDTO.description" + " :: " + ExceptionMessageConstants.PARAMETER_NULL,
 				nullException.getMessage());
 
 		Throwable emptyException = assertThrows(InvalidParamException.class,
-				() -> service.validateRecipeDTO(empty, false));
+				() -> service.validateRecipeDTO(empty));
 		assertEquals("RecipeDTO.description" + " :: " + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY,
 				emptyException.getMessage());
 
 		Throwable blankException = assertThrows(InvalidParamException.class,
-				() -> service.validateRecipeDTO(blank, false));
+				() -> service.validateRecipeDTO(blank));
 		assertEquals("RecipeDTO.description" + " :: " + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY,
 				blankException.getMessage());
 
@@ -127,35 +99,36 @@ class ValidationServiceTest {
 	@Test
 	void validateRecipeDTO_withNullTypeId_thenThrowsException() {
 
-		RecipeDTO nullType = TestUtils.buildRecipeDTO(false, false);
+		RecipeDTO nullType = TestUtils.buildRecipeDTO(false);
+		nullType.setType(null);
 
 		Throwable nullException = assertThrows(InvalidParamException.class,
-				() -> service.validateRecipeDTO(nullType, false));
-		assertEquals("RecipeDTO.typeId" + " :: " + ExceptionMessageConstants.PARAMETER_NULL,
+				() -> service.validateRecipeDTO(nullType));
+		assertEquals("RecipeDTO.type" + " :: " + ExceptionMessageConstants.PARAMETER_NULL,
 				nullException.getMessage());
 	}
 
 	@Test
 	void validateRecipeDTO_withNullBlankEmptyLang_thenThrowsException() {
 
-		RecipeDTO nullLang = TestUtils.buildRecipeDTO(false, true);
+		RecipeDTO nullLang = TestUtils.buildRecipeDTO(false);
 		nullLang.setLang(null);
-		RecipeDTO empty = TestUtils.buildRecipeDTO(false, true);
+		RecipeDTO empty = TestUtils.buildRecipeDTO(false);
 		empty.setLang("");
-		RecipeDTO blank = TestUtils.buildRecipeDTO(false, true);
+		RecipeDTO blank = TestUtils.buildRecipeDTO(false);
 		blank.setLang("  ");
 
 		Throwable nullException = assertThrows(InvalidParamException.class,
-				() -> service.validateRecipeDTO(nullLang, false));
+				() -> service.validateRecipeDTO(nullLang));
 		assertEquals("RecipeDTO.lang" + " :: " + ExceptionMessageConstants.PARAMETER_NULL, nullException.getMessage());
 
 		Throwable emptyException = assertThrows(InvalidParamException.class,
-				() -> service.validateRecipeDTO(empty, false));
+				() -> service.validateRecipeDTO(empty));
 		assertEquals("RecipeDTO.lang" + " :: " + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY,
 				emptyException.getMessage());
 
 		Throwable blankException = assertThrows(InvalidParamException.class,
-				() -> service.validateRecipeDTO(blank, false));
+				() -> service.validateRecipeDTO(blank));
 		assertEquals("RecipeDTO.lang" + " :: " + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY,
 				blankException.getMessage());
 
@@ -164,11 +137,11 @@ class ValidationServiceTest {
 	@Test
 	void validateRecipeDTO_withWrongLang_thenThrowsException() {
 
-		RecipeDTO wrongLang = TestUtils.buildRecipeDTO(false, true);
+		RecipeDTO wrongLang = TestUtils.buildRecipeDTO(false);
 		wrongLang.setLang("BREKZ");
 
 		Throwable exception = assertThrows(InvalidParamException.class,
-				() -> service.validateRecipeDTO(wrongLang, false));
+				() -> service.validateRecipeDTO(wrongLang));
 		assertEquals("RecipeDTO.lang :: " + ExceptionMessageConstants.PARAMETER_INVALID, exception.getMessage());
 
 	}
@@ -241,23 +214,23 @@ class ValidationServiceTest {
 	}
 
 	@Test
-	void validateIngredientDTO_withNullUnitRefId_thenThrowsException() {
+	void validateIngredientDTO_withNullUnitRef_thenThrowsException() {
 
 		IngredientDTO dto = TestUtils.buildIngredientDTO(false);
-		dto.setUnitRefId(null);
+		dto.setUnitRef(null);
 
 		Throwable exception = assertThrows(InvalidParamException.class, () -> service.validateIngredientDTO(dto));
-		assertEquals("IngredientDTO.unitRefId :: " + ExceptionMessageConstants.PARAMETER_NULL, exception.getMessage());
+		assertEquals("IngredientDTO.unitRef :: " + ExceptionMessageConstants.PARAMETER_NULL, exception.getMessage());
 	}
 
 	@Test
-	void validateIngredientDTO_withNullIngredientRefId_thenThrowsException() {
+	void validateIngredientDTO_withNullIngredientRef_thenThrowsException() {
 
 		IngredientDTO dto = TestUtils.buildIngredientDTO(false);
-		dto.setIngredientRefId(null);
+		dto.setIngredientRef(null);
 
 		Throwable exception = assertThrows(InvalidParamException.class, () -> service.validateIngredientDTO(dto));
-		assertEquals("IngredientDTO.ingredientRefId :: " + ExceptionMessageConstants.PARAMETER_NULL,
+		assertEquals("IngredientDTO.ingredientRef :: " + ExceptionMessageConstants.PARAMETER_NULL,
 				exception.getMessage());
 	}
 
@@ -447,11 +420,11 @@ class ValidationServiceTest {
 	void validateIngredientReferenceDTO_withNullTypeId_thenThrowsException() {
 
 		IngredientReferenceDTO dto = TestUtils.buildIngredientReferenceDTO(false);
-		dto.setTypeId(null);
+		dto.setType(null);
 
 		Throwable exception = assertThrows(InvalidParamException.class,
 				() -> service.validateIngredientReferenceDTO(dto));
-		assertEquals("IngredientReferenceDTO.typeId :: " + ExceptionMessageConstants.PARAMETER_NULL,
+		assertEquals("IngredientReferenceDTO.type :: " + ExceptionMessageConstants.PARAMETER_NULL,
 				exception.getMessage());
 	}
 

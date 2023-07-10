@@ -42,19 +42,19 @@ class RecipeControllerTest {
 
 	@MockBean
 	RecipeService recipeService;
-	
+
 	@MockBean
 	ReferencesService referenceService;
-	
+
 	@MockBean
 	IngredientService ingredientService;
-	
+
 	@MockBean
 	StepService stepService;
-	
+
 	@MockBean
 	ValidationService dtoValidationService;
-	
+
 	@MockBean
 	ToolService toolService;
 
@@ -68,16 +68,14 @@ class RecipeControllerTest {
 
 		when(recipeService.listRecipesByLang("FR")).thenReturn(list);
 
-		mockMvc.perform(get(BASE_API + "/lang/FR"))
-				.andExpect(status().isOk())
+		mockMvc.perform(get(BASE_API + "/lang/FR")).andExpect(status().isOk())
 				.andExpect(jsonPath("$", Matchers.hasSize(5)));
 	}
 
 	@Test
 	void testListRecipesByLang_withLangBlank_thenThrowInvalidParamException() throws Exception {
 
-		mockMvc.perform(get(BASE_API + "/lang/  "))
-				.andExpect(status().is5xxServerError())
+		mockMvc.perform(get(BASE_API + "/lang/  ")).andExpect(status().is5xxServerError())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof InvalidParamException))
 				.andExpect(result -> assertEquals("lang :: " + ExceptionMessageConstants.PARAMETER_BLANK_EMPTY,
 						result.getResolvedException().getMessage()));
@@ -86,7 +84,7 @@ class RecipeControllerTest {
 	@Test
 	void testGetRecipeDetail() throws Exception {
 
-		RecipeDTO rDTO = TestUtils.buildRecipeDTO(true, true);
+		RecipeDTO rDTO = TestUtils.buildRecipeDTO(true);
 		List<IngredientDTO> iList = TestUtils.buildIngredientDTOList(5, true);
 		List<StepDTO> sList = TestUtils.buildStepDTOList(5, true);
 		List<ToolDTO> tList = TestUtils.buildToolDTOList(5, true);
@@ -96,13 +94,12 @@ class RecipeControllerTest {
 		when(stepService.listStepsByRecipe(1l)).thenReturn(sList);
 		when(toolService.listToolsByRecipe(1l)).thenReturn(tList);
 
-		mockMvc.perform(get(BASE_API + "/detail/1"))
-				.andExpect(status().isOk())
+		mockMvc.perform(get(BASE_API + "/detail/1")).andExpect(status().isOk())
 				.andExpect(jsonPath("$.recipe.id", Matchers.is(1)))
 				.andExpect(jsonPath("$.recipe.lang", Matchers.is("FR")))
-				.andExpect(jsonPath("$.recipe.name", Matchers.is("Name")))
-				.andExpect(jsonPath("$.recipe.description", Matchers.is("Description")))
-				.andExpect(jsonPath("$.recipe.typeId", Matchers.is(1)))
+				.andExpect(jsonPath("$.recipe.name", Matchers.is("Name1")))
+				.andExpect(jsonPath("$.recipe.description", Matchers.is("Description1")))
+				.andExpect(jsonPath("$.recipe.type.id", Matchers.is(1)))
 				.andExpect(jsonPath("$.ingredientList", Matchers.hasSize(5)))
 				.andExpect(jsonPath("$.stepList", Matchers.hasSize(5)));
 	}
@@ -110,46 +107,43 @@ class RecipeControllerTest {
 	@Test
 	void testCreateRecipe() throws Exception {
 
-		RecipeDTO dto = TestUtils.buildRecipeDTO(true, true);
-		
-		when(dtoValidationService.validateRecipeDTO(dto, true)).thenReturn(true);
+		RecipeDTO dto = TestUtils.buildRecipeDTO(true);
+
+		when(dtoValidationService.validateRecipeDTO(dto)).thenReturn(true);
 		when(recipeService.saveRecipe(dto)).thenReturn(dto);
 
 		mockMvc.perform(
 				post(BASE_API + "/create").content(TestUtils.objectToJson(dto)).contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.id", Matchers.is(1)))
-				.andExpect(jsonPath("$.lang", Matchers.is("FR")))
-				.andExpect(jsonPath("$.name", Matchers.is("Name")))
-				.andExpect(jsonPath("$.description", Matchers.is("Description")))
-				.andExpect(jsonPath("$.typeId", Matchers.is(1)));
+				.andExpect(status().isOk()).andExpect(jsonPath("$.id", Matchers.is(1)))
+				.andExpect(jsonPath("$.lang", Matchers.is("FR"))).andExpect(jsonPath("$.name", Matchers.is("Name1")))
+				.andExpect(jsonPath("$.description", Matchers.is("Description1")))
+				.andExpect(jsonPath("$.type.id", Matchers.is(1)));
 	}
 
 	@Test
 	void testUpdateRecipe() throws Exception {
 
-		RecipeDTO dto = TestUtils.buildRecipeDTO(true, true);
-		RecipeDTO dto1 = new RecipeDTO(1l, "FR", "Name", "Updated", 1l);
+		RecipeDTO dto = TestUtils.buildRecipeDTO(true);
+		RecipeDTO dto1 = TestUtils.buildRecipeDTO(true);
+		dto1.setDescription("Updated");
 
-		when(dtoValidationService.validateRecipeDTO(dto, false)).thenReturn(true);
+		when(dtoValidationService.validateRecipeDTO(dto)).thenReturn(true);
 		when(recipeService.saveRecipe(dto)).thenReturn(dto1);
 
 		mockMvc.perform(
 				put(BASE_API + "/update").content(TestUtils.objectToJson(dto)).contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.id", Matchers.is(1)))
-				.andExpect(jsonPath("$.lang", Matchers.is("FR")))
-				.andExpect(jsonPath("$.name", Matchers.is("Name")))
+				.andExpect(status().isOk()).andExpect(jsonPath("$.id", Matchers.is(1)))
+				.andExpect(jsonPath("$.lang", Matchers.is("FR"))).andExpect(jsonPath("$.name", Matchers.is("Name1")))
 				.andExpect(jsonPath("$.description", Matchers.is("Updated")))
-				.andExpect(jsonPath("$.typeId", Matchers.is(1)));
+				.andExpect(jsonPath("$.type.id", Matchers.is(1)));
 	}
 
 	@Test
 	void testUpdateRecipe_withIdNull_thenThrowInvalidParamException() throws Exception {
 
-		RecipeDTO dto = TestUtils.buildRecipeDTO(false, true);
+		RecipeDTO dto = TestUtils.buildRecipeDTO(false);
 
-		when(dtoValidationService.validateRecipeDTO(dto, false)).thenReturn(true);
+		when(dtoValidationService.validateRecipeDTO(dto)).thenReturn(true);
 		when(recipeService.saveRecipe(dto)).thenReturn(dto);
 
 		mockMvc.perform(
@@ -159,14 +153,13 @@ class RecipeControllerTest {
 				.andExpect(result -> assertEquals("RecipeDTO.id :: " + ExceptionMessageConstants.PARAMETER_NULL,
 						result.getResolvedException().getMessage()));
 	}
-	
+
 	@Test
 	void testDeleteRecipe() throws Exception {
 
 		doNothing().when(recipeService).deleteRecipe(1l);
 
-		mockMvc.perform(delete(BASE_API + "/delete/1"))
-				.andExpect(status().isOk());
+		mockMvc.perform(delete(BASE_API + "/delete/1")).andExpect(status().isOk());
 	}
 
 }

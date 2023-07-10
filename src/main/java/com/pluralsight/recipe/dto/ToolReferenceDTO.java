@@ -12,5 +12,5 @@ public class ToolReferenceDTO {
 	private Long id;
 	private String lang;
 	private String name;
-	private Long typeId;
+	private ToolTypeDTO type;
 }

@@ -8,14 +8,15 @@ import org.mapstruct.ReportingPolicy;
 import com.pluralsight.recipe.dto.ToolDTO;
 import com.pluralsight.recipe.entities.Tool;
 
-@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR, unmappedTargetPolicy = ReportingPolicy.ERROR)
+@Mapper(componentModel = "spring", uses = {
+		ToolReferenceMapper.class }, injectionStrategy = InjectionStrategy.CONSTRUCTOR, unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface ToolMapper {
 
-	@Mapping(source = "toolReference.id", target = "toolRefId")
 	@Mapping(source = "recipe.id", target = "recipeId")
+	@Mapping(source = "toolReference", target = "toolRef")
 	ToolDTO mapToDTO(Tool entity);
 
-	@Mapping(target = "toolReference.id", source = "toolRefId")
 	@Mapping(target = "recipe.id", source = "recipeId")
+	@Mapping(target = "toolReference", source = "toolRef")
 	Tool mapToEntity(ToolDTO dto);
 }

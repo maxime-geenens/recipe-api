@@ -12,4 +12,6 @@ public interface IngredientTypeMapper {
 
 	IngredientTypeDTO mapToDTO(IngredientType entity);
 
+	IngredientType mapToEntity(IngredientTypeDTO dto);
+
 }

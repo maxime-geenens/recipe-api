@@ -11,4 +11,6 @@ import com.pluralsight.recipe.entities.RecipeType;
 public interface RecipeTypeMapper {
 
 	RecipeTypeDTO mapToDTO(RecipeType entity);
+	
+	RecipeType mapToEntity(RecipeTypeDTO dto);
 }

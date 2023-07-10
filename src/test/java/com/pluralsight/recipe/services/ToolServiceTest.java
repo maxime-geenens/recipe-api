@@ -101,7 +101,7 @@ class ToolServiceTest {
 		assertThat(result.getId()).isEqualTo(entity.getId());
 		assertThat(result.getLang()).isEqualTo(entity.getLang());
 		assertThat(result.getQuantity()).isEqualTo(entity.getQuantity());
-		assertThat(result.getToolRefId()).isEqualTo(entity.getToolReference().getId());
+		assertThat(result.getToolRef().getId()).isEqualTo(entity.getToolReference().getId());
 		assertThat(result.getRecipeId()).isEqualTo(entity.getRecipe().getId());
 	}
 

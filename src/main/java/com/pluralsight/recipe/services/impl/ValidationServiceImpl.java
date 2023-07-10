@@ -1,6 +1,5 @@
 package com.pluralsight.recipe.services.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pluralsight.recipe.dto.IngredientDTO;
@@ -10,7 +9,6 @@ import com.pluralsight.recipe.dto.StepDTO;
 import com.pluralsight.recipe.dto.ToolDTO;
 import com.pluralsight.recipe.dto.ToolReferenceDTO;
 import com.pluralsight.recipe.exceptions.InvalidParamException;
-import com.pluralsight.recipe.services.RecipeService;
 import com.pluralsight.recipe.services.ValidationService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 import com.pluralsight.recipe.utils.ValidationUtils;
@@ -18,13 +16,10 @@ import com.pluralsight.recipe.utils.ValidationUtils;
 @Service
 public class ValidationServiceImpl implements ValidationService {
 
-	@Autowired
-	private RecipeService recipeService;
-
 	// DTO Validations
 
 	@Override
-	public boolean validateRecipeDTO(RecipeDTO dto, boolean checkCode) {
+	public boolean validateRecipeDTO(RecipeDTO dto) {
 
 		boolean isValid = false;
 
@@ -36,23 +31,12 @@ public class ValidationServiceImpl implements ValidationService {
 				ExceptionMessageConstants.RECIPE_DTO + ExceptionMessageConstants.PARAM_LANG);
 		ValidationUtils.validateLang(dto.getLang(), ExceptionMessageConstants.RECIPE_DTO);
 
-		if (dto.getTypeId() != null) {
+		if (dto.getType() != null) {
 			isValid = true;
 		} else {
 			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
-					ExceptionMessageConstants.RECIPE_DTO + ExceptionMessageConstants.PARAM_TYPE_ID,
+					ExceptionMessageConstants.RECIPE_DTO + ExceptionMessageConstants.PARAM_TYPE,
 					ExceptionMessageConstants.PARAMETER_NULL));
-		}
-
-		if (checkCode) {
-			String code = dto.getLang() + dto.getName();
-
-			if (recipeService.findByCode(code) != null) {
-				throw new InvalidParamException(ValidationUtils.buildExceptionMessage(ExceptionMessageConstants.RECIPE,
-						ExceptionMessageConstants.CODE_ALREADY_EXISTS_IN_DB));
-			} else {
-				isValid = true;
-			}
 		}
 
 		return isValid;
@@ -79,19 +63,19 @@ public class ValidationServiceImpl implements ValidationService {
 					ExceptionMessageConstants.PARAMETER_NULL));
 		}
 
-		if (dto.getUnitRefId() != null) {
+		if (dto.getUnitRef() != null) {
 			isValid = true;
 		} else {
 			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
-					ExceptionMessageConstants.INGREDIENT_DTO + ExceptionMessageConstants.PARAM_UNIT_REF_ID,
+					ExceptionMessageConstants.INGREDIENT_DTO + ExceptionMessageConstants.PARAM_UNIT_REF,
 					ExceptionMessageConstants.PARAMETER_NULL));
 		}
 
-		if (dto.getIngredientRefId() != null) {
+		if (dto.getIngredientRef() != null) {
 			isValid = true;
 		} else {
 			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
-					ExceptionMessageConstants.INGREDIENT_DTO + ExceptionMessageConstants.PARAM_INGREDIENT_REF_ID,
+					ExceptionMessageConstants.INGREDIENT_DTO + ExceptionMessageConstants.PARAM_INGREDIENT_REF,
 					ExceptionMessageConstants.PARAMETER_NULL));
 		}
 
@@ -151,11 +135,11 @@ public class ValidationServiceImpl implements ValidationService {
 				ExceptionMessageConstants.INGREDIENT_REF_DTO + ExceptionMessageConstants.PARAM_NAME);
 		ValidationUtils.validateLang(dto.getLang(), ExceptionMessageConstants.INGREDIENT_REF_DTO);
 
-		if (dto.getTypeId() != null) {
+		if (dto.getType() != null) {
 			isValid = true;
 		} else {
 			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
-					ExceptionMessageConstants.INGREDIENT_REF_DTO + ExceptionMessageConstants.PARAM_TYPE_ID,
+					ExceptionMessageConstants.INGREDIENT_REF_DTO + ExceptionMessageConstants.PARAM_TYPE,
 					ExceptionMessageConstants.PARAMETER_NULL));
 		}
 
@@ -183,11 +167,11 @@ public class ValidationServiceImpl implements ValidationService {
 					ExceptionMessageConstants.PARAMETER_NULL));
 		}
 
-		if (dto.getToolRefId() != null) {
+		if (dto.getToolRef() != null) {
 			isValid = true;
 		} else {
 			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
-					ExceptionMessageConstants.TOOL_DTO + ExceptionMessageConstants.PARAM_TOOL_REF_ID,
+					ExceptionMessageConstants.TOOL_DTO + ExceptionMessageConstants.PARAM_TOOL_REF,
 					ExceptionMessageConstants.PARAMETER_NULL));
 		}
 
@@ -213,11 +197,11 @@ public class ValidationServiceImpl implements ValidationService {
 				ExceptionMessageConstants.TOOL_REF_DTO + ExceptionMessageConstants.PARAM_NAME);
 		ValidationUtils.validateLang(dto.getLang(), ExceptionMessageConstants.TOOL_REF_DTO);
 
-		if (dto.getTypeId() != null) {
+		if (dto.getType() != null) {
 			isValid = true;
 		} else {
 			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
-					ExceptionMessageConstants.TOOL_REF_DTO + ExceptionMessageConstants.PARAM_TYPE_ID,
+					ExceptionMessageConstants.TOOL_REF_DTO + ExceptionMessageConstants.PARAM_TYPE,
 					ExceptionMessageConstants.PARAMETER_NULL));
 		}
 

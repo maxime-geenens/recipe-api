@@ -12,7 +12,7 @@ public class IngredientDTO {
 	private Long id;
 	private String lang;
 	private Double quantity;
-	private Long unitRefId;
-	private Long ingredientRefId;
 	private Long recipeId;
+	private UnitReferenceDTO unitRef;
+	private IngredientReferenceDTO ingredientRef;
 }

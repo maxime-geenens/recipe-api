@@ -117,7 +117,7 @@ public class RecipeController {
 		} else {
 			throw new EntityWasNotFoundException(ExceptionMessageConstants.STEPT_LIST_NOT_FOUND);
 		}
-		
+
 		List<ToolDTO> toolDTOList = toolService.listToolsByRecipe(id);
 
 		if (log.isInfoEnabled()) {
@@ -142,7 +142,7 @@ public class RecipeController {
 		}
 
 		if (requestDTO != null) {
-			validationService.validateRecipeDTO(requestDTO, true);
+			validationService.validateRecipeDTO(requestDTO);
 		} else {
 			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(ExceptionMessageConstants.RECIPE_DTO,
 					ExceptionMessageConstants.PARAMETER_NULL));
@@ -168,7 +168,7 @@ public class RecipeController {
 		if (requestDTO != null) {
 			Long id = requestDTO.getId();
 			if (id != null) {
-				validationService.validateRecipeDTO(requestDTO, false);
+				validationService.validateRecipeDTO(requestDTO);
 			} else {
 				throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
 						ExceptionMessageConstants.RECIPE_DTO + ExceptionMessageConstants.PARAM_ID,

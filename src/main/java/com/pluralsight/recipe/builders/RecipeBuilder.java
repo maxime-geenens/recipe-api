@@ -41,13 +41,7 @@ public class RecipeBuilder {
 	}
 
 	public Recipe build() {
-		addCode();
 		return recipe;
-	}
-
-	private RecipeBuilder addCode() {
-		recipe.setCode();
-		return this;
 	}
 
 }

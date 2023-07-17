@@ -164,12 +164,12 @@ public class ReferenceController {
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
-	@GetMapping(path = "/recipes/type/lang/{lang}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/recipes/typeByLang/{lang}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<RecipeTypeDTO>> fetchRecipeTypeListByLang(
 			@PathVariable(name = "lang", required = true) String lang) {
 
 		if (log.isInfoEnabled()) {
-			log.info(" GET API Call api/references/recipes/type/lang/{} ", lang);
+			log.info(" GET API Call api/references/recipes/typeByLang/{} ", lang);
 		}
 
 		List<RecipeTypeDTO> list = new ArrayList<>();
@@ -189,7 +189,7 @@ public class ReferenceController {
 		}
 
 		if (log.isInfoEnabled()) {
-			log.info(" Returning from api/references/recipes/type/lang/{} :: {}", lang, list.toString());
+			log.info(" Returning from api/references/recipes/typeByLang/{} :: {}", lang, list.toString());
 		}
 
 		return new ResponseEntity<>(list, HttpStatus.OK);
@@ -262,7 +262,7 @@ public class ReferenceController {
 			@PathVariable(name = "lang", required = true) String lang) {
 
 		if (log.isInfoEnabled()) {
-			log.info(" GET API Call api/references/ingredients/typeByLang/{} ", lang);
+			log.info(" GET API Call api/references/tools/typeByLang/{} ", lang);
 		}
 
 		List<ToolTypeDTO> list = new ArrayList<>();

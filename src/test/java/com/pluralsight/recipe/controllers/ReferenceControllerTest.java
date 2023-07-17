@@ -162,7 +162,7 @@ class ReferenceControllerTest {
 		
 		when(service.listRecipeTypesByLang("FR")).thenReturn(list);
 		
-		mockMvc.perform(get(BASE_API + "/recipes/type/lang/FR"))
+		mockMvc.perform(get(BASE_API + "/recipes/typeByLang/FR"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$", Matchers.hasSize(1)))
 				.andExpect(jsonPath("$[0].id", Matchers.is(1)))

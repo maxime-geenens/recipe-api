@@ -82,6 +82,18 @@ class RecipeControllerTest {
 	}
 
 	@Test
+	void testGetRecipeById() throws Exception {
+
+		RecipeDTO dto = TestUtils.buildRecipeDTO(true);
+
+		when(recipeService.getRecipeDTOById(1l)).thenReturn(dto);
+
+		mockMvc.perform(get(BASE_API + "/id/1"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.id", Matchers.is(1)));
+	}
+
+	@Test
 	void testGetRecipeDetail() throws Exception {
 
 		RecipeDTO rDTO = TestUtils.buildRecipeDTO(true);

@@ -83,6 +83,31 @@ public class RecipeController {
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
+	@GetMapping(path = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<RecipeDTO> getRecipeById(@PathVariable(name = "id", required = true) Long id)
+			throws EntityWasNotFoundException, InvalidParamException {
+
+		if (log.isInfoEnabled()) {
+			log.info(" GET API Call api/recipes/id/{} ", id);
+		}
+
+		RecipeDTO response = new RecipeDTO();
+
+		if (id != null) {
+			response = recipeService.getRecipeDTOById(id);
+		} else {
+			throw new InvalidParamException(ValidationUtils.buildExceptionMessage(
+					ExceptionMessageConstants.RECIPE_DTO + ExceptionMessageConstants.PARAM_ID,
+					ExceptionMessageConstants.PARAMETER_NULL));
+		}
+
+		if (log.isInfoEnabled()) {
+			log.info(" Returning from api/recipes/id/{} :: {}", id, response.toString());
+		}
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
 	@GetMapping(path = "/detail/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<RecipeDetailDTO> getRecipeDetail(@PathVariable(name = "id", required = true) Long id)
 			throws EntityWasNotFoundException, InvalidParamException {
@@ -120,14 +145,14 @@ public class RecipeController {
 
 		List<ToolDTO> toolDTOList = toolService.listToolsByRecipe(id);
 
-		if (log.isInfoEnabled()) {
-			log.info(" Returning from api/recipes/detail/{} :: {}", id, response.toString());
-		}
-
 		if (!toolDTOList.isEmpty()) {
 			response.setToolList(toolDTOList);
 		} else {
 			throw new EntityWasNotFoundException(ExceptionMessageConstants.TOOL_LIST_NOT_FOUND);
+		}
+
+		if (log.isInfoEnabled()) {
+			log.info(" Returning from api/recipes/detail/{} :: {}", id, response.toString());
 		}
 
 		return new ResponseEntity<>(response, HttpStatus.OK);

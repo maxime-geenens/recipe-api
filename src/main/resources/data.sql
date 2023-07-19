@@ -2,6 +2,13 @@ SET @fr = 'FR';
 SET @pt = 'PT';
 SET @en = 'EN';
 
+--- LANG_REFERENCE ---
+INSERT INTO LANG_REFERENCE (name, code) VALUES
+	('Français', @fr),
+	('Português', @pt),
+	('English', @en);
+
+
 --- UNIT_REFERENCE ---
 -- FR --
 INSERT INTO UNIT_REFERENCE (lang, symbol, name, description) VALUES 

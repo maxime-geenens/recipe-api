@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.pluralsight.recipe.dto.IngredientReferenceDTO;
 import com.pluralsight.recipe.dto.IngredientTypeDTO;
+import com.pluralsight.recipe.dto.LangReferenceDTO;
 import com.pluralsight.recipe.dto.RecipeTypeDTO;
 import com.pluralsight.recipe.dto.ToolReferenceDTO;
 import com.pluralsight.recipe.dto.ToolTypeDTO;
@@ -223,6 +224,24 @@ class ReferenceControllerTest {
 				.andExpect(jsonPath("$[0].id", Matchers.is(1)))
 				.andExpect(jsonPath("$[0].lang", Matchers.is("FR")))
 				.andExpect(jsonPath("$[0].name", Matchers.is("Name")));
+		
+	}
+
+	@Test
+	void testFetchLangRefList() throws Exception {
+
+		List<LangReferenceDTO> list = new ArrayList<>();
+		LangReferenceDTO dto = new LangReferenceDTO(1l, "Français", "FR");
+		list.add(dto);
+
+		when(service.listLangReferences()).thenReturn(list);
+
+		mockMvc.perform(get(BASE_API + "/languages/list"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", Matchers.hasSize(1)))
+				.andExpect(jsonPath("$[0].id", Matchers.is(1)))
+				.andExpect(jsonPath("$[0].code", Matchers.is("FR")))
+				.andExpect(jsonPath("$[0].name", Matchers.is("Français")));
 		
 	}
 

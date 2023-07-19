@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.pluralsight.recipe.dto.IngredientReferenceDTO;
 import com.pluralsight.recipe.dto.IngredientTypeDTO;
+import com.pluralsight.recipe.dto.LangReferenceDTO;
 import com.pluralsight.recipe.dto.RecipeTypeDTO;
 import com.pluralsight.recipe.dto.ToolReferenceDTO;
 import com.pluralsight.recipe.dto.ToolTypeDTO;
@@ -110,4 +111,12 @@ public interface ReferencesService {
 	 * @return List<ToolTypeDTO>
 	 */
 	List<ToolTypeDTO> listToolTypesByLang(String lang);
+
+	/**
+	 * 
+	 * Lists all language references
+	 * 
+	 * @return List<LangReferenceDTO>
+	 */
+	List<LangReferenceDTO> listLangReferences();
 }

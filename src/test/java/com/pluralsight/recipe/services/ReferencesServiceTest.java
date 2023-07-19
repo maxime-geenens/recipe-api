@@ -3,6 +3,7 @@ package com.pluralsight.recipe.services;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,18 +16,21 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.pluralsight.recipe.dto.IngredientReferenceDTO;
 import com.pluralsight.recipe.dto.IngredientTypeDTO;
+import com.pluralsight.recipe.dto.LangReferenceDTO;
 import com.pluralsight.recipe.dto.RecipeTypeDTO;
 import com.pluralsight.recipe.dto.ToolReferenceDTO;
 import com.pluralsight.recipe.dto.ToolTypeDTO;
 import com.pluralsight.recipe.dto.UnitReferenceDTO;
 import com.pluralsight.recipe.dto.mappers.IngredientReferenceMapper;
 import com.pluralsight.recipe.dto.mappers.IngredientTypeMapper;
+import com.pluralsight.recipe.dto.mappers.LangReferenceMapper;
 import com.pluralsight.recipe.dto.mappers.RecipeTypeMapper;
 import com.pluralsight.recipe.dto.mappers.ToolReferenceMapper;
 import com.pluralsight.recipe.dto.mappers.ToolTypeMapper;
 import com.pluralsight.recipe.dto.mappers.UnitReferenceMapper;
 import com.pluralsight.recipe.entities.IngredientReference;
 import com.pluralsight.recipe.entities.IngredientType;
+import com.pluralsight.recipe.entities.LangReference;
 import com.pluralsight.recipe.entities.QIngredientReference;
 import com.pluralsight.recipe.entities.QIngredientType;
 import com.pluralsight.recipe.entities.QRecipeType;
@@ -39,6 +43,7 @@ import com.pluralsight.recipe.entities.ToolType;
 import com.pluralsight.recipe.entities.UnitReference;
 import com.pluralsight.recipe.repositories.IngredientReferenceRepository;
 import com.pluralsight.recipe.repositories.IngredientTypeRepository;
+import com.pluralsight.recipe.repositories.LangReferenceRepository;
 import com.pluralsight.recipe.repositories.RecipeTypeRepository;
 import com.pluralsight.recipe.repositories.ToolReferenceRepository;
 import com.pluralsight.recipe.repositories.ToolTypeRepository;
@@ -88,6 +93,12 @@ class ReferencesServiceTest {
 
 	@Mock
 	private ToolTypeMapper toolTypeMapper;
+	
+	@Mock
+	private LangReferenceRepository langRefRepository;
+
+	@Mock
+	private LangReferenceMapper langRefMapper;
 
 	@DisplayName("JUnit Test for getRecipeTypeById method")
 	@Test
@@ -303,6 +314,30 @@ class ReferencesServiceTest {
 
 		assertThat(result).isNotNull();
 		assertThat(result.getId()).isEqualTo(1l);
+	}
+
+	@DisplayName("JUnit Test for listLangReferences method")
+	@Test
+	void whenListLangReferences_thenReturnLangReferenceDTO() {
+
+		List<LangReferenceDTO> dtoList = new ArrayList<>();
+		List<LangReference> list = new ArrayList<>();
+
+		LangReferenceDTO dto = new LangReferenceDTO(1l, "Français", "FR");
+		LangReference entity1 = new LangReference(1l, "Français", "FR");
+
+		dtoList.add(dto);
+		list.add(entity1);
+
+		given(langRefRepository.findAll()).willReturn(list);
+		given(langRefMapper.mapToDTO(entity1)).willReturn(dto);
+
+		List<LangReferenceDTO> result = service.listLangReferences();
+
+		assertThat(result)
+				.isNotNull()
+				.isNotEmpty()
+				.hasSize(1);
 	}
 
 }

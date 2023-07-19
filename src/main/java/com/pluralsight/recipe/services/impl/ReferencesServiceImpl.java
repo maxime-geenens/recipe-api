@@ -8,18 +8,21 @@ import org.springframework.stereotype.Service;
 
 import com.pluralsight.recipe.dto.IngredientReferenceDTO;
 import com.pluralsight.recipe.dto.IngredientTypeDTO;
+import com.pluralsight.recipe.dto.LangReferenceDTO;
 import com.pluralsight.recipe.dto.RecipeTypeDTO;
 import com.pluralsight.recipe.dto.ToolReferenceDTO;
 import com.pluralsight.recipe.dto.ToolTypeDTO;
 import com.pluralsight.recipe.dto.UnitReferenceDTO;
 import com.pluralsight.recipe.dto.mappers.IngredientReferenceMapper;
 import com.pluralsight.recipe.dto.mappers.IngredientTypeMapper;
+import com.pluralsight.recipe.dto.mappers.LangReferenceMapper;
 import com.pluralsight.recipe.dto.mappers.RecipeTypeMapper;
 import com.pluralsight.recipe.dto.mappers.ToolReferenceMapper;
 import com.pluralsight.recipe.dto.mappers.ToolTypeMapper;
 import com.pluralsight.recipe.dto.mappers.UnitReferenceMapper;
 import com.pluralsight.recipe.entities.IngredientReference;
 import com.pluralsight.recipe.entities.IngredientType;
+import com.pluralsight.recipe.entities.LangReference;
 import com.pluralsight.recipe.entities.QIngredientReference;
 import com.pluralsight.recipe.entities.QIngredientType;
 import com.pluralsight.recipe.entities.QRecipeType;
@@ -33,6 +36,7 @@ import com.pluralsight.recipe.entities.UnitReference;
 import com.pluralsight.recipe.exceptions.EntityWasNotFoundException;
 import com.pluralsight.recipe.repositories.IngredientReferenceRepository;
 import com.pluralsight.recipe.repositories.IngredientTypeRepository;
+import com.pluralsight.recipe.repositories.LangReferenceRepository;
 import com.pluralsight.recipe.repositories.RecipeTypeRepository;
 import com.pluralsight.recipe.repositories.ToolReferenceRepository;
 import com.pluralsight.recipe.repositories.ToolTypeRepository;
@@ -66,6 +70,9 @@ public class ReferencesServiceImpl implements ReferencesService {
 	private ToolReferenceRepository toolReferenceRepository;
 	
 	@Autowired
+	private LangReferenceRepository langReferenceRepository;
+	
+	@Autowired
 	private IngredientReferenceMapper ingredientRefMapper;
 	
 	@Autowired
@@ -82,6 +89,9 @@ public class ReferencesServiceImpl implements ReferencesService {
 	
 	@Autowired
 	private ToolReferenceMapper toolReferenceMapper;
+	
+	@Autowired
+	private LangReferenceMapper langReferenceMapper;
 
 	@Override
 	public RecipeType getRecipeTypeById(Long id) {
@@ -201,6 +211,14 @@ public class ReferencesServiceImpl implements ReferencesService {
 		List<ToolType> list = (List<ToolType>) toolTypeRepository.findAll(predicate);
 
 		return list.stream().map(entity -> toolTypeMapper.mapToDTO(entity)).toList();
+	}
+
+	@Override
+	public List<LangReferenceDTO> listLangReferences() {
+
+		List<LangReference> list = langReferenceRepository.findAll();
+
+		return list.stream().map(entity -> langReferenceMapper.mapToDTO(entity)).toList();
 	}
 
 }

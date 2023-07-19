@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pluralsight.recipe.dto.IngredientReferenceDTO;
 import com.pluralsight.recipe.dto.IngredientTypeDTO;
+import com.pluralsight.recipe.dto.LangReferenceDTO;
 import com.pluralsight.recipe.dto.RecipeTypeDTO;
 import com.pluralsight.recipe.dto.ToolReferenceDTO;
 import com.pluralsight.recipe.dto.ToolTypeDTO;
@@ -39,6 +40,22 @@ public class ReferenceController {
 
 	@Autowired
 	private ValidationService validationService;
+
+	@GetMapping(path = "/languages/list", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<LangReferenceDTO>> fetchLangRefList() {
+
+		if (log.isInfoEnabled()) {
+			log.info(" GET API Call api/references/languages/list");
+		}
+
+		List<LangReferenceDTO> list = referenceService.listLangReferences();
+
+		if (log.isInfoEnabled()) {
+			log.info(" Returning from api/references/languages/list", list.toString());
+		}
+
+		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
 
 	@GetMapping(path = "/ingredients/type/{type}/lang/{lang}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<IngredientReferenceDTO>> fetchIngredientListByTypeAndLang(

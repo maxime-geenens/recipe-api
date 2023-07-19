@@ -17,7 +17,10 @@ import com.pluralsight.recipe.services.StepService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 import com.querydsl.core.types.Predicate;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class StepServiceImpl implements StepService {
 
 	@Autowired

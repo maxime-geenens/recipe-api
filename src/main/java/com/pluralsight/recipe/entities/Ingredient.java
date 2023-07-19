@@ -1,5 +1,8 @@
 package com.pluralsight.recipe.entities;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
@@ -43,6 +46,7 @@ public class Ingredient {
 	private IngredientReference ingredientReference;
 
 	@ManyToOne(fetch = FetchType.LAZY)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "recipe_id", referencedColumnName = "id")
 	private Recipe recipe;
 

@@ -13,7 +13,10 @@ import com.pluralsight.recipe.services.ValidationService;
 import com.pluralsight.recipe.utils.ExceptionMessageConstants;
 import com.pluralsight.recipe.utils.ValidationUtils;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class ValidationServiceImpl implements ValidationService {
 
 	// DTO Validations

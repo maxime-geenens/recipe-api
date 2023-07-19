@@ -14,7 +14,10 @@ import com.pluralsight.recipe.repositories.IngredientRepository;
 import com.pluralsight.recipe.services.IngredientService;
 import com.querydsl.core.types.Predicate;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class IngredientServiceImpl implements IngredientService {
 
 	@Autowired

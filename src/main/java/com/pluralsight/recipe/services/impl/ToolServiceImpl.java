@@ -14,7 +14,10 @@ import com.pluralsight.recipe.repositories.ToolRepository;
 import com.pluralsight.recipe.services.ToolService;
 import com.querydsl.core.types.Predicate;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class ToolServiceImpl implements ToolService {
 
 	@Autowired
